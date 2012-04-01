@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rsync -avPH --delete ./ ftp:public_html/ks/ \
+  --exclude=.svn --exclude=rsync \
+  "$@"

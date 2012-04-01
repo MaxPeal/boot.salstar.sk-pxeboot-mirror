@@ -1,0 +1,16 @@
+#!/bin/bash
+
+C32S="hdt menu sysdump"
+
+cp -a /usr/share/hwdata/pci.ids .
+cp -a /lib/modules/`uname -r`/modules.pcimap .
+
+cp -a /usr/share/syslinux/pxelinux.0 .
+for i in $C32S; do
+  cp -a /usr/share/syslinux/$i.c32 .
+done
+
+rsync -avPH --inplace ./* ftp:tftpboot/ \
+  --exclude=rsync --exclude='**/.svn' \
+  --exclude=kickstart \
+  --exclude=config
