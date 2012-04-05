@@ -1,4 +1,4 @@
-#based on "pc" configuration
+#based on "mini" configuration
 #kernel parameter:
 #  part=root=4,vg=VGNAME,swap=4,var=20,home=max
 #

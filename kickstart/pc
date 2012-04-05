@@ -73,6 +73,7 @@ which
 iptables
 joe
 mc
+parted
 -sendmail
 #:BEGIN:fedora
 gdisk
@@ -96,6 +97,7 @@ part_names = dict(
   mysql='/var/lib/mysql'
 )
 sys.stdout = open('/tmp/partitions.cfg', 'wt')
+spare = 2
 #:BEGIN:fedora
 distro = "fedora"
 biosboot = 2
@@ -105,19 +107,25 @@ distro = "centos"
 biosboot = 0
 #:END:centos
 
-def size(s):
+def disksize(*disks):
+    ds = [
+           int(open('/sys/class/block/%s/size' % x).read().strip())/2048
+           for x in disks
+         ]
+    print "# disksizes: %s = %s" % (disks, ds)
+    return min(ds)
+
+def size(s, disks=None, sum=0):
     if s in ['', 'max']:
-      return "1 --grow"
+      if disks is None:
+        return "1 --grow"
+      else:
+        print "# sum=%d kB" % sum
+        return disksize(*disks)-sum
     if s.endswith('m') or s.endswith('M'):
       return int(s[:-1])
     else:
       return int(float(s.strip('gG'))*1024)
-
-def disksize(*disks):
-    return min([
-      int(open('/sys/class/block/%s/size' % x).read().strip())/2048
-      for x in disks
-    ])
 
 class mk_raid:
   cntr = -1
@@ -134,7 +142,7 @@ class mk_raid:
             % (self.cntr, self.cntr, self.cntr)
       print "volgroup %s pv.01" % vg
   def add_part(self, mp, s, fstype='--fstype=ext4'):
-      self.add(size(s))
+      self.add(s)
       print "raid %s --level=1 --device=md%d %s raid.%d1 raid.%d2" \
             % (mp, self.cntr, fstype, self.cntr, self.cntr)
 
@@ -186,9 +194,6 @@ def autopartition():
       if len(disks)==1:
         # one disk partition scheme
         disk0 = disks[0]
-        if biosboot>0:
-          print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                % (disk0, biosboot)
         for key, value in parts:
           if ':' in value:
             fstype = "--fstype=%s" % value.split(':', 1)[1]
@@ -203,6 +208,9 @@ def autopartition():
             print "volgroup %s pv.01" % vg
           elif key=='root':
             print "clearpart --all --initlabel"
+            if biosboot>0:
+              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                    % (disk0, biosboot)
             print "part / --ondisk=%s %s --size=%d" \
                   % (disk0, fstype, size(value))
           elif key in part_names:
@@ -214,14 +222,9 @@ def autopartition():
                     % (part_names[key], disk0, fstype, size(value))
       elif len(disks)==2:
         # raid 1 partition scheme
-        sum = 0
+        sum = spare # 1
         disk0 = disks[0]
         disk1 = disks[1]
-        if biosboot>0:
-          print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                 % (disk0, biosboot)
-          print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                 % (disk1, biosboot)
         raid = mk_raid(disks)
         for key, value in parts:
           if ':' in value:
@@ -235,32 +238,40 @@ def autopartition():
           if key=='vg':
             vg = value
             # calculate pv size
-            s = 0
-            for k, v in parts:
-              if k=='vg':
-                s = 1
-              elif s>0:
-                if v.isdigit():
-                  s += int(v)*1024
-                else:
-                  s += 1
+            #s = 0
+            #for k, v in parts:
+            #  if k=='vg':
+            #    s = 1
+            #  elif s>0:
+            #    if v.isdigit():
+            #      s += int(v)*1024
+            #    else:
+            #      s += 1
             # add pv
             # --grow disabled in F14 for raid partitions :-(
             #raid.add_vg(vg, "%d --grow" % s)
-            print "# disk size: %d-%d-1" \
-                  % (disksize(*disks)-biosboot*1024, sum)
-            raid.add_vg(vg, "%d" % (disksize(*disks)-sum-1-biosboot*1024))
+            print "# disk size: %d-%d" % (disksize(*disks), sum)
+            raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
           elif key=='root':
             print "clearpart --all --initlabel"
-            raid.add_part("/", value, fstype)
-            sum += size(value)
+            if biosboot>0:
+              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                     % (disk0, biosboot)
+              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                     % (disk1, biosboot)
+              sum += biosboot
+            s = size(value, disks, sum)
+            raid.add_part("/", s, fstype)
+            sum += s
           elif key in part_names:
             if vg:
               print "logvol %s --vgname=%s --size=%s --name=%s %s" \
                     % (part_names[key], vg, size(value), key, fstype)
             else:
-              raid.add_part(part_names[key], value, fstype)
-              sum += size(value)
+              s = size(value, disks, sum)
+              raid.add_part(part_names[key], s, fstype)
+              sum += s
+          print "# sum=%d kB" % sum
 
 #version_check()
 autopartition()
@@ -326,15 +337,18 @@ echo 'from="work.salstar.sk,158.197.240.41" ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA
 #chkconfig network on
 #chkconfig postfix on
 #:BEGIN:fedora
+GRUB_MODULES="part_gpt part_msdos raid mdraid09 mdraid1x"
 if [ -e /sys/block/vdb ]; then
-  echo "Configuring grub2 on /dev/vd*"
-  /sbin/grub2-install /dev/vdb
-  /sbin/grub2-install /dev/vda
-fi >> /root/kslog
+  GRUB_HD=/dev/vd
+fi
 if [ -e /sys/block/sdb ]; then
-  echo "Configuring grub2 on /dev/sd*"
-  /sbin/grub2-install /dev/sdb
-  /sbin/grub2-install /dev/sda
+  GRUB_HD=/dev/sd
+fi
+if [ "$GRUB_HD" ]; then
+  echo "Configuring grub2 on $GRUB_HD*"
+  /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}b
+  /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}a
+  echo "GRUB_PRELOAD_MODULES='$GRUB_MODULES'" >> /etc/default/grub
 fi >> /root/kslog
 #:END:fedora
 #:BEGIN:centos
