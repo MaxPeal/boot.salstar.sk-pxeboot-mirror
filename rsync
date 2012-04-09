@@ -14,8 +14,9 @@ done
 rsync -avPH --inplace $DIR/* ftp:tftpboot/ \
   --exclude=rsync --exclude='**/.svn' \
   --exclude=kickstart \
-  --exclude=config
+  --exclude=config \
+  --exclude=ipxe/*.img
 
-cd kickstart
+cd $DIR/kickstart
 ./rsync
-cd ..
+cd -
