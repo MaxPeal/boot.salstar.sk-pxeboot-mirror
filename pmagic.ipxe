@@ -1,0 +1,43 @@
+#!ipxe
+
+:pmagic_menu
+set dir mirrors/pmagic
+menu Parted Magic (pmagic)
+item --key 1 2012_3_24 Parted Magic 2012_3_24
+item --key 2 2012_2_27 Parted Magic 2012_2_27
+choose version || goto boot_pmagic_exit
+
+:pmagic_arch
+menu Parted Magic ${version}
+iseq ${arch} x86_64 && set default --default || set default --
+item --key 6 ${default} x86_64 Parted Magic ${version} (x86_64) [6]
+iseq ${arch} i386 && set default --default || set default --
+item --key p ${default} base Parted Magic ${version} (Pentium III class+) [p]
+item --key 4 i486 Parted Magic ${version} (i486, i586, PII) [4]
+item --key x exit Exit to main menu [x]
+choose value || goto boot_pmagic_exit
+goto boot_pmagic_${value}
+
+:boot_pmagic_exit
+#imgverify script.ipxe ${sigs}script.ipxe.sig
+#chain script.ipxe
+exit 0
+
+:boot_pmagic_base
+kernel ${mirror}/${dir}/pmagic_pxe_${version}/pmagic/bzImage
+imgverify bzImage ${sigs}${dir}/pmagic_pxe_${version}/pmagic/bzImage.sig
+isset ${cleanpmagic} || initrd images/modules.cgz
+isset ${cleanpmagic} || imgverify modules.cgz ${sigs}images/modules.cgz.sig
+initrd ${mirror}/${dir}/pmagic_pxe_${version}/pmagic/initrd.img
+imgverify initrd.img ${sigs}${dir}/pmagic_pxe_${version}/pmagic/initrd.img.sig
+imgargs bzImage edd=off load_ramdisk=1 prompt_ramdisk=0 rw vga=normal loglevel=9 max_loop=256 ${params}
+boot
+exit
+
+:boot_pmagic_i486
+set dir ${dir}/i486
+goto boot_pmagic_base
+
+:boot_pmagic_x86_64
+set dir ${dir}/x86_64
+goto boot_pmagic_base

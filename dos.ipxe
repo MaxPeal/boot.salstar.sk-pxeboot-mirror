@@ -1,0 +1,67 @@
+#!ipxe
+
+:dos_menu
+menu FreeDOS
+item --key f fdubcd UBCD FreeDOS R1.44 (Based on NwDsk V3.40) [f]
+item --key u ubcd UBCD 5.1.1 - Ultimate boot CD [u]
+item --key i install FreeDOS 1.1 src (installation iso) [i]
+#item --key l live FreeDOS 1.1 Live [l]
+item --key c custom_iso Boot custom CDROM ISO image [c]
+item --key d custom_img Boot custom FD/HDD image [d]
+item --key x exit Exit to main menu [x]
+choose value || goto boot_dos_exit
+goto boot_dos_${value}
+
+:boot_dos_exit
+#imgverify script.ipxe ${sigs}script.ipxe.sig
+#chain script.ipxe
+exit 0
+
+:boot_dos_install
+set dir mirrors/freedos/1.1
+kernel ${url}memdisk iso ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${mirror}/${dir}/fd11src.iso
+imgverify fd11src.iso ${sigs}${dir}/fd11src.iso.sig
+boot
+
+:boot_dos_live
+set dir mirrors/freedos/1.1
+kernel ${url}memdisk raw keeppxe ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${mirror}/${dir}/fd11live.img.zip
+imgverify fd11live.img.zip ${sigs}${dir}/fd11live.img.zip.sig
+boot
+
+:boot_dos_custom_iso
+kernel ${url}memdisk iso ${params}
+imgverify memdisk ${sigs}memdisk.sig
+goto enter_path
+
+:boot_dos_custom_img
+kernel ${url}memdisk ${params}
+imgverify memdisk ${sigs}memdisk.sig
+goto enter_path
+
+:enter_path
+echo -n Enter image URL: ${}
+read imgurl
+isset ${imgurl} || goto dos_menu
+imgtrust --allow
+initrd ${imgurl} || goto enter_path
+boot
+
+:boot_dos_ubcd
+kernel ${url}memdisk iso keeppxe ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${url}images/ubcd511.iso
+imgverify ubcd511.iso ${sigs}images/ubcd511.iso.sig
+boot
+
+:boot_dos_fdubcd
+kernel ${url}memdisk iso raw keeppxe ${params}
+imgverify memdisk ${sigs}memdisk.sig
+set dir mirrors/freedos/1.1
+initrd ${url}images/fdubcd.iso
+imgverify fdubcd.iso ${sigs}images/fdubcd.iso.sig
+boot

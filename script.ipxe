@@ -1,6 +1,7 @@
 #!ipxe
 
-set url https://www.salstar.sk/pxe/
+set url http://www.salstar.sk/pxe/
+set sigs ${url}sigs/
 set mirror http://ftp.upjs.sk/pub
 #set url tftp://158.197.16.70/
 isset ${admin_ip} || set admin_ip 158.197.240.41
@@ -11,16 +12,23 @@ isset ${menu} && goto ${menu} ||
 
 isset ${ip} || dhcp || echo DHCP failed
 
+imgtrust
+
 :main_menu
 clear version
 set space:hex 20:20
 menu SAL's iPXE MENU
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
-item --gap Linux systems:
-item --key f fedora ${space} Fedora ${arch} [f]
-item --key c centos ${space} CentOS ${arch} [c]
-item --key d freedos ${space} FreeDOS [d]
+item --gap Operating systems:
+iseq ${menu} fedora && set default --default || set default --
+item --key f ${default} fedora ${space} Fedora ${arch} [f]
+iseq ${menu} centos && set default --default || set default --
+item --key c ${default} centos ${space} CentOS ${arch} [c]
+iseq ${menu} pmagic && set default --default || set default --
+item --key p ${default} pmagic ${space} Parted Magic [p]
+iseq ${menu} dos && set default --default || set default --
+item --key d ${default} dos ${space} FreeDOS [d]
 item --gap Options:
 iseq ${menu} changebits && set default --default || set default --
 item --key a ${default} changebits ${space} Architecture: ${arch} (${bits}bit) [a]
@@ -29,8 +37,7 @@ item --key 0x09 ${default} params_menu ${space} Kernel parameters: ${params}
 item --gap Tools:
 item --key x pxelinux ${space} Chainload pxelinux menu [x]
 item --key h hdt ${space} Hardware detection tool [h]
-item --key p pmagic ${space} Parted Magic [p]
-item --key m memtest ${space} MemTest86+ [m]
+item --key m memtest ${space} MemTest86+ 4.20 [m]
 item --key s shell ${space} iPXE shell [s]
 isset ${menu} && set timeout 0 || set timeout 60000
 choose --timeout ${timeout} menu || goto local
@@ -38,38 +45,61 @@ echo ${cls}
 goto ${menu}
 
 :local
-exit
+echo Booting from local disks ...
+exit 0
+
+:reload
+echo Reloading script.ipxe ...
+imgverify script.ipxe ${sigs}script.ipxe
+chain script.ipxe
 
 :pxelinux
 echo Loading pxelinux ...
+set next-server 158.197.16.70
 set 209:string pxelinux.cfg/default
-set 210:string ${url}
-chain ${url}pxelinux.0 || goto die
+set 210:string tftp://${next-server}/
+kernel ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
 
+:hdt_new
+# new way, does not work
+imgtrust --allow
+kernel ${url}images/hdt.c32
+imgargs ${params}
+boot
+goto main_menu
 :hdt
+# old pxelinux way
 set 209:string pxelinux.cfg/hdt
 set 210:string ${url}
-chain ${url}pxelinux.0 || goto die
+kernel ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
+goto main_menu
 
 :pmagic
-initrd ${url}pmagic/initrd.img || goto die
-chain ${url}pmagic/bzImage edd=off load_ramdisk=1 prompt_ramdisk=0 rw vga=normal loglevel=9 max_loop=256 || goto die
+imgverify pmagic.ipxe ${sigs}pmagic.ipxe.sig
+chain pmagic.ipxe
+goto main_menu
+
+:dos
+imgverify dos.ipxe ${sigs}dos.ipxe.sig
+chain dos.ipxe
+goto main_menu
 
 :memtest
-set 209:string pxelinux.cfg/memtest
-set 210:string ${url}
-chain ${url}pxelinux.0 || goto die
-chain ${url}memtest/memtest || goto die
+kernel ${url}memtest/memtest86+-4.20.lkrn
+imgverify memtest86+-4.20.lkrn ${sigs}memtest/memtest86+-4.20.lkrn.sig
+boot 
 
 :shell
 echo Type "exit" to return to menu.
+# temporarily disable imgtrust for shell
+imgtrust --allow
 shell
+imgtrust
 goto main_menu
-
-:die
-echo Error occured, press any key ...
-prompt --timeout 60000
-exit
 
 :changebits
 iseq ${bits} 32 && set bits 64 || set bits 32
@@ -120,23 +150,23 @@ item --key d development ${os} 17 (development) ${arch} [d]
 isset ${version} || choose version || goto main_menu
 echo ${cls}
 goto fedora_${version} ||
-set dir ${mirror}/fedora/linux/releases/${version}/${os}/${arch}/os
+set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
 set osks http://www.salstar.sk/ks/auto
 goto boottype
 
 :fedora_17-Alpha
-set dir ${mirror}/fedora/linux/releases/test/${version}/${os}/${arch}/os
-set params root=live:${dir}/LiveOS/squashfs.img ${params}
+set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_development
-set dir ${mirror}/fedora/linux/development/17/${arch}/os
-set params root=live:${dir}/LiveOS/squashfs.img ${params}
+set dir fedora/linux/development/17/${arch}/os
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_live
-set dir ${mirror}/fedora/linux/releases/${version}/Live/${arch}
+set dir fedora/linux/releases/${version}/Live/${arch}
 set img ${os}-${version}-${arch}-Live-Desktop.iso
 prompt
 exit
@@ -148,7 +178,7 @@ item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 isset ${version} || choose version || goto main_menu
 echo ${cls}
-set dir ${mirror}/centos/${version}/os/${arch}
+set dir centos/${version}/os/${arch}
 set osks http://www.salstar.sk/ks/centos${version}
 goto boottype
 
@@ -161,8 +191,8 @@ item --key r rescue ${ova} rescue [r]
 item --key s remote ${ova} rescue with ssh [s]
 item --key a autopart ${ova} kickstart part=root=4 [a]
 item --key i isolinux ${ova} direct boot using isolinux [i]
-item --key l live_desktop ${ova} Live Desktop [l]
-item --key d live_kde ${ova} Live KDE [d]
+#item --key l live_desktop ${ova} Live Desktop [l]
+#item --key d live_kde ${ova} Live KDE [d]
 isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
@@ -173,23 +203,27 @@ goto bootos_${bt} ||
 goto bootos_images
 
 :bootos_images
-echo Loading from ${dir}/isolinux/
-echo   method=${dir}
+echo Loading from ${mirror}/${dir}/isolinux/
+echo   method=${mirror}/${dir}
 echo   ${kickstart} ${rescue} ${params}
 #set next-server 158.197.16.70
 # load vmlinuz and initrd
-kernel ${dir}/isolinux/vmlinuz nodhcp method=${dir} ${params} || goto die
-initrd ${dir}/isolinux/initrd.img || goto die
+kernel ${mirror}/${dir}/isolinux/vmlinuz
+imgverify vmlinuz ${sigs}${dir}/isolinux/vmlinuz.sig
+initrd ${mirror}/${dir}/isolinux/initrd.img
+imgverify initrd.img ${sigs}${dir}/isolinux/initrd.img.sig
+imgargs vmlinuz nodhcp method=${mirror}/${dir} ${params}
 imgstat
 isset ${debug} && prompt ||
 boot
 exit
 
 :bootos_isolinux
-echo Loading isolinux from ${dir}/isolinux/
+echo Loading isolinux from ${mirror}/${dir}/isolinux/
 set 209:string isolinux.cfg
-set 210:string ${dir}/isolinux/
-chain ${url}pxelinux.0 || goto die
+set 210:string ${mirror}/${dir}/isolinux/
+imgload ${url}pxelinux.0
+boot
 exit
 
 :bootos_live_desktop
@@ -201,15 +235,12 @@ set img ${os}-${version}-${arch}-Live-KDE.iso
 goto bootos_live
 
 :bootos_live
-set dir ${mirror}/fedora/linux/releases/${version}/Live/${arch}
+set dir fedora/linux/releases/${version}/Live/${arch}
 set next-server 158.197.16.70
 set params ip=${ip}:${next-server}:${gateway}:${netmask} BOOTIF=${mac}
 echo params: ${params}
 echo WARNING: This does not really works!
-kernel ${url}memdisk iso raw ${params} || goto die
-initrd ${dir}/${img} || goto die
+kernel ${url}memdisk iso raw ${params}
+initrd ${mirror}/${dir}/${img}
 boot
 exit
-
-:freedos
-chain dos.ipxe

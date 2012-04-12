@@ -4,11 +4,12 @@
 dhcp || goto shell
 
 :boot
-set base https://www.salstar.sk/pxe/ipxe/
+set base https://www.salstar.sk/pxe/
+:boot_chain
 chain ${base}${mac} ||
 chain ${base}${ip} ||
-chain ${base}script.ipxe ||
-echo Internal script failed!
+chain ${base}script.ipxe && exit ||
+echo Internal script failed! Failing to iPXE shell ...
 shell
 goto start
 
@@ -24,3 +25,9 @@ read vlan
 vcreate --tag ${vlan} net0
 dhcp net0-${vlan}
 goto boot
+
+:tftp
+set next-server 158.197.16.70
+clear base
+echo Trying to boot from tftp server at ${next-server} ...
+goto boot_chain
