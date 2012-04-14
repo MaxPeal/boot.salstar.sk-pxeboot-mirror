@@ -8,8 +8,9 @@ item --key i install FreeDOS 1.1 src (installation iso) [i]
 #item --key l live FreeDOS 1.1 Live [l]
 item --key c custom_iso Boot custom CDROM ISO image [c]
 item --key d custom_img Boot custom FD/HDD image [d]
-item --key x exit Exit to main menu [x]
+#item --key x exit Exit to main menu [x]
 choose value || goto boot_dos_exit
+echo ${cls}
 goto boot_dos_${value}
 
 :boot_dos_exit

@@ -14,8 +14,9 @@ item --key 6 ${default} x86_64 Parted Magic ${version} (x86_64) [6]
 iseq ${arch} i386 && set default --default || set default --
 item --key p ${default} base Parted Magic ${version} (Pentium III class+) [p]
 item --key 4 i486 Parted Magic ${version} (i486, i586, PII) [4]
-item --key x exit Exit to main menu [x]
+#item --key x exit Exit to main menu [x]
 choose value || goto boot_pmagic_exit
+echo ${cls}
 goto boot_pmagic_${value}
 
 :boot_pmagic_exit

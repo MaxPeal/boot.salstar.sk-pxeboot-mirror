@@ -85,6 +85,8 @@
       $release = preg_replace('|^anaconda/([0-9]+)\.[0-9]+$|', '$1',
                               $_SERVER["HTTP_USER_AGENT"]);
     }
+    #if ($_SERVER["X-ANACONDS-SYSTEM-RELEASE"]=="CentOS") {
+    #}
   }
   echo "# system: $config, release: $release\n";
   if ("$matches[2]"=="64_") {
