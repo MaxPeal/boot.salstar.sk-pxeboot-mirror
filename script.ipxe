@@ -1,7 +1,7 @@
 #!ipxe
 
 :start
-set url http://www.salstar.sk/pxe/
+set url http://pxe.salstar.sk/
 set sigs ${url}sigs/
 set mirror http://ftp.upjs.sk${mirror_port}/pub
 
@@ -230,6 +230,7 @@ echo Loading isolinux from ${mirror}/${dir}/isolinux/
 set 209:string isolinux.cfg
 set 210:string ${mirror}/${dir}/isolinux/
 imgload ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
 exit
 
