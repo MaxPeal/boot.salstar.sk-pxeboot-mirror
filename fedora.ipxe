@@ -1,0 +1,116 @@
+# OS
+:fedora
+set os Fedora
+menu Fedora
+item --key 6 16 ${os} 16 ${arch} [6]
+item --key 5 15 ${os} 15 ${arch} [5]
+item --key a 17-Alpha ${os} 17-Aplha ${arch} [a]
+item --key b 17-Beta ${os} 17-Beta ${arch} [b]
+item --key d development ${os} 17 (development) ${arch} [d]
+isset ${version} || choose version || goto main_menu
+echo ${cls}
+goto fedora_${version} ||
+set dir fedora/linux/releases/${version}/${os}/${arch}/os
+:fedora_setvars
+set osks http://www.salstar.sk/ks/auto
+goto boottype
+
+:fedora_development
+set dir fedora/linux/development/17/${arch}/os
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
+goto fedora_setvars
+
+:fedora_17-Alpha
+set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
+goto fedora_setvars
+
+:fedora_17-Beta
+set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
+goto fedora_setvars
+
+:fedora_live
+set dir fedora/linux/releases/${version}/Live/${arch}
+set img ${os}-${version}-${arch}-Live-Desktop.iso
+prompt
+exit
+
+:centos
+set os CentOS
+menu CentOS
+item --key 6 6 ${os} 6 ${arch} [6]
+item --key 5 5 ${os} 5 ${arch} [5]
+isset ${version} || choose version || goto main_menu
+echo ${cls}
+set dir centos/${version}/os/${arch}
+set osks http://www.salstar.sk/ks/centos${version}
+goto boottype
+
+:boottype
+set ova ${os} ${version} ${arch}
+menu ${os} boot type
+item normal ${ova}
+item --key k ks ${ova} kickstart [k]
+item --key r rescue ${ova} rescue [r]
+item --key s remote ${ova} rescue with ssh [s]
+item --key a autopart ${ova} kickstart part=root=4 [a]
+item --key i isolinux ${ova} direct boot using isolinux [i]
+#item --key l live_desktop ${ova} Live Desktop [l]
+#item --key d live_kde ${ova} Live KDE [d]
+isset ${bt} || choose bt || goto main_menu
+echo ${cls}
+iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
+iseq ${bt} rescue && set params rescue ${params} ||
+iseq ${bt} remote && set params ksdevice=bootif ks=http://www.salstar.sk/ks/rescue ${params} ||
+iseq ${bt} autopart && set params ksdevice=bootif ks=${osks} root=part=4 ${params} ||
+goto bootos_${bt} ||
+goto bootos_images
+
+:bootos_images
+echo Loading from ${mirror}/${dir}/isolinux/
+echo   method=${mirror}/${dir}
+echo   ${kickstart} ${rescue} ${params}
+#set next-server 158.197.16.70
+# load vmlinuz and initrd
+kernel ${mirror}/${dir}/isolinux/vmlinuz
+iseq ${version} development && imgtrust --allow ||
+iseq ${version} development && goto bootos_images_skip_verify_vmlinuz ||
+imgverify vmlinuz ${sigs}${dir}/isolinux/vmlinuz.sig
+:bootos_images_skip_verify_vmlinuz
+initrd ${mirror}/${dir}/isolinux/initrd.img
+iseq ${version} development && goto bootos_images_skip_verify_initrd ||
+imgverify initrd.img ${sigs}${dir}/isolinux/initrd.img.sig
+:bootos_images_skip_verify_initrd
+imgargs vmlinuz nodhcp method=${mirror}/${dir} ${params}
+imgstat
+isset ${debug} && prompt ||
+boot
+exit
+:bootos_isolinux
+echo Loading isolinux from ${mirror}/${dir}/isolinux/
+set 209:string isolinux.cfg
+set 210:string ${mirror}/${dir}/isolinux/
+imgload ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
+exit
+
+:bootos_live_desktop
+set img ${os}-${version}-${arch}-Live-Desktop.iso
+goto bootos_live
+
+:bootos_live_kde
+set img ${os}-${version}-${arch}-Live-KDE.iso
+goto bootos_live
+
+:bootos_live
+set dir fedora/linux/releases/${version}/Live/${arch}
+set next-server 158.197.16.70
+set params ip=${ip}:${next-server}:${gateway}:${netmask} BOOTIF=${mac}
+echo params: ${params}
+echo WARNING: This does not really works!
+kernel ${url}memdisk iso raw ${params}
+initrd ${mirror}/${dir}/${img}
+boot
+exit

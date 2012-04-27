@@ -1,0 +1,47 @@
+#!ipxe
+
+set darch ${arch}
+iseq ${darch} x86_64 && set darch amd64 ||
+set country sk
+
+goto ${menu} ||
+menu Debian or Ubuntu ?
+item --key d debian Debian [d]
+item --key u ubuntu Ubuntu [u]
+choose menu || goto deb_exit
+goto ${menu}
+
+:debian
+set mirror http://ftp.${country}.debian.org/debian/
+
+menu Debian ${darch}
+item --key s squeeze Debian squeeze (stable) [s]
+item --key t wheezy Debian wheezy (testing) [t]
+item --key u sid Debian sid (unstable) [u]
+goto deb_boot
+
+:ubuntu
+#set mirror http://ftp.ubuntu.com/ubuntu/
+set mirror http://${country}.releases.ubuntu.com/ubuntu/
+
+menu Ubuntu ${darch}
+item --key p precise Ubuntu 12.04 LTS Precise Pangolin
+item --key o oneiric Ubuntu 11.10 Oneiric Ocelot
+item --key n natty Ubuntu 11.04 Natty Narwhal
+# lucid's pxelinux scripts are not compatible :-(
+#item --key l lucid Ubuntu 10.04.3 LTS Lucid Lynx
+
+:deb_boot
+choose version || goto deb_exit
+set dir dists/${version}/main/installer-${darch}/current/images/netboot/
+echo ${cls}
+
+set 209:string pxelinux.cfg/default
+set 210:string ${mirror}${dir}
+
+kernel ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
+
+:deb_exit
+exit 0

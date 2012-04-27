@@ -28,6 +28,12 @@ iseq ${menu} fedora && set default --default || set default --
 item --key f ${default} fedora ${space} Fedora ${arch} [f]
 iseq ${menu} centos && set default --default || set default --
 item --key c ${default} centos ${space} CentOS ${arch} [c]
+iseq ${menu} debian && set default --default || set default --
+item --key b ${default} debian ${space} Debian [b]
+iseq ${menu} ubuntu && set default --default || set default --
+item --key u ${default} ubuntu ${space} Ubuntu [u]
+iseq ${menu} opensuse && set default --default || set default --
+item --key o ${default} opensuse ${space} openSUSE [o]
 iseq ${menu} pmagic && set default --default || set default --
 item --key p ${default} pmagic ${space} Parted Magic [p]
 iseq ${menu} dos && set default --default || set default --
@@ -135,6 +141,17 @@ goto params_menu
 :params_exit
 goto main_menu
 
+:debian
+:ubuntu
+imgverify deb.ipxe ${sigs}deb.ipxe.sig
+chain deb.ipxe
+goto main_menu
+
+:opensuse
+imgverify opensuse.ipxe ${sigs}opensuse.ipxe.sig
+chain opensuse.ipxe
+goto main_menu
+
 # OS
 :fedora
 set os Fedora
@@ -224,7 +241,6 @@ imgstat
 isset ${debug} && prompt ||
 boot
 exit
-
 :bootos_isolinux
 echo Loading isolinux from ${mirror}/${dir}/isolinux/
 set 209:string isolinux.cfg
