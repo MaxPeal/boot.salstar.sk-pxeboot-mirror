@@ -1,12 +1,19 @@
+#!ipxe
+
+# Fedora & CentOS
+
+goto ${menu} ||
+
 # OS
 :fedora
 set os Fedora
+set devel_version 17
 menu Fedora
 item --key 6 16 ${os} 16 ${arch} [6]
 item --key 5 15 ${os} 15 ${arch} [5]
-item --key a 17-Alpha ${os} 17-Aplha ${arch} [a]
-item --key b 17-Beta ${os} 17-Beta ${arch} [b]
-item --key d development ${os} 17 (development) ${arch} [d]
+item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
+item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
+item --key d development ${os} ${devel_version} (development) ${arch} [d]
 isset ${version} || choose version || goto main_menu
 echo ${cls}
 goto fedora_${version} ||
@@ -16,16 +23,18 @@ set osks http://www.salstar.sk/ks/auto
 goto boottype
 
 :fedora_development
-set dir fedora/linux/development/17/${arch}/os
+set dir fedora/linux/development/${devel_version}/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
-:fedora_17-Alpha
+:fedora_Alpha
+set version ${devel_version}-Alpha
 set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
-:fedora_17-Beta
+:fedora_Beta
+set version ${devel_version}-Beta
 set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
@@ -34,7 +43,7 @@ goto fedora_setvars
 set dir fedora/linux/releases/${version}/Live/${arch}
 set img ${os}-${version}-${arch}-Live-Desktop.iso
 prompt
-exit
+goto main_menu
 
 :centos
 set os CentOS
@@ -86,7 +95,8 @@ imgargs vmlinuz nodhcp method=${mirror}/${dir} ${params}
 imgstat
 isset ${debug} && prompt ||
 boot
-exit
+goto main_menu
+
 :bootos_isolinux
 echo Loading isolinux from ${mirror}/${dir}/isolinux/
 set 209:string isolinux.cfg
@@ -94,7 +104,7 @@ set 210:string ${mirror}/${dir}/isolinux/
 imgload ${url}pxelinux.0
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
-exit
+goto main_menu
 
 :bootos_live_desktop
 set img ${os}-${version}-${arch}-Live-Desktop.iso
@@ -113,4 +123,6 @@ echo WARNING: This does not really works!
 kernel ${url}memdisk iso raw ${params}
 initrd ${mirror}/${dir}/${img}
 boot
-exit
+
+:main_menu
+exit 0

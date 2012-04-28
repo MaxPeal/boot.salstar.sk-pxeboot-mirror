@@ -39,7 +39,7 @@ echo ${cls}
 set 209:string pxelinux.cfg/default
 set 210:string ${mirror}${dir}
 
-kernel ${url}pxelinux.0
+kernel ${url}pxelinux.0 ${params}
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
 
