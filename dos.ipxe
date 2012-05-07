@@ -14,20 +14,19 @@ echo ${cls}
 goto boot_dos_${value}
 
 :boot_dos_exit
-#imgverify script.ipxe ${sigs}script.ipxe.sig
-#chain script.ipxe
 exit 0
 
 :boot_dos_install
-set dir mirrors/freedos/1.1
+set dir mirrors/images
 kernel ${url}memdisk iso ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fd11src.iso
 imgverify fd11src.iso ${sigs}${dir}/fd11src.iso.sig
+#sanboot ${mirror}/${dir}/fd11src.iso
 boot
 
 :boot_dos_live
-set dir mirrors/freedos/1.1
+set dir mirrors/images
 kernel ${url}memdisk raw keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fd11live.img.zip
@@ -53,16 +52,24 @@ initrd ${imgurl} || goto enter_path
 boot
 
 :boot_dos_ubcd
+set dir mirrors/images
 kernel ${url}memdisk iso keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${url}images/ubcd511.iso
-imgverify ubcd511.iso ${sigs}images/ubcd511.iso.sig
+initrd ${mirror}/${dir}/ubcd511.iso
+imgverify ubcd511.iso ${sigs}${dir}/ubcd511.iso.sig
+#sanboot ${mirror}/${dir}/ubcd511.iso
 boot
 
 :boot_dos_fdubcd
+set dir mirrors/images
 kernel ${url}memdisk iso raw keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
-set dir mirrors/freedos/1.1
-initrd ${url}images/fdubcd.iso
-imgverify fdubcd.iso ${sigs}images/fdubcd.iso.sig
+initrd ${mirror}/${dir}/fdubcd.iso
+imgverify fdubcd.iso ${sigs}${dir}/fdubcd.iso.sig
 boot
+#set url http://pxe.salstar.sk/
+#echo HOOK
+#sanhook --no-describe ${mirror}/${dir}/fdubcd.iso
+#echo BOOTING
+#sanboot
+#echo END

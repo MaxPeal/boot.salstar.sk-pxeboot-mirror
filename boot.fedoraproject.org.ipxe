@@ -1,0 +1,4 @@
+#!ipxe
+
+imgtrust --allow
+chain http://dl.fedoraproject.org/pub/alt/bfo/bfo.lkrn

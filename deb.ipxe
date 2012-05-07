@@ -1,7 +1,5 @@
 #!ipxe
 
-set darch ${arch}
-iseq ${darch} x86_64 && set darch amd64 ||
 set country sk
 
 goto ${menu} ||
@@ -12,32 +10,79 @@ choose menu || goto deb_exit
 goto ${menu}
 
 :debian
-set mirror http://ftp.${country}.debian.org/debian/
+set debmirror http://ftp.${country}.debian.org/debian/
 
-menu Debian ${darch}
-item --key s squeeze Debian squeeze (stable) [s]
-item --key t wheezy Debian wheezy (testing) [t]
-item --key u sid Debian sid (unstable) [u]
-goto deb_boot
+set os Debian
+menu ${os} ${arch_a}
+item --key s squeeze ${os} 6.0 squeeze (stable) [s]
+item --key t wheezy ${os} wheezy (testing) [t]
+item --key u sid ${os} sid (unstable) [u]
+choose version || goto deb_exit
+goto deb_boot_type
 
 :ubuntu
-#set mirror http://ftp.ubuntu.com/ubuntu/
-set mirror http://${country}.releases.ubuntu.com/ubuntu/
+#set debmirror http://ftp.ubuntu.com/ubuntu/
+set debmirror http://${country}.releases.ubuntu.com/ubuntu/
 
-menu Ubuntu ${darch}
-item --key p precise Ubuntu 12.04 LTS Precise Pangolin
-item --key o oneiric Ubuntu 11.10 Oneiric Ocelot
-item --key n natty Ubuntu 11.04 Natty Narwhal
+set os Ubuntu
+menu ${os} ${arch_a}
+item --key p precise ${os} 12.04 LTS Precise Pangolin
+item --key o oneiric ${os} 11.10 Oneiric Ocelot
+item --key n natty ${os} 11.04 Natty Narwhal
 # lucid's pxelinux scripts are not compatible :-(
-#item --key l lucid Ubuntu 10.04.3 LTS Lucid Lynx
-
-:deb_boot
+#item --key l lucid ${os} 10.04.3 LTS Lucid Lynx
 choose version || goto deb_exit
-set dir dists/${version}/main/installer-${darch}/current/images/netboot/
-echo ${cls}
 
+:deb_boot_type
+set dir dists/${version}/main/installer-${arch_a}/current/images/netboot/
+
+menu ${os} boot parameters
+item --key k install ${os} install [k]
+item --key c rescue ${os} rescue mode [c]
+item --key a automated ${os} automated install [a]
+item --key e expert ${os} expert install [e]
+# desktop selection for Debian only
+iseq ${menu} debian && item --key d desktop ${os} desktop selection [d] ||
+item --key p pxe ${os} pxelinux boot [p]
+choose --default ${type} type || goto deb_exit
+
+echo ${cls}
+goto deb_${type}
+
+:deb_desktop
+menu ${os} desktop selection
+item default Default
+item kde KDE
+item lxde LXDE
+item xfce XFCE
+choose --default ${desktop} desktop || goto deb_boot_type
+iseq desktop default && clear desktop_param || set desktop_param desktop=${desktop}
+goto deb_boot_type
+
+:deb_rescue
+set insatll_params rescue/enable=true
+goto deb_boot
+
+:deb_automated
+set install_params auto=true priority=critical
+goto deb_boot
+
+:dev_expert
+set install_params priority=low
+goto deb_boot
+
+:deb_install
+:deb_boot
+set dir ${dir}${menu}-installer/${arch_a}/
+imgtrust --allow
+echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
+kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params}
+initrd ${debmirror}${dir}initrd.gz
+boot
+
+:deb_pxe_boot
 set 209:string pxelinux.cfg/default
-set 210:string ${mirror}${dir}
+set 210:string ${debmirror}${dir}
 
 kernel ${url}pxelinux.0 ${params}
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig

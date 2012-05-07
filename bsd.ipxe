@@ -1,0 +1,101 @@
+#!ipxe
+
+menu BSD systems
+item --key o openbsd OpenBSD
+item --key n netbsd NetBSD
+item --key f freebsd FreeBSD
+item --key p pcbsd PC-BSD
+choose bsd || goto bsd_exit
+
+goto ${bsd}
+:bsd_exit
+exit 0
+
+:boot_bsd
+echo ${cls}
+imgtrust --allow
+initrd ${mirror}${dir}/${iso}
+chain ${url}memdisk iso raw
+exit
+
+:openbsd
+set os OpenBSD
+menu ${os} ${arch_a}
+item 5.1 ${os} 5.1
+item 5.0 ${os} 5.0
+item 4.9 ${os} 4.9
+item 4.8 ${os} 4.8
+item other ${os} Choose other version
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version_openbsd
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version_openbsd
+
+iseq ${version} 5.2 && set ver 52 ||
+iseq ${version} 5.1 && set ver 51 ||
+iseq ${version} 5.0 && set ver 50 ||
+iseq ${version} 4.9 && set ver 49 ||
+iseq ${version} 4.8 && set ver 48 ||
+
+set mirror http://ftp.openbsd.org/pub/
+set dir OpenBSD/${version}/${arch_a}
+set iso cd${ver}.iso
+goto boot_bsd
+
+:netbsd
+set os NetBSD
+menu ${os} ${arch_a}
+item 5.1.2 ${os} 5.1.2
+item 5.0.2 ${os} 5.0.2
+item 4.0.1 ${os} 4.0.1
+item other ${os} Choose other version
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version_netbsd
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version_netbsd
+
+set mirror http://ftp.availo.se/pub/
+set dir NetBSD/iso/${version}
+set iso ${arch_a}cd-${version}.iso
+goto boot_bsd
+
+:freebsd
+set os FreeBSD
+menu ${os}
+item 9.0 ${os} 9.0
+item 8.3 ${os} 8.3
+item other ${os} Choose other version
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version_freebsd
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version_freebsd
+
+set mirror http://ftp.sk.freebsd.org/pub/
+set dir FreeBSD/releases/ISO-IMAGES/${version}
+set iso FreeBSD-${version}-RELEASE-${arch_a}-bootonly.iso
+goto boot_bsd
+
+:pcbsd
+set os PC-BSD
+menu ${os}
+item 9.0 ${os} 9.0
+item 8.2 ${os} 8.2
+item other ${os} Choose other version
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version_pcbsd
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version_pcbsd
+
+set mirror http://ftp.netbsd.se/PC-BSD/
+iseq ${arch} i386 && set xarch x86 || set xarch x64
+set dir ${version}/${arch_a}
+set iso PCBSD${version}-${xarch}-bootonly.iso
+goto boot_bsd

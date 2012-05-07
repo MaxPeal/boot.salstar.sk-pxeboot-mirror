@@ -1,0 +1,24 @@
+#!ipxe
+
+# This is testing only. Gentoo has no minimal isos or bootable kernels.
+
+set default_version 20120223
+
+iseq ${arch} x86_64 && set gt_arch amd64 || set gt_arch x86
+
+echo For Gentoo you need ISO image version number.
+echo See this link for latest build version:
+echo http://distfiles.gentoo.org/releases/${gt_arch}/autobuilds/current-iso/
+echo Example: ${default_version}
+
+echo -n Enter version: ${} && read version
+
+isset ${version} || set version ${default_version}
+
+set mirror http://ftp.fi.muni.cz/pub/linux/gentoo
+set dir releases/${gt_arch}/autobuilds/current-iso/
+set iso install-${gt_arch}-minimal-${version}.iso
+
+imgtrust --allow
+initrd ${mirror}/${dir}/${iso}
+chain memdisk iso

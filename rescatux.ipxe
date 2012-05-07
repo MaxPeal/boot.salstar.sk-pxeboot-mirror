@@ -1,0 +1,9 @@
+#!ipxe
+
+set iso rescatux_cdrom_usb_hybrid_i386_486-amd64_0.30b5_sg2d.iso
+
+imgtrust --allow
+kernel ${url}memdisk iso raw ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd http://sourceforge.net/projects/rescatux.berlios/files/${iso}/download
+boot

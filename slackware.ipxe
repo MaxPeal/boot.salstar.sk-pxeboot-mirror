@@ -1,0 +1,26 @@
+#!ipxe
+
+iseq ${arch} x86_64 && set sbits 64 || clear sbits
+
+set os Slackware
+menu ${os}
+item current ${os} Current ${bits} bit
+item 13.37 ${os} 13.37 ${bits} bit
+item 13.1 ${os} 13.1 ${bits} bit
+item 13.0 ${os} 13.0 ${bits} bit
+item other Choose other version
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version
+
+set mirror http://ftp.linux.cz/pub/
+set dir linux/slackware/slackware${sbits}-${version}
+
+imgtrust --allow
+kernel ${mirror}${dir}/kernels/huge.s/bzImage
+initrd ${mirror}${dir}/isolinux/initrd.img
+imgargs bzImage load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 SLACK_KERNEL=huge.s ${params}
+boot

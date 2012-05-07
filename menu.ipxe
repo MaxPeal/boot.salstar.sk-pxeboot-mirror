@@ -20,48 +20,61 @@ imgtrust
 :main_menu
 clear version
 set space:hex 20:20
-menu SAL's iPXE MENU
+menu SAL's PXE MENU (press "x" to expand menu)
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
 item --gap Operating systems:
-iseq ${menu} fedora && set default --default || set default --
-item --key f ${default} fedora ${space} Fedora ${arch} [f]
-iseq ${menu} centos && set default --default || set default --
-item --key c ${default} centos ${space} CentOS ${arch} [c]
-iseq ${menu} debian && set default --default || set default --
-item --key b ${default} debian ${space} Debian [b]
-iseq ${menu} ubuntu && set default --default || set default --
-item --key u ${default} ubuntu ${space} Ubuntu [u]
-iseq ${menu} opensuse && set default --default || set default --
-item --key o ${default} opensuse ${space} openSUSE [o]
-iseq ${menu} pmagic && set default --default || set default --
-item --key p ${default} pmagic ${space} Parted Magic [p]
-iseq ${menu} dos && set default --default || set default --
-item --key d ${default} dos ${space} FreeDOS [d]
+# Fedora, CentOS, Scientific Linux
+item --key f fedora ${space} Fedora ${arch} [f]
+item --key c centos ${space} CentOS ${arch} [c]
+isset ${extended_menu} && item scientific ${space} Scientific Linux ${arch} ||
+# Deb based systems
+iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
+item --key b debian ${space} Debian ${arch_a} [b]
+item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
+# Others
+item --key o opensuse ${space} openSUSE ${arch} [o]
+isset ${extended_menu} && item archlinux ${space} ArchLinux ${arch_a} ||
+iseq ${arch} i386 && set arch5 i586 || set arch5 ${arch}
+isset ${extended_menu} && item mandriva ${space} Mandriva ${arch5} ||
+isset ${extended_menu} && item slackware ${space} Slackware ${bits} bit ||
+item --key p pmagic ${space} Parted Magic [p]
+isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||
+#isset ${extended_menu} && item rescatux ${space} RescaTux ||
+# BSD systems
+isset ${extended_menu} && item bsd ${space} BSD systems ||
+# DOS
+item --key d dos ${space} FreeDOS [d]
+isset ${extended_menu} || item --key x extended_menu ${space} Other systems [x]
 item --gap Options:
 iseq ${arch} x86_64 && set bits 64 || set bits 32
-iseq ${menu} changebits && set default --default || set default --
-item --key a ${default} changebits ${space} Architecture: ${arch} (${bits}bit) [a]
-iseq ${menu} params_menu && set default --default || set default --
-item --key 0x09 ${default} params_menu ${space} Kernel parameters: ${params}
+item --key a changebits ${space} Architecture: ${arch} (${bits}bit) [a]
+item --key 0x09 params_menu ${space} Kernel parameters: ${params}
 item --gap Tools:
-item --key x pxelinux ${space} Chainload pxelinux menu [x]
 item --key h hdt ${space} Hardware detection tool [h]
 item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
 item --key s shell ${space} iPXE shell [s]
 isset ${menu} && set timeout 0 || set timeout 60000
-choose --timeout ${timeout} menu || goto local
+choose --timeout ${timeout} --default ${menu} menu || goto local
 echo ${cls}
-goto ${menu}
+goto ${menu} ||
+imgverify ${menu}.ipxe ${sigs}${menu}.ipxe.sig || goto error
+chain ${menu}.ipxe || goto error
+goto main_menu
+
+:error
+echo Error occured, press any key to return to menu ...
+prompt
+goto main_menu
 
 :local
 echo Booting from local disks ...
 exit 0
 
 :reload
-echo Reloading script.ipxe ...
-imgverify script.ipxe ${sigs}script.ipxe
-chain script.ipxe
+echo Reloading menu.ipxe ...
+imgverify menu.ipxe ${sigs}menu.ipxe
+chain menu.ipxe
 
 :pxelinux
 echo Loading pxelinux ...
@@ -78,16 +91,6 @@ set 210:string ${url}pxelinux.cfg/
 kernel ${url}pxelinux.0
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
-goto main_menu
-
-:pmagic
-imgverify pmagic.ipxe ${sigs}pmagic.ipxe.sig
-chain pmagic.ipxe
-goto main_menu
-
-:dos
-imgverify dos.ipxe ${sigs}dos.ipxe.sig
-chain dos.ipxe
 goto main_menu
 
 :memtest
@@ -138,12 +141,14 @@ goto params_menu
 set params ${params} console=ttyS1
 goto params_menu
 
-:params_exit
+:extended_menu
+isset ${extended_menu} && clear extended_menu || set extended_menu 1
 goto main_menu
 
 # OS
 :fedora
 :centos
+:scientific
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 goto main_menu
@@ -152,9 +157,4 @@ goto main_menu
 :ubuntu
 imgverify deb.ipxe ${sigs}deb.ipxe.sig
 chain deb.ipxe
-goto main_menu
-
-:opensuse
-imgverify opensuse.ipxe ${sigs}opensuse.ipxe.sig
-chain opensuse.ipxe
 goto main_menu

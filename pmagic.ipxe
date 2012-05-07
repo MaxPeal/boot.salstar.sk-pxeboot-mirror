@@ -3,14 +3,14 @@
 :pmagic_menu
 set dir mirrors/pmagic
 menu Parted Magic (pmagic)
+item --key 1 2012_04_21 Parted Magic 2012_04_21
 item --key 1 2012_3_24 Parted Magic 2012_3_24
 item --key 2 2012_2_27 Parted Magic 2012_2_27
 choose version || goto boot_pmagic_exit
 
 :pmagic_arch
 menu Parted Magic ${version}
-iseq ${arch} x86_64 && set default --default || set default --
-item --key 6 ${default} x86_64 Parted Magic ${version} (x86_64) [6]
+item --key 6 x86_64 Parted Magic ${version} (x86_64) [6]
 iseq ${arch} i386 && set default --default || set default --
 item --key p ${default} base Parted Magic ${version} (Pentium III class+) [p]
 item --key 4 i486 Parted Magic ${version} (i486, i586, PII) [4]
@@ -20,8 +20,6 @@ echo ${cls}
 goto boot_pmagic_${value}
 
 :boot_pmagic_exit
-#imgverify script.ipxe ${sigs}script.ipxe.sig
-#chain script.ipxe
 exit 0
 
 :boot_pmagic_base

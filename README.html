@@ -1,0 +1,197 @@
+<h1>SAL's PXE BOOT</h1>
+
+<div>
+Can boot
+<a href="http://www.linux.org/">Linux</a>,
+<a href="http://www.bsd.org/">BSD</a>,
+<a href="http://www.freedos.org/">DOS</a>
+and tools like
+<a href="http://hdt-project.org">hdt</a>,
+<a href="http://www.memtest.org/">memtest</a>,
+...
+<br/><br/>
+
+Supported operating systems:
+<ul>
+  <li>RPM based Linux distributions:
+    <ul>
+      <li>		Fedora *</li>
+      <li>		CentOS *</li>
+      <li>		Scientific linux *</li>
+      <li>		openSUSE</li>
+      <li>		Mandriva</li>
+    </ul>
+  </li>
+  <li>	DEB based Linux distributions:
+    <ul>
+      <li>		Debian</li>
+      <li>		Ubuntu</li>
+    </ul>
+  </li>
+  <li>	Other Linux distributions:
+    <ul>
+      <li>		Slackware</li>
+      <li>		ArchLinux</li>
+    </ul>
+  </li>
+  <li>	Live distributions:
+    <ul>
+      <li>		Parted Magic *</li>
+      <li>		Clonezilla *</li>
+    </ul>
+  </li>
+  <li>	BSD systems:
+    <ul>
+      <li>		OpenBSD</li>
+      <li>		NetBSD</li>
+      <li>		FreeBSD</li>
+      <li>		PC-BSD</li>
+    </ul>
+  </li>
+  <li>	FreeDOS images:
+    <ul>
+      <li>		UBCD FreeDOS *</li>
+      <li>		Ultimate boot CD *</li>
+      <li>		FreeDOS 1.1 src (installation iso) *</li>
+    </ul>
+  </li>
+  <li>	Tools:
+    <ul>
+      <li>		Hardware detection tool (HDT) *</li>
+      <li>		MemTest86+ *</li>
+    </ul>
+  </li>
+</ul>
+
+Systems with asterisk (*) are signed and signature is verified before boot.
+<br/><br/>
+Requirements: *86* PC with network connection.
+<br/><br/>
+Optional but recommended: network configuration from DHCP server.
+<br/><br/>
+See into <a href="ipxe/">ipxe/</a> dir for how to boot your favorite system.
+</div>
+
+<div>
+<h3>Screenshots</h3>
+Main menu:<br/>
+
+<pre class="screenshot">
+                                                                                
+ <span class="title">                  SAL's PXE MENU (press "x" to expand menu)                   </span> 
+                                                                                
+ <span class="gap">  Default:                                                                    </span> 
+ <span class="cursor">     Boot local hdd [l]                                                       </span> 
+ <span class="gap">  Operating systems:                                                          </span> 
+      Fedora x86_64 [f]                                                         
+      CentOS x86_64 [c]                                                         
+      Debian amd64 [b]                                                          
+      Ubuntu amd64 [u]                                                          
+      openSUSE x86_64 [o]                                                       
+      Parted Magic [p]                                                          
+      FreeDOS [d]                                                               
+      Other systems [x]                                                         
+ <span class="gap">  Options:                                                                    </span> 
+      Architecture: x86_64 (64bit) [a]                                          
+      Kernel parameters:                                                        
+ <span class="gap">  Tools:                                                                      </span> 
+      Hardware detection tool [h]                                               
+      MemTest86+ 4.20 [m]                                                       
+      iPXE shell [s]                                                            
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+</pre><br/>
+
+Extended main menu:<br/>
+
+<pre class="screenshot">
+                                                                                
+ <span class="title">                  SAL's PXE MENU (press "x" to expand menu)                   </span> 
+                                                                                
+ <span class="gap">  Default:                                                                    </span> 
+      Boot local hdd [l]                                                        
+ <span class="gap">  Operating systems:                                                          </span> 
+ <span class="cursor">     Fedora x86_64 [f]                                                        </span> 
+      CentOS x86_64 [c]                                                         
+      Scientific Linux x86_64                                                   
+      Debian amd64 [b]                                                          
+      Ubuntu amd64 [u]                                                          
+      openSUSE x86_64 [o]                                                       
+      ArchLinux amd64                                                           
+      Mandriva x86_64                                                           
+      Slackware 64 bit                                                          
+      Parted Magic [p]                                                          
+      Clonezilla [z]                                                            
+      BSD systems                                                               
+      FreeDOS [d]                                                               
+ <span class="gap">  Options:                                                                    </span> 
+      Architecture: x86_64 (64bit) [a]                                          
+ <span class="gap">  ...                                                                         </span> 
+                                                                                
+                                                                                
+                                                                                
+</pre><br/>
+
+Fedora version selection:<br/>
+
+<pre class="screenshot">
+                                                                                
+ <span class="title">                                    Fedora                                    </span> 
+                                                                                
+ <span class="cursor">  Fedora 16 x86_64 [6]                                                        </span> 
+   Fedora 15 x86_64 [5]                                                         
+   Fedora 17-Aplha x86_64 [a]                                                   
+   Fedora 17-Beta x86_64 [b]                                                    
+   Fedora 17 (development) x86_64 [d]                                           
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+</pre><br/>
+
+Fedora installation type selection:<br/>
+
+<pre class="screenshot">
+                                                                                
+ <span class="title">                               Fedora boot type                               </span> 
+                                                                                
+ <span class="cursor">  Fedora 16 x86_64                                                            </span> 
+   Fedora 16 x86_64 kickstart [k]                                               
+   Fedora 16 x86_64 rescue [r]                                                  
+   Fedora 16 x86_64 rescue with ssh [s]                                         
+   Fedora 16 x86_64 kickstart part=root=4 [a]                                   
+   Fedora 16 x86_64 direct boot using isolinux [i]                              
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+                                                                                
+</pre>
+
+</div>

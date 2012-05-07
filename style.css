@@ -1,0 +1,20 @@
+pre.screenshot {
+	display: inline-block;
+	font-size: 12pt;
+	font-weight: bold;
+	color: #a8a8a8;
+	background-color: #0000a8;
+}
+
+.title {
+	color: #ffffff;
+}
+
+.gap {
+	color: #00a8a8;
+}
+
+.cursor {
+	color: #ffffff;
+	background-color: #a80000;
+}

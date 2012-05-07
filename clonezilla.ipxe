@@ -1,0 +1,19 @@
+#!ipxe
+
+set version 1.2.12-37
+
+iseq ${arch} x86_64 && set cz_arch amd64 || set cz_arch i686-pae
+
+set dir mirrors/clonezilla/clonezilla-live-${version}-${cz_arch}
+set fetch ${mirror}/${dir}/live/filesystem.squashfs
+
+kernel ${mirror}/${dir}/live/vmlinuz
+imgverify vmlinuz ${sigs}${dir}/live/vmlinuz.sig
+initrd ${mirror}/${dir}/live/initrd.img
+imgverify initrd.img ${sigs}${dir}/live/initrd.img.sig
+imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_keymap="" ocs_live_batch="no" ocs_lang="" vga=788 nosplash noprompt fetch=${fetch} ${params}
+boot
+
+# boot iso directly from sourceforge
+initrd http://sourceforge.net/projects/clonezilla/files/clonezilla_live_stable/${version}/clonezilla-live-${version}-${cz_arch}.iso/download
+chain memdisk iso raw

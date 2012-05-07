@@ -14,8 +14,8 @@ item --key 5 15 ${os} 15 ${arch} [5]
 item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
 item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
 item --key d development ${os} ${devel_version} (development) ${arch} [d]
+item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${version} || choose version || goto main_menu
-echo ${cls}
 goto fedora_${version} ||
 set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
@@ -45,15 +45,33 @@ set img ${os}-${version}-${arch}-Live-Desktop.iso
 prompt
 goto main_menu
 
+# boot.fedoraproject.org online boot
+:fedora_fedoraproject
+echo ${cls}
+imgverify boot.fedoraproject.org.ipxe ${sigs}boot.fedoraproject.org.ipxe.sig
+chain boot.fedoraproject.org.ipxe
+exit
+
 :centos
 set os CentOS
-menu CentOS
+menu ${os}
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 isset ${version} || choose version || goto main_menu
-echo ${cls}
-set dir centos/${version}/os/${arch}
+set dir ${menu}/${version}/os/${arch}
 set osks http://www.salstar.sk/ks/centos${version}
+goto boottype
+
+:scientific
+set os Scientific Linux
+menu ${os}
+item --key 6 6 ${os} 6 ${arch} [6]
+item --key 5 5 ${os} 5 ${arch} [5]
+isset ${version} || choose version || goto main_menu
+set dir ${menu}/${version}x/${arch}/os
+iseq ${version} 5 && set dir ${menu}/${version}x/${arch} ||
+set osks http://www.salstar.sk/ks/centos${version}
+set mirror http://ftp.scientificlinux.org/linux
 goto boottype
 
 :boottype
@@ -65,8 +83,8 @@ item --key r rescue ${ova} rescue [r]
 item --key s remote ${ova} rescue with ssh [s]
 item --key a autopart ${ova} kickstart part=root=4 [a]
 item --key i isolinux ${ova} direct boot using isolinux [i]
-#item --key l live_desktop ${ova} Live Desktop [l]
-#item --key d live_kde ${ova} Live KDE [d]
+isset ${testing} && item --key l live_desktop ${ova} Live Desktop [l] ||
+isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
 isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
@@ -120,8 +138,9 @@ set next-server 158.197.16.70
 set params ip=${ip}:${next-server}:${gateway}:${netmask} BOOTIF=${mac}
 echo params: ${params}
 echo WARNING: This does not really works!
-kernel ${url}memdisk iso raw ${params}
-initrd ${mirror}/${dir}/${img}
+#kernel ${url}memdisk iso raw ${params}
+#initrd ${mirror}/${dir}/${img}
+sanboot --no-describe ${mirror}/${dir}/${img}
 boot
 
 :main_menu
