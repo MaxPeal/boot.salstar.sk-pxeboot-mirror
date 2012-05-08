@@ -2,7 +2,7 @@
 
 :start
 set url https://pxe.salstar.sk/
-set mirror http://ftp.upjs.sk${mirror_port}/pub
+set mirror https://ftp.upjs.sk${mirror_port}/pub
 set sigs ${url}sigs/
 
 set cls:hex 1b:5b:4a  # ANSI clear screen sequence - "^[[J"
@@ -20,23 +20,23 @@ imgtrust
 :main_menu
 clear version
 set space:hex 20:20
-menu SAL's PXE MENU (press "x" to expand menu)
+menu SAL's PXE MENU
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
 item --gap Operating systems:
-# Fedora, CentOS, Scientific Linux
+# RPM based systems
 item --key f fedora ${space} Fedora ${arch} [f]
 item --key c centos ${space} CentOS ${arch} [c]
 isset ${extended_menu} && item scientific ${space} Scientific Linux ${arch} ||
+isset ${extended_menu} && item --key o opensuse ${space} openSUSE ${arch} [o] ||
+isset ${extended_menu} && item mandriva ${space} Mandriva ${arch5} ||
 # Deb based systems
 iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
 item --key b debian ${space} Debian ${arch_a} [b]
 item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
 # Others
-item --key o opensuse ${space} openSUSE ${arch} [o]
 isset ${extended_menu} && item archlinux ${space} ArchLinux ${arch_a} ||
 iseq ${arch} i386 && set arch5 i586 || set arch5 ${arch}
-isset ${extended_menu} && item mandriva ${space} Mandriva ${arch5} ||
 isset ${extended_menu} && item slackware ${space} Slackware ${bits} bit ||
 item --key p pmagic ${space} Parted Magic [p]
 isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||
@@ -109,6 +109,49 @@ goto main_menu
 
 :changebits
 iseq ${arch} x86_64 && set arch i386 || set arch x86_64
+goto main_menu
+
+# this is not used yet
+:select_arch
+menu Select architecture
+item --gap Basic:
+item --key 3 i386 i386 (32 bit) [3]
+item --key 6 x86_64 x86_64/amd64 (64 bit) [6]
+item --gap Extended:
+item i486 i486
+item i586 i586
+item i686 i686
+choose --default ${march} march || goto main_menu
+goto set_arch_${march}
+
+:set_arch_i386
+set arch i386
+set arch_a i386
+set xarch x86
+goto main_menu
+
+:set_arch_x86_64
+set arch x86_64
+set arch_a amd64
+set xarch x64
+goto main_menu
+
+:set_arch_i486
+set arch i386
+set arch_a i386
+set xarch x86
+goto main_menu
+
+:set_arch_i586
+set arch i386
+set arch_a i386
+set xarch x86
+goto main_menu
+
+:set_arch_i686
+set arch i386
+set arch_a i386
+set xarch x86
 goto main_menu
 
 :params_menu
