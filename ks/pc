@@ -84,6 +84,8 @@ epel-release
 %end
 
 %pre --interpreter /usr/bin/python
+# SAL's fedora/centos kickstart script
+
 import os, sys, re
 
 part_names = dict(

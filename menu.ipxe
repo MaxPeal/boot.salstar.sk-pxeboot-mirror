@@ -2,7 +2,7 @@
 
 :start
 set url https://pxe.salstar.sk/
-set mirror https://ftp.upjs.sk${mirror_port}/pub
+set mirror http://ftp.upjs.sk${mirror_port}/pub
 set sigs ${url}sigs/
 
 set cls:hex 1b:5b:4a  # ANSI clear screen sequence - "^[[J"

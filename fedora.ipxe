@@ -2,6 +2,8 @@
 
 # Fedora & CentOS
 
+set ksurl http://pxe.salstar.sk/ks/
+
 goto ${menu} ||
 
 # OS
@@ -19,7 +21,7 @@ isset ${version} || choose version || goto main_menu
 goto fedora_${version} ||
 set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
-set osks http://www.salstar.sk/ks/auto
+set osks ${ksurl}auto
 goto boottype
 
 :fedora_development
@@ -59,7 +61,7 @@ item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 isset ${version} || choose version || goto main_menu
 set dir ${menu}/${version}/os/${arch}
-set osks http://www.salstar.sk/ks/centos${version}
+set osks ${ksurl}centos${version}
 goto boottype
 
 :scientific
@@ -70,7 +72,7 @@ item --key 5 5 ${os} 5 ${arch} [5]
 isset ${version} || choose version || goto main_menu
 set dir ${menu}/${version}x/${arch}/os
 iseq ${version} 5 && set dir ${menu}/${version}x/${arch} ||
-set osks http://www.salstar.sk/ks/centos${version}
+set osks ${ksurl}centos${version}
 set mirror http://ftp.scientificlinux.org/linux
 goto boottype
 
@@ -89,7 +91,7 @@ isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
 iseq ${bt} rescue && set params rescue ${params} ||
-iseq ${bt} remote && set params ksdevice=bootif ks=http://www.salstar.sk/ks/rescue ${params} ||
+iseq ${bt} remote && set params ksdevice=bootif ks=${ksurl}rescue ${params} ||
 iseq ${bt} autopart && set params ksdevice=bootif ks=${osks} root=part=4 ${params} ||
 goto bootos_${bt} ||
 goto bootos_images
