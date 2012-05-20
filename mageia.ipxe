@@ -1,16 +1,9 @@
 #!ipxe
 
-set os Mandriva
+set os Mageia
 
 menu ${os}
-item current ${os} ${arch5} Current
-item 2011 ${os} ${arch5} 2011
-item 2010.2 ${os} ${arch5} 2010.2
-item 2010.1 ${os} ${arch5} 2010.1
-item 2010.0 ${os} ${arch5} 2010.0
-item 2009.1 ${os} ${arch5} 2009.1
-item 2009.0 ${os} ${arch5} 2009.0
-item 2008.1 ${os} ${arch5} 2008.1
+item 1 ${os} ${arch5} 1
 item other Choose other version of ${os}
 choose version || exit 0
 
@@ -19,9 +12,9 @@ echo ${cls}
 echo -n Enter version: ${} && read version
 :skip_read_version
 
-set server mandriva.mirror.dkm.cz
+set server ftp.linux.cz
 set mirror http://${server}/
-set dir pub/mandriva/official/${version}/${arch5}
+set dir pub/linux/mageia/distrib/${version}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 
 imgtrust --allow

@@ -1,7 +1,7 @@
 <h1>SAL's PXE BOOT</h1>
 
 <div>
-Can boot
+Network boot
 <a href="http://www.linux.org/">Linux</a>,
 <a href="http://www.bsd.org/">BSD</a>,
 <a href="http://www.freedos.org/">DOS</a>
@@ -15,60 +15,69 @@ Supported operating systems:
 <ul>
   <li>RPM based Linux distributions:
     <ul>
-      <li>		Fedora *</li>
-      <li>		CentOS *</li>
-      <li>		Scientific linux *</li>
-      <li>		openSUSE</li>
-      <li>		Mandriva</li>
+      <li>		<a href="http://fedoraproject.org/">Fedora</a> (s) (m)</li>
+      <li>		<a href="http://centos.org/">CentOS</a> (s) (m)</li>
+      <li>		<a href="http://www.scientificlinux.org/">Scientific linux</a> (s) (m)</li>
+      <li>		<a href="http://www.opensuse.org/">openSUSE</a> (m)</li>
+      <li>		<a href="http://www.mageia.org/">Mageia</a> (m)</li>
+      <li>		<a href="http://www.mandriva.com/">Mandriva</a> (m)</li>
     </ul>
   </li>
   <li>	DEB based Linux distributions:
     <ul>
-      <li>		Debian</li>
-      <li>		Ubuntu</li>
+      <li>		<a href="http://www.debian.org/">Debian</a> (m)</li>
+      <li>		<a href="http://www.ubuntu.com/">Ubuntu</a> (m)</li>
     </ul>
   </li>
   <li>	Other Linux distributions:
     <ul>
-      <li>		Slackware</li>
-      <li>		ArchLinux</li>
+      <li>		<a href="http://www.slackware.com/">Slackware</a> (m)</li>
+      <li>		<a href="http://www.archlinux.org/">ArchLinux</a> (m)</li>
     </ul>
   </li>
   <li>	Live distributions:
     <ul>
-      <li>		Parted Magic *</li>
-      <li>		Clonezilla *</li>
+      <li>		<a href="http://partedmagic.com/">Parted Magic</a> (s)</li>
+      <li>		<a href="http://clonezilla.org/">Clonezilla</a> (s)</li>
     </ul>
   </li>
   <li>	BSD systems:
     <ul>
-      <li>		OpenBSD</li>
-      <li>		NetBSD</li>
-      <li>		FreeBSD</li>
-      <li>		PC-BSD</li>
+      <li>		<a href="http://www.openbsd.org/">OpenBSD</a> (m)</li>
+      <li>		<a href="http://www.netbsd.org/">NetBSD</a> (m)</li>
+      <li>		<a href="http://www.freebsd.org/">FreeBSD</a> (m)</li>
+      <li>		<a href="http://www.pcbsd.org/">PC-BSD</a> (m)</li>
     </ul>
   </li>
   <li>	FreeDOS images:
     <ul>
-      <li>		UBCD FreeDOS *</li>
-      <li>		Ultimate boot CD *</li>
-      <li>		FreeDOS 1.1 src (installation iso) *</li>
+      <li>		UBCD FreeDOS (s)</li>
+      <li>		<a href="http://www.ultimatebootcd.com/">Ultimate boot CD</a> (s)</li>
+      <li>		<a href="http://www.freedos.org/">FreeDOS 1.1 src (installation iso)</a> (s)</li>
     </ul>
   </li>
   <li>	Tools:
     <ul>
-      <li>		Hardware detection tool (HDT) *</li>
-      <li>		MemTest86+ *</li>
+      <li>		<a href="http://hdt-project.org/">Hardware detection tool (HDT)</a> (s)</li>
+      <li>		<a href="http://www.memtest86.com/">MemTest86+</a> (s)</li>
     </ul>
   </li>
 </ul>
 
-Systems with asterisk (*) are signed and signature is verified before boot.
-<br/><br/>
-Requirements: *86* PC with network connection.
-<br/><br/>
-Optional but recommended: network configuration from DHCP server.
-<br/><br/>
+Legend:<br/>
+<ul>
+  <li>(s) - signed and signature is verified before boot</li>
+  <li>(m) - booting from an official mirror</li>
+</ul>
+Requirements:<br/>
+<ul>
+  <li>x86 (32 or 64 bit) PC with network connection</li>
+</ul>
+Optional but recommended:
+<ul>
+  <li>network configuration from DHCP server</li>
+  <li>PXE enabled network card</li>
+</ul>
 See into <a href="ipxe/">ipxe/</a> dir for how to boot your favorite system.
 </div>
 
@@ -192,6 +201,7 @@ Fedora installation type selection:<br/>
                                                                                 
                                                                                 
                                                                                 
-</pre>
+</pre><br/>
 
+<h3>Files in this folder:</h3>
 </div>
