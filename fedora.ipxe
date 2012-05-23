@@ -2,7 +2,7 @@
 
 # Fedora & CentOS
 
-set ksurl http://pxe.salstar.sk/ks/
+set ksurl http://boot.salstar.sk/ks/
 
 goto ${menu} ||
 

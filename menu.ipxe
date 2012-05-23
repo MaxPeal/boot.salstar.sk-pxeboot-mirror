@@ -1,7 +1,7 @@
 #!ipxe
 
 :start
-set url https://pxe.salstar.sk/
+set url https://boot.salstar.sk/
 set mirror http://ftp.upjs.sk${mirror_port}/pub
 set sigs ${url}sigs/
 
@@ -22,7 +22,7 @@ clear version
 set space:hex 20:20
 iseq ${arch} i386 && set arch5 i586 || set arch5 ${arch}
 iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
-menu SAL's PXE MENU
+menu SAL's BOOT MENU
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
 item --gap Operating systems:

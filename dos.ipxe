@@ -67,7 +67,7 @@ imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fdubcd.iso
 imgverify fdubcd.iso ${sigs}${dir}/fdubcd.iso.sig
 boot
-#set url http://pxe.salstar.sk/
+#set url http://boot.salstar.sk/
 #echo HOOK
 #sanhook --no-describe ${mirror}/${dir}/fdubcd.iso
 #echo BOOTING
