@@ -9,8 +9,9 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_version 17
+set devel_version 18
 menu Fedora
+item --key 7 17 ${os} 17 ${arch} [7]
 item --key 6 16 ${os} 16 ${arch} [6]
 item --key 5 15 ${os} 15 ${arch} [5]
 item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]

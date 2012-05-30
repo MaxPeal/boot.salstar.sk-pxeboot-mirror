@@ -42,10 +42,10 @@
     while (!feof($f)) {
       $row = fgets($f, 4096);
       # sections
-      if (preg_match("/^#:BEGIN:/", "$row")) {
-        $section = substr($row, 8, -1);
+      if (preg_match("/^% if /", "$row")) {
+        $section = substr($row, 5, -1);
         continue;
-      } else if (preg_match("/^#:END:/", "$row")) {
+      } else if (preg_match("/^% endif/", "$row")) {
         $section = "";
         continue;
       }

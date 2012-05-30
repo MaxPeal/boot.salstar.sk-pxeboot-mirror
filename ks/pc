@@ -27,18 +27,18 @@ lang sk_SK.UTF-8
 # Installation logging level
 #logging info
 # Repository configuration
-#:BEGIN:fedora
+% if fedora
 url --url=http://ftp.upjs.sk/pub/fedora/linux/releases/15/Fedora/i386/os/
 repo --name=Updates --baseurl=http://ftp.upjs.sk/pub/fedora/linux/updates/15/i386/
 #repo --name=Everything --baseurl=http://ftp.upjs.sk/pub/fedora/linux/releases/15/Everything/i386/os/
-#repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/15/
-#:END:fedora
-#:BEGIN:centos
+#repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/15/i386/
+% endif fedora
+% if centos
 url --url=http://ftp.upjs.sk/pub/centos/6/os/i386/
 repo --name=Updates --baseurl=http://ftp.upjs.sk/pub/centos/6/updates/i386/
 repo --name=EPEL --baseurl=http://ftp.upjs.sk/pub/mirrors/epel/6/i386/
 #repo --name=Salstar --baseurl=http://www.salstar.sk/pub/centos/6/
-#:END:centos
+% endif centos
 # Network information
 network --bootproto=dhcp --onboot=on
 #vnc --host=158.197.240.41 --port=5500
@@ -75,12 +75,12 @@ joe
 mc
 parted
 -sendmail
-#:BEGIN:fedora
+% if fedora
 gdisk
-#:END:fedora
-#:BEGIN:centos
+% endif fedora
+% if centos
 epel-release
-#:END:centos
+% endif centos
 %end
 
 %pre --interpreter /usr/bin/python
@@ -100,14 +100,14 @@ part_names = dict(
 )
 sys.stdout = open('/tmp/partitions.cfg', 'wt')
 spare = 2
-#:BEGIN:fedora
+% if fedora
 distro = "fedora"
 biosboot = 2
-#:END:fedora
-#:BEGIN:centos
+% endif fedora
+% if centos
 distro = "centos"
 biosboot = 0
-#:END:centos
+% endif centos
 
 def disksize(*disks):
     ds = [
@@ -338,7 +338,7 @@ mkdir -p /root/.ssh
 echo 'from="work.salstar.sk,158.197.240.41" ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAou3n+SuHVsuM5QXAKnIKilPHnJdKm/KP31Ho2VahJIC7mK0+snbXZYXeQmnwYvqQaDVCl8p0ANMonbs189t+RdBZ86Yq6/boc7zhyrj3gqzflsjyGWp5Gfo2AGQ9pgW3JMHefHMMXqF2uB9pT7PRL873gGfMG1WE3W+loFpDYPgg5TQvDifDP+cnlEdT/30JROFBbJ6sJro5la+7vZT/Yd9JOyNSvjizSsqLyva/t1zhQ2Bb37xGJOgVoRc1Hj+fYe1+jaD2ebtGWWIykvfIb33tpoBg3KkN01rrniTiVD8t1yNPGxc9VecqJoK5QJOCZ6zpjeFtvmiZwdd9bgfznQ== ondrejj@work.salstar.sk' >> /root/.ssh/authorized_keys
 #chkconfig network on
 #chkconfig postfix on
-#:BEGIN:fedora
+% if fedora
 GRUB_MODULES="part_gpt part_msdos raid mdraid09 mdraid1x"
 if [ -e /sys/block/vdb ]; then
   GRUB_HD=/dev/vd
@@ -352,12 +352,12 @@ if [ "$GRUB_HD" ]; then
   /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}a
   echo "GRUB_PRELOAD_MODULES='$GRUB_MODULES'" >> /etc/default/grub
 fi >> /root/kslog
-#:END:fedora
-#:BEGIN:centos
+% endif fedora
+% if centos
 if [ -e /sys/block/vdb -o -e /sys/block/sdb ]; then
   echo -e 'root (hd0,0)\nsetup (hd0)' | grub --device-map=/boot/grub/device.map
   echo -e 'root (hd1,0)\nsetup (hd1)' | grub --device-map=/boot/grub/device.map
 fi
-#:END:centos
+% endif centos
 sync
 %end

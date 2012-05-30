@@ -80,7 +80,7 @@ kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${par
 initrd ${debmirror}${dir}initrd.gz
 boot
 
-:deb_pxe_boot
+:deb_pxe
 set 209:string pxelinux.cfg/default
 set 210:string ${debmirror}${dir}
 

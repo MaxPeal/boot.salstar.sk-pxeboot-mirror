@@ -3,6 +3,7 @@
 set os Mageia
 
 menu ${os}
+item 2 ${os} ${arch5} 2
 item 1 ${os} ${arch5} 1
 item other Choose other version of ${os}
 choose version || exit 0
@@ -12,23 +13,33 @@ echo ${cls}
 echo -n Enter version: ${} && read version
 :skip_read_version
 
+menu ${os} boot type
+item alt0 Normal boot using vmlinuz and initrd
+item pxe PXElinux boot
+choose boot_type || exit 0
+echo ${cls}
+
 set server ftp.linux.cz
 set mirror http://${server}/
 set dir pub/linux/mageia/distrib/${version}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 
+goto ${boot_type}_boot
+
+:alt0_boot
 imgtrust --allow
-kernel ${mirror}${dir}/isolinux/alt1/vmlinuz
-initrd ${mirror}${dir}/isolinux/alt1/all.rdz
+kernel ${mirror}${dir}/isolinux/alt0/vmlinuz
+initrd ${mirror}${dir}/isolinux/alt0/all.rdz
 imgargs vmlinuz automatic=${automatic} vga=788 splash=silent ${params}
 boot
 exit 0
 
-
-# default boot, type "alt1" after boot
+:pxe_boot
+# pxe boot, type "alt1" or "alt0" after boot
 set 209:string isolinux.cfg
 set 210:string ${mirror}${dir}/isolinux/
 
 kernel ${url}pxelinux.0 ${params}  
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
+exit 0
