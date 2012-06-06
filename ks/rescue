@@ -1,6 +1,7 @@
 #based on "rescue" configuration
 # System authorization information
 auth  --useshadow  --enablemd5 
+sshpw --username=root --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
 # System bootloader configuration
 bootloader --append="" --location=mbr --timeout=1
 # Firewall configuration

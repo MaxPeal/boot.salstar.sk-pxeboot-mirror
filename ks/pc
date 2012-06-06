@@ -14,11 +14,10 @@ bootloader --append="" --location=mbr --timeout=1
 # Use graphical install
 #graphical
 # Firewall configuration
-firewall --enabled --port=ssh:tcp
+firewall --enabled
+# --port=ssh:tcp # ssh is enabled by default
 # Run the Setup Agent on first boot
 firstboot --enable
-# Use interactive kickstart installation method
-#interactive
 # System keyboard
 keyboard us
 # System language

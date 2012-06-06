@@ -75,7 +75,7 @@
     fclose($f);
   }
 
-  preg_match('/^(xen|pc|fedora|centos|)(|64_)([0-9]+|auto)(|-Alpha|-Beta|-Preview)$/', "$req", $matches);
+  preg_match('/^(xen|pc|fedora|centos|desktop|)(|64_)([0-9]+|auto)(|-Alpha|-Beta|-Preview)$/', "$req", $matches);
   $config = "$matches[1]";
   if ("$config"=="") $config="fedora";
   $remove_packages = array();

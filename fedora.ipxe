@@ -19,6 +19,10 @@ item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
 item --key d development ${os} ${devel_version} (development) ${arch} [d]
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${version} || choose version || goto main_menu
+
+# workaround for fedora 17
+iseq ${version} 17 && set params rd.debug ${params} ||
+
 goto fedora_${version} ||
 set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
@@ -81,7 +85,8 @@ goto boottype
 set ova ${os} ${version} ${arch}
 menu ${os} boot type
 item normal ${ova}
-item --key k ks ${ova} kickstart [k]
+item --key k ks ${ova} minimal server kickstart [k]
+item --key d desktop ${ova} desktop kickstart [d]
 item --key r rescue ${ova} rescue [r]
 item --key s remote ${ova} rescue with ssh [s]
 item --key a autopart ${ova} kickstart part=root=4 [a]
@@ -91,6 +96,7 @@ isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
 isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
+iseq ${bt} desktop && set params ksdevice=bootif ks=${ksurl}/desktop${version} ${params} ||
 iseq ${bt} rescue && set params rescue ${params} ||
 iseq ${bt} remote && set params ksdevice=bootif ks=${ksurl}rescue ${params} ||
 iseq ${bt} autopart && set params ksdevice=bootif ks=${osks} root=part=4 ${params} ||
