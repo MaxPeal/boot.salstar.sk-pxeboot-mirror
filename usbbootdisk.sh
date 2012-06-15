@@ -1,5 +1,13 @@
 #!/bin/bash
 
+cat << EOF > /dev/null
+# LiveUSB creation:
+livecd-iso-to-disk \
+  --msdos --multi --noverify \
+  --home-size-mb 512 --unencrypted-home \
+  livecd-FedoraLive-201206151415.iso /dev/sdx1
+EOF
+
 set -e -x
 
 if [ -z "$1" ]; then
@@ -108,6 +116,10 @@ cfg_fedora_live() {
     echo "LABEL fedora_live"
     echo "  MENU LABEL ^Fedora $FEDORA Live"
     echo "  KERNEL grub2/grub.0"
+  elif [ -d $MOUNT/LiveOS/syslinux ]; then
+    echo "LABEL fedora_live"
+    echo "  MENU LABEL ^Fedora $FEDORA Live"
+    echo "  CONFIG ../LiveOS/syslinux/syslinux.cfg ../LiveOS/syslinux"
   fi
 }
 
