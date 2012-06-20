@@ -1,13 +1,5 @@
 #!/bin/bash
 
-cat << EOF > /dev/null
-# LiveUSB creation:
-livecd-iso-to-disk \
-  --msdos --multi --noverify \
-  --home-size-mb 512 --unencrypted-home \
-  livecd-FedoraLive-201206151415.iso /dev/sdx1
-EOF
-
 set -e -x
 
 if [ -z "$1" ]; then
@@ -124,6 +116,8 @@ cfg_fedora_live() {
 }
 
 umount $MOUNT 2>/dev/null || true
+umount $PART 2>/dev/null || true
+[ "$LIVE" ] && umount $LIVE 2>/dev/null || true
 #mkfs.vfat $PART
 
 mount $PART $MOUNT
