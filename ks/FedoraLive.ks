@@ -1,7 +1,7 @@
 # SAL's Live CD
 
 # LiveUSB creation:
-# LANG=C setarch i686 livecd-creator -v -c ks/FedoraLive.ks
+# LANG=C setarch i686 livecd-creator -v -c FedoraLive.ks
 # livecd-iso-to-disk \
 #  --msdos --multi --noverify --home-size-mb 512 --unencrypted-home \
 #  livecd-FedoraLive-201206151415.iso /dev/sdx1
