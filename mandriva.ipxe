@@ -24,6 +24,7 @@ set mirror http://${server}/
 set dir pub/mandriva/official/${version}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 
+imgfree
 imgtrust --allow
 kernel ${mirror}${dir}/isolinux/alt1/vmlinuz
 initrd ${mirror}${dir}/isolinux/alt1/all.rdz
@@ -36,6 +37,7 @@ exit 0
 set 209:string isolinux.cfg
 set 210:string ${mirror}${dir}/isolinux/
 
+imgfree
 kernel ${url}pxelinux.0 ${params}  
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot

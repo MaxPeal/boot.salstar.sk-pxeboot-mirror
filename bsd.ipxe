@@ -13,6 +13,7 @@ exit 0
 
 :boot_bsd
 echo ${cls}
+imgfree
 imgtrust --allow
 initrd ${mirror}${dir}/${iso}
 chain ${url}memdisk iso raw

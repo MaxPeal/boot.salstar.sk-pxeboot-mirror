@@ -11,6 +11,7 @@ set mirror http://ftp.linux.cz/pub/linux/opensuse/
 set dir distribution/${version}/repo/oss/
 iseq ${version} factory && set dir ${version}/repo/oss/ ||
 
+imgfree
 imgtrust --allow
 kernel ${mirror}${dir}boot/${arch}/loader/linux
 initrd ${mirror}${dir}boot/${arch}/loader/initrd

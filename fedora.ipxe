@@ -64,7 +64,12 @@ set os CentOS
 menu ${os}
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
+item --key c other Choose other version [c]
 isset ${version} || choose version || goto main_menu
+iseq ${version} other || goto centos_skip_read_version
+echo ${cls}
+echo -n Enter version: ${} && read version
+:centos_skip_read_version
 set dir ${menu}/${version}/os/${arch}
 set osks ${ksurl}centos${version}
 goto boottype
@@ -105,9 +110,10 @@ goto bootos_images
 
 :bootos_images
 echo Loading from ${mirror}/${dir}/isolinux/
-echo   method=${mirror}/${dir}
-echo   ${kickstart} ${rescue} ${params}
+echo ${}  method=${mirror}/${dir}
+echo ${}  ${params}
 #set next-server 158.197.16.70
+imgfree
 # load vmlinuz and initrd
 kernel ${mirror}/${dir}/isolinux/vmlinuz
 iseq ${version} development && imgtrust --allow ||
@@ -118,16 +124,17 @@ initrd ${mirror}/${dir}/isolinux/initrd.img
 iseq ${version} development && goto bootos_images_skip_verify_initrd ||
 imgverify initrd.img ${sigs}${dir}/isolinux/initrd.img.sig
 :bootos_images_skip_verify_initrd
-imgargs vmlinuz nodhcp method=${mirror}/${dir} ${params}
+imgargs vmlinuz method=${mirror}/${dir} ${params}
 imgstat
 isset ${debug} && prompt ||
-boot
+boot vmlinuz
 goto main_menu
 
 :bootos_isolinux
 echo Loading isolinux from ${mirror}/${dir}/isolinux/
 set 209:string isolinux.cfg
 set 210:string ${mirror}/${dir}/isolinux/
+imgfree
 imgload ${url}pxelinux.0
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
@@ -147,6 +154,7 @@ set next-server 158.197.16.70
 set params ip=${ip}:${next-server}:${gateway}:${netmask} BOOTIF=${mac}
 echo params: ${params}
 echo WARNING: This does not really works!
+imgfree
 #kernel ${url}memdisk iso raw ${params}
 #initrd ${mirror}/${dir}/${img}
 sanboot --no-describe ${mirror}/${dir}/${img}

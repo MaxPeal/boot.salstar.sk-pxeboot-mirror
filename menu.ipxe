@@ -97,9 +97,15 @@ boot
 goto main_menu
 
 :memtest
-kernel ${url}images/memtest
-imgverify memtest ${sigs}images/memtest.sig
-boot 
+#kernel ${url}images/memtest
+#imgverify memtest ${sigs}images/memtest.sig
+#boot
+imgverify memtest.0 ${sigs}memtest.0.sig
+chain memtest.0 ${params} && goto main_menu
+echo MEMORY ERROR DETECTED!
+echo Press any key to continue ...
+read a
+goto main_menu
 
 :shell
 echo Type "exit" to return to menu.
@@ -166,6 +172,7 @@ item --key s set Set parameters [s]
 item --key v vnc VNC installation [v]
 item --key 0 ttyS0 Serial console ttyS0 [0]
 item --key 1 ttyS1 Serial cosnole ttyS1 [1]
+item --key n network Static network configuration [n]
 choose kp || goto main_menu
 echo ${cls}
 goto params_${kp}
@@ -180,11 +187,31 @@ set params ${params} vnc vncconnect=${admin_ip}:5500
 goto params_menu
 
 :params_ttyS0
-set params ${params} console=ttyS0
-goto params_menu
+set serial_port ttyS0
+goto params_serial
 
 :params_ttyS1
-set params ${params} console=ttyS1
+set serial_port ttyS1
+
+:params_serial
+menu Serial console speed
+item --key 0 none Don't set [0]
+item --key 1 ,115200 115200 [1]
+item --key 2 ,57600 57600 [2]
+item --key 3 ,38400 38400 [3]
+item --key 4 ,9600 9600 [4]
+choose serial_speed
+iseq ${serial_speed} none && clear serial_speed ||
+set params ${params} console=${serial_port}${serial_speed}
+goto params_menu
+
+:params_network
+menu Static network configuration
+item --key f fedora Fedora 17+ style (dracut options) [f]
+item --key c centos CentOS style [c]
+choose netos
+iseq ${netos} fedora && set params ${params} ip=${ip}::${gateway}:${netmask}:${ip}::none nameserver=${dns} ||
+iseq ${netos} centos && set params ${params} ip=${ip} gateway=${gateway} netmask=${netmask} dns=${dns} ||
 goto params_menu
 
 :extended_menu

@@ -95,7 +95,8 @@ part_names = dict(
   tmp='/tmp',
   www='/var/www',
   backuppc='/var/lib/BackupPC',
-  mysql='/var/lib/mysql'
+  mysql='/var/lib/mysql',
+  pgsql='/var/lib/pgsql'
 )
 sys.stdout = open('/tmp/partitions.cfg', 'wt')
 spare = 2

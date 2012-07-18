@@ -4,14 +4,13 @@
 set dir mirrors/pmagic
 set os Parted Magic
 menu ${os} (pmagic)
+item 2012_07_13 ${os} 2012_07_13
 item 2012_07_05 ${os} 2012_07_05
 item 2012_06_26 ${os} 2012_06_26
 item 2012_06_07 ${os} 2012_06_07
 item 2012_05_30 ${os} 2012_05_30
 item 2012_05_14 ${os} 2012_05_14
 item 2012_04_21 ${os} 2012_04_21
-item 2012_3_24 ${os} 2012_3_24
-item 2012_2_27 ${os} 2012_2_27
 choose version || goto boot_pmagic_exit
 
 :pmagic_arch
@@ -29,6 +28,7 @@ goto boot_pmagic_${value}
 exit 0
 
 :boot_pmagic_base
+imgfree
 kernel ${mirror}/${dir}/pmagic_pxe_${version}/pmagic/bzImage
 imgverify bzImage ${sigs}${dir}/pmagic_pxe_${version}/pmagic/bzImage.sig
 isset ${cleanpmagic} || initrd images/modules.cgz

@@ -18,6 +18,7 @@ exit 0
 
 :boot_dos_install
 set dir mirrors/images
+imgfree
 kernel ${url}memdisk iso ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fd11src.iso
@@ -27,6 +28,7 @@ boot
 
 :boot_dos_live
 set dir mirrors/images
+imgfree
 kernel ${url}memdisk raw keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fd11live.img.zip
@@ -34,11 +36,13 @@ imgverify fd11live.img.zip ${sigs}${dir}/fd11live.img.zip.sig
 boot
 
 :boot_dos_custom_iso
+imgfree
 kernel ${url}memdisk iso ${params}
 imgverify memdisk ${sigs}memdisk.sig
 goto enter_path
 
 :boot_dos_custom_img
+imgfree
 kernel ${url}memdisk ${params}
 imgverify memdisk ${sigs}memdisk.sig
 goto enter_path
@@ -53,6 +57,7 @@ boot
 
 :boot_dos_ubcd
 set dir mirrors/images
+imgfree
 kernel ${url}memdisk iso keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/ubcd511.iso
@@ -62,6 +67,7 @@ boot
 
 :boot_dos_fdubcd
 set dir mirrors/images
+imgfree
 kernel ${url}memdisk iso raw keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}/${dir}/fdubcd.iso

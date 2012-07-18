@@ -15,6 +15,7 @@ choose version || goto tinycore_exit
 
 echo ${cls}
 
+imgfree
 kernel ${url}memdisk iso raw ${params}
 imgverify memdisk ${sigs}memdisk.sig
 initrd ${mirror}${dir}/${version}-current.iso

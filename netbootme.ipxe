@@ -1,3 +1,4 @@
 #!ipxe
 
+imgfree
 chain http://static.netboot.me/gpxe/netbootme.kpxe

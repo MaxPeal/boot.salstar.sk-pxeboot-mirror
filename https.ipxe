@@ -1,3 +1,4 @@
 #!ipxe
 
 set mirror https://ftp.upjs.sk/pub
+imgfree

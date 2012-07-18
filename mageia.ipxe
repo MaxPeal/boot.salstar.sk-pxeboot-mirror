@@ -27,6 +27,7 @@ set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 goto ${boot_type}_boot
 
 :alt0_boot
+imgfree
 imgtrust --allow
 kernel ${mirror}${dir}/isolinux/alt0/vmlinuz
 initrd ${mirror}${dir}/isolinux/alt0/all.rdz
@@ -39,6 +40,7 @@ exit 0
 set 209:string isolinux.cfg
 set 210:string ${mirror}${dir}/isolinux/
 
+imgfree
 kernel ${url}pxelinux.0 ${params}  
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot

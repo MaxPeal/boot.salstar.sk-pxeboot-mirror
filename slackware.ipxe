@@ -19,6 +19,7 @@ echo -n Enter version: ${} && read version
 set mirror http://ftp.linux.cz/pub/
 set dir linux/slackware/slackware${sbits}-${version}
 
+imgfree
 imgtrust --allow
 kernel ${mirror}${dir}/kernels/huge.s/bzImage
 initrd ${mirror}${dir}/isolinux/initrd.img
