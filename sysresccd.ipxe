@@ -1,0 +1,17 @@
+#!ipxe
+
+# This doesn't really works. This ISO is not compatible with memdisk. :-(
+
+set project systemrescuecd
+set version 2.8.1
+set iso sysresccd-x86/${version}/systemrescuecd-x86-${version}.iso
+set isourl http://sourceforge.net/projects/${project}/files/${iso}/download
+
+imgfree
+imgtrust --allow
+
+sanboot --no-describe ${isourl} ||
+
+kernel ${url}memdisk iso raw ${params}
+initrd ${isourl}
+boot

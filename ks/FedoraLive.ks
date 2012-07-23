@@ -83,6 +83,9 @@ hdparm
 -iok*
 roxterm
 
+# photo and video viewer
+gthumb
+
 # Fonts
 -@Fonts
 # don't install unnecessary fonts
