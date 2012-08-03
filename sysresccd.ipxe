@@ -6,12 +6,7 @@ set project systemrescuecd
 set version 2.8.1
 set iso sysresccd-x86/${version}/systemrescuecd-x86-${version}.iso
 set isourl http://sourceforge.net/projects/${project}/files/${iso}/download
+set sfboot sanboot
 
-imgfree
-imgtrust --allow
-
-sanboot --no-describe ${isourl} ||
-
-kernel ${url}memdisk iso raw ${params}
-initrd ${isourl}
-boot
+imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
+chain sourceforge.ipxe

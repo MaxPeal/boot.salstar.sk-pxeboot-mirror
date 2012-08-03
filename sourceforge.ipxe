@@ -1,0 +1,32 @@
+#!ipxe
+
+# Commands to run this:
+#set project project_name
+#set iso iso_filename-${bits}.iso
+#set sfboot memdisk
+#imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
+#chain sourceforge.ipxe
+
+set sfurl http://sourceforge.net/projects/${project}/files/${iso}/download
+
+goto sourceforge_${sfboot} ||
+
+:sourceforge_sanboot
+imgfree
+imgtrust --allow
+sanboot --no-describe ${sfurl}
+exit
+
+:sourceforge_memdisk
+imgfree
+imgtrust --allow
+kernel ${url}memdisk iso raw ${params}
+imgverify memdisk ${sigs}memdisk.sig
+# try multiple times
+echo Press CTRL+C to retry from different mirror (max 5 attempts).
+set try x
+:retry
+iseq ${try} xxxxx && exit ||
+set try ${try}x
+initrd ${sfurl} || goto retry
+boot

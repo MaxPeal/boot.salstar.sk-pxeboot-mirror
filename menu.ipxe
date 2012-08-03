@@ -5,6 +5,12 @@ set url https://boot.salstar.sk/
 set mirror http://ftp.upjs.sk${mirror_port}/pub
 set sigs ${url}sigs/
 
+iseq ${boot_salstar_version} 1 && goto version_ok ||
+echo
+echo IPXE version too old, rechaining ...
+chain --replace ${url}/ipxe/ipxe.kpxe ||
+:version_ok
+
 set cls:hex 1b:5b:4a  # ANSI clear screen sequence - "^[[J"
 
 set memtest_version 4.20

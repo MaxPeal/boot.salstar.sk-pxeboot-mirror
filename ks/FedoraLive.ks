@@ -81,10 +81,13 @@ hdparm
 -scim*
 -ibus*
 -iok*
-roxterm
 
-# photo and video viewer
+# SAL's packages
+roxterm
+lshw
+devilspie
 gthumb
+qemu-kvm
 
 # Fonts
 -@Fonts
