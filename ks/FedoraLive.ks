@@ -2,9 +2,9 @@
 
 # LiveUSB creation:
 # LANG=C setarch i686 livecd-creator -v -c FedoraLive.ks
-# livecd-iso-to-disk \
-#  --msdos --multi --noverify --home-size-mb 512 --unencrypted-home \
-#  livecd-FedoraLive-201206151415.iso /dev/sdx1
+# WITH_HOME="--home-size-mb 512 --unencrypted-home"
+# livecd-iso-to-disk --msdos --multi --noverify $WITH_HOME \
+#   livecd-FedoraLive-*.iso /dev/sdx1
 
 %include /usr/share/spin-kickstarts/fedora-live-desktop.ks
 %include /usr/share/spin-kickstarts/fedora-live-minimization.ks
@@ -146,6 +146,9 @@ gstreamer-plugins-ugly
 
 # svplayer dependencies
 git
+python-gdata
+youtube-dl
+python-imaging
 
 %end
 
