@@ -11,6 +11,14 @@ set sfurl http://sourceforge.net/projects/${project}/files/${iso}/download
 
 goto sourceforge_${sfboot} ||
 
+# no sfboot variable defined, ask user
+menu Select boot method
+item --key m memdisk Memdisk [m]
+item --key s sanboot Sanboot [s]
+choose sfboot || exit
+echo ${cls}
+goto sourceforge_${sfboot}
+
 :sourceforge_sanboot
 imgfree
 imgtrust --allow

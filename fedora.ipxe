@@ -64,7 +64,7 @@ set os CentOS
 menu ${os}
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
-item --key c other Choose other version [c]
+item --key o other Choose other version [o]
 isset ${version} || choose version || goto main_menu
 iseq ${version} other || goto centos_skip_read_version
 echo ${cls}

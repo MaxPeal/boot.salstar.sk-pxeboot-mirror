@@ -4,6 +4,7 @@
 set dir mirrors/pmagic
 set os Parted Magic
 menu ${os} (pmagic)
+item 2012_08_09 ${os} 2012_08_09
 item 2012_07_13 ${os} 2012_07_13
 item 2012_07_05 ${os} 2012_07_05
 item 2012_06_26 ${os} 2012_06_26
@@ -11,7 +12,13 @@ item 2012_06_07 ${os} 2012_06_07
 item 2012_05_30 ${os} 2012_05_30
 item 2012_05_14 ${os} 2012_05_14
 item 2012_04_21 ${os} 2012_04_21
-choose version || goto boot_pmagic_exit
+item --key o other Choose other version [o]
+choose version || exit 0
+
+iseq ${version} other || goto skip_read_version
+echo ${cls}
+echo -n Enter version: ${} && read version
+:skip_read_version
 
 :pmagic_arch
 menu ${os} ${version}
@@ -20,16 +27,14 @@ iseq ${arch} i386 && set default --default || set default --
 item --key p ${default} base ${os} ${version} (Pentium III class+) [p]
 item --key 4 i486 ${os} ${version} (i486, i586, PII) [4]
 #item --key x exit Exit to main menu [x]
-choose value || goto boot_pmagic_exit
+choose value || exit 0
 echo ${cls}
+set pmarch ${}
 goto boot_pmagic_${value}
-
-:boot_pmagic_exit
-exit 0
 
 :boot_pmagic_base
 imgfree
-kernel ${mirror}/${dir}/pmagic_pxe_${version}/pmagic/bzImage
+kernel ${mirror}/${dir}/pmagic_pxe_${version}/pmagic/bzImage || goto sf_boot
 imgverify bzImage ${sigs}${dir}/pmagic_pxe_${version}/pmagic/bzImage.sig
 isset ${cleanpmagic} || initrd images/modules.cgz
 isset ${cleanpmagic} || imgverify modules.cgz ${sigs}images/modules.cgz.sig
@@ -40,9 +45,27 @@ boot
 exit
 
 :boot_pmagic_i486
+set pmarch _i486
 set dir ${dir}/i486
 goto boot_pmagic_base
 
 :boot_pmagic_x86_64
+set pmarch _x86_64
 set dir ${dir}/x86_64
 goto boot_pmagic_base
+
+:sf_boot
+menu :-( ERROR :-(
+item --gap Image not found on ${mirror} !
+item --gap Press ENTER to direct boot from sourceforge.
+item --gap
+item --gap WARNING!
+item --gap This is not a secure way, signature check will be skipped!
+item --gap
+item ACCEPT ACCEPT
+choose accept || exit
+
+set project partedmagic
+set iso partedmagic/Parted%20Magic%20${version}/pmagic_${version}${pmarch}.iso
+imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
+chain sourceforge.ipxe

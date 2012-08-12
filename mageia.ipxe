@@ -5,7 +5,7 @@ set os Mageia
 menu ${os}
 item 2 ${os} ${arch5} 2
 item 1 ${os} ${arch5} 1
-item other Choose other version of ${os}
+item --key o other Choose other version [o]
 choose version || exit 0
 
 iseq ${version} other || goto skip_read_version

@@ -11,7 +11,7 @@ item 2010.0 ${os} ${arch5} 2010.0
 item 2009.1 ${os} ${arch5} 2009.1
 item 2009.0 ${os} ${arch5} 2009.0
 item 2008.1 ${os} ${arch5} 2008.1
-item other Choose other version of ${os}
+item --key o other Choose other version [o]
 choose version || exit 0
 
 iseq ${version} other || goto skip_read_version

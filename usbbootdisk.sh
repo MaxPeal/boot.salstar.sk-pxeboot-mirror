@@ -106,10 +106,12 @@ fedora_live() {
 cfg_fedora_live() {
   if [ "$LIVE" ]; then
     echo "LABEL fedora_live"
+    echo "  MENU DEFAULT"
     echo "  MENU LABEL ^Fedora $FEDORA Live"
     echo "  KERNEL grub2/grub.0"
   elif [ -d $MOUNT/LiveOS/syslinux ]; then
     echo "LABEL fedora_live"
+    echo "  MENU DEFAULT"
     echo "  MENU LABEL ^Fedora $FEDORA Live"
     echo "  CONFIG ../LiveOS/syslinux/syslinux.cfg ../LiveOS/syslinux"
   fi
@@ -151,7 +153,6 @@ TIMEOUT 300
 TOTALTIMEOUT 9000
 
 LABEL ipxe
-  MENU DEFAULT
   MENU LABEL ^iPXE menu
   KERNEL ipxe.lkrn
   APPEND -
