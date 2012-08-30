@@ -88,6 +88,8 @@ lshw
 devilspie
 gthumb
 qemu-kvm
+kismet
+aircrack-ng
 
 # Fonts
 -@Fonts
