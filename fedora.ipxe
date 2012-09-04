@@ -26,7 +26,7 @@ iseq ${version} 17 && set params rd.debug ${params} ||
 goto fedora_${version} ||
 set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
-set osks ${ksurl}auto
+set osks ${ksurl}${version}
 goto boottype
 
 :fedora_development
@@ -94,7 +94,6 @@ item --key k ks ${ova} minimal server kickstart [k]
 item --key d desktop ${ova} desktop kickstart [d]
 item --key r rescue ${ova} rescue [r]
 item --key s remote ${ova} rescue with ssh [s]
-item --key a autopart ${ova} kickstart part=root=4 [a]
 item --key i isolinux ${ova} direct boot using isolinux [i]
 isset ${testing} && item --key l live_desktop ${ova} Live Desktop [l] ||
 isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
@@ -104,13 +103,12 @@ iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
 iseq ${bt} desktop && set params ksdevice=bootif ks=${ksurl}/desktop${version} ${params} ||
 iseq ${bt} rescue && set params rescue ${params} ||
 iseq ${bt} remote && set params ksdevice=bootif ks=${ksurl}rescue ${params} ||
-iseq ${bt} autopart && set params ksdevice=bootif ks=${osks} root=part=4 ${params} ||
 goto bootos_${bt} ||
 goto bootos_images
 
 :bootos_images
 echo Loading from ${mirror}/${dir}/isolinux/
-echo ${}  method=${mirror}/${dir}
+echo ${}  repo=${mirror}/${dir}
 echo ${}  ${params}
 #set next-server 158.197.16.70
 imgfree
@@ -124,7 +122,9 @@ initrd ${mirror}/${dir}/isolinux/initrd.img
 iseq ${version} development && goto bootos_images_skip_verify_initrd ||
 imgverify initrd.img ${sigs}${dir}/isolinux/initrd.img.sig
 :bootos_images_skip_verify_initrd
-imgargs vmlinuz method=${mirror}/${dir} ${params}
+imgargs vmlinuz repo=${mirror}/${dir} ${params}
+# use method= instad of repo= for CentOS 5
+iseq ${version} 5 && imgargs vmlinuz method=${mirror}/${dir} ${params} ||
 imgstat
 isset ${debug} && prompt ||
 boot vmlinuz

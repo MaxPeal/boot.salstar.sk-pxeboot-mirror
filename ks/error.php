@@ -30,7 +30,7 @@
     if ($config != "centos") {
       $rf = @fopen("http://ftp.upjs.sk/fedora/releases/$testing$release/Fedora/$arch/os", "r");
       if (!$rf) {
-        $lurl = "fedora/development/$arch/os/";
+        $lurl = "fedora/development/$release/$arch/os/";
         $rawhide = TRUE;
       } else {
         fclose($rf);
@@ -59,13 +59,13 @@
       $row = preg_replace(";/[0-9]{2}/;", "/$testing$release/", "$row");
       $row = preg_replace(";(http://$_SERVER[HTTP_HOST])$dir/$config;", "\$1$_SERVER[REQUEST_URI]", "$row");
       if ($rawhide) {
-        $row = preg_replace(";/releases/$release/Fedora/;", "/development/", "$row");
+        $row = preg_replace(";/releases/$release/Fedora/;", "/development/$release/", "$row");
       }
-      if ($rawhide or $testing) {
-        # no updates for rawhide/devel/testing
-        if (preg_match(";pub/fedora/linux/updates;", "$row")) $row = "#$row";
-        if (preg_match(";fedora/updates/;", "$row")) $row = "#$row";
-      }
+      #if ($rawhide or $testing) {
+      #  # no updates for rawhide/devel/testing
+      #  if (preg_match(";pub/fedora/linux/updates;", "$row")) $row = "#$row";
+      #  if (preg_match(";fedora/updates/;", "$row")) $row = "#$row";
+      #}
       # remove packages, which are not present on current media
       foreach($remove_packages as $key) {
         if (trim("$row")=="$key") $row="#$row";
