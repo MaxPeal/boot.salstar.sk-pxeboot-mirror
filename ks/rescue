@@ -17,11 +17,6 @@ lang sk_SK.UTF-8
 #lang en_US.UTF-8
 # Installation logging level
 #logging info
-# Repository configuration
-#:BEGIN:fedora
-#url --url=http://ftp.upjs.sk/pub/fedora/linux/releases/15/Fedora/i386/os/
-#repo --name=Updates --baseurl=http://ftp.upjs.sk/pub/fedora/linux/updates/15/i386/
-#:END:fedora
 # Network information
 network --bootproto=dhcp --onboot=on
 #vnc --host=158.197.240.41 --port=5500

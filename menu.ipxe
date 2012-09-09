@@ -62,6 +62,7 @@ item --key 0x09 params_menu ${space} Kernel parameters: ${params}
 item --gap Tools:
 item --key h hdt ${space} Hardware detection tool [h]
 item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
+item --key . predefined ${space} Predefined systems menu [.]
 item --key s shell ${space} iPXE shell [s]
 isset ${menu} && set timeout 0 || set timeout 60000
 choose --timeout ${timeout} --default ${menu} menu || goto local
@@ -251,4 +252,10 @@ goto main_menu
 :ubuntu
 imgverify deb.ipxe ${sigs}deb.ipxe.sig
 chain deb.ipxe
+goto main_menu
+
+# Predefined systems
+:predefined
+imgverify predefined.ipxe ${sigs}predefined.ipxe.sig
+chain predefined.ipxe
 goto main_menu

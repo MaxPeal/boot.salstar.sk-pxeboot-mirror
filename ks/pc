@@ -1,18 +1,14 @@
 #based on "pc" configuration
-#kernel parameter:
+#accepted kernel parameters:
 #  part=root=4,vg=VGNAME,swap=4,var=20,home=max
+#  disks=vda,vdb
+#  pkgs=desktop,salpack
 #
-#platform=x86, AMD64, alebo Intel EM64T
-# System authorization information
-auth  --useshadow  --enablemd5 
+# System authorization information and root password
+auth --useshadow  --enablemd5 
+rootpw --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
 # System bootloader configuration
 bootloader --append="" --location=mbr --timeout=1
-# Clear the Master Boot Record
-#zerombr
-# Partition clearing information
-#clearpart --all --initlabel 
-# Use graphical install
-#graphical
 # Firewall configuration
 firewall --enabled
 # --port=ssh:tcp # ssh is enabled by default
@@ -25,30 +21,13 @@ lang sk_SK.UTF-8
 #lang en_US.UTF-8
 # Installation logging level
 #logging info
-# Repository configuration
-% if fedora
-url --url=http://ftp.upjs.sk/pub/fedora/linux/releases/15/Fedora/i386/os/
-repo --name=Updates --baseurl=http://ftp.upjs.sk/pub/fedora/linux/updates/15/i386/
-#repo --name=Everything --baseurl=http://ftp.upjs.sk/pub/fedora/linux/releases/15/Everything/i386/os/
-#repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/15/i386/
-% endif fedora
-% if centos
-url --url=http://ftp.upjs.sk/pub/centos/6/os/i386/
-repo --name=Updates --baseurl=http://ftp.upjs.sk/pub/centos/6/updates/i386/
-repo --name=EPEL --baseurl=http://ftp.upjs.sk/pub/mirrors/epel/6/i386/
-#repo --name=Salstar --baseurl=http://www.salstar.sk/pub/centos/6/
-% endif centos
 # Network information
 network --bootproto=dhcp --onboot=on
 #vnc --host=158.197.240.41 --port=5500
 # Reboot after installation
 reboot
-#Root password
-rootpw --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
 # SELinux configuration
 selinux --permissive
-# Do not configure the X Window System
-#skipx
 # System timezone
 timezone --utc Europe/Bratislava
 # Install OS instead of upgrade
@@ -57,7 +36,7 @@ install
 services --disabled=netfs --enabled=network
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
-%include /tmp/partitions.cfg
+%include /tmp/salstar.ks
 
 %packages --nobase
 dhclient
@@ -74,18 +53,12 @@ joe
 mc
 parted
 -sendmail
-% if fedora
-gdisk
-% endif fedora
-% if centos
-epel-release
-% endif centos
 %end
 
 %pre --interpreter /usr/bin/python
 # SAL's fedora/centos kickstart script
 
-import os, sys, re
+import os, sys, re, urllib2
 
 part_names = dict(
   swap='swap',
@@ -98,17 +71,24 @@ part_names = dict(
   mysql='/var/lib/mysql',
   pgsql='/var/lib/pgsql'
 )
-sys.stdout = open('/tmp/partitions.cfg', 'wt')
+sys.stdout = open('/tmp/salstar.ks', 'wt')
 spare = 2
-% if fedora
-distro = "fedora"
-biosboot = 2
-% endif fedora
-% if centos
-distro = "centos"
-biosboot = 0
-% endif centos
 
+# check distribution (el6 or fc17)
+distro, arch = os.popen('uname -r').read().strip().split('.')[-2:]
+if distro.startswith("fc"):
+  biosboot = 2
+else:
+  biosboot = 0
+if arch.endswith('86'):
+  arch = "i386"
+
+# boot command line
+cmd_line = dict([
+  x.split('=', 1)
+  for x in open('/proc/cmdline').read().strip().split(' ')
+  if '=' in x
+])
 def disksize(*disks):
     ds = [
            int(open('/sys/class/block/%s/size' % x).read().strip())/2048
@@ -148,21 +128,6 @@ class mk_raid:
       print "raid %s --level=1 --device=md%d %s raid.%d1 raid.%d2" \
             % (mp, self.cntr, fstype, self.cntr, self.cntr)
 
-def version_check():
-    try:
-      ver, arch = re.compile('^.*\.fc([0-9][0-9])\.([^. ]+)[. ].*$', re.S
-                  ).sub('\\1 \\2', open('/proc/version').read()).split()
-      ver = int(ver)
-      if arch.endswith('86'):
-        arch='i386'
-      URL="http://ftp.upjs.sk/pub/fedora/linux"
-      print "url --url=%s/releases/%d/Fedora/%s/os/" % (URL, ver, arch)
-      print "#repo --name=Everything --baseurl=%s/releases/%d/Everything/%s/os/" % (URL, ver, arch)
-      print "repo --name=Updates --baseurl=%s/updates/%d/i386/" % (URL, ver)
-      print "#repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/%d/" % ver
-    except Exception, e:
-      print "#", e
-
 def not_cdrom_or_lun(hd):
     try:
       media = open('/sys/block/%s/device/media' % hd, 'r').read().strip()
@@ -178,120 +143,194 @@ def not_cdrom_or_lun(hd):
       pass
     return True
 
-def autopartition():
-    part_line = [x for x in open('/proc/cmdline').read().strip().split(' ')
-                 if x.startswith('part=')]
-    disk_line = [x for x in open('/proc/cmdline').read().strip().split(' ')
-                 if x.startswith('disk=') or x.startswith('disks=')]
-    if disk_line:
-      disks = disk_line[0].split('=', 1)[1].split(',')
+def autopartition(disks, parts):
+    if not parts:
+      return
+    if disks:
+      print "ignoredisk --only-use=%s" % disks
+      disks = disks.split(',')
     else:
       disks = [x for x in os.listdir('/sys/block')
                if (x[0:2] in ['sd','vd','hd']) and not_cdrom_or_lun(x)]
-    if part_line:
-      parts = part_line[0].split('=', 1)[1]
-      parts = [x.split('=', 1) for x in parts.split(',')]
-      vg = None
-
-      if len(disks)==1:
-        # one disk partition scheme
-        disk0 = disks[0]
-        for key, value in parts:
-          if ':' in value:
-            fstype = "--fstype=%s" % value.split(':', 1)[1]
-            value = value.split(':', 1)[0]
-          elif key=='swap':
-            fstype = ''
+    parts = [x.split('=', 1) for x in parts.split(',')]
+    vg = None
+    if len(disks)==1:
+      # one disk partition scheme
+      disk0 = disks[0]
+      for key, value in parts:
+        if ':' in value:
+          fstype = "--fstype=%s" % value.split(':', 1)[1]
+          value = value.split(':', 1)[0]
+        elif key=='swap':
+          fstype = ''
+        else:
+          fstype = '--fstype=ext4'
+        if key=='vg':
+          vg = value
+          print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
+          print "volgroup %s pv.01" % vg
+        elif key=='root':
+          print "zerombr"
+          print "clearpart --all --initlabel"
+          if biosboot>0:
+            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                  % (disk0, biosboot)
+          print "part / --ondisk=%s %s --size=%d" \
+                % (disk0, fstype, size(value))
+        elif key in part_names:
+          if vg:
+            print "logvol %s --vgname=%s --size=%s --name=%s %s" \
+                  % (part_names[key], vg, size(value), key, fstype)
           else:
-            fstype = '--fstype=ext4'
-          if key=='vg':
-            vg = value
-            print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
-            print "volgroup %s pv.01" % vg
-          elif key=='root':
-            print "clearpart --all --initlabel"
-            if biosboot>0:
-              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                    % (disk0, biosboot)
-            print "part / --ondisk=%s %s --size=%d" \
-                  % (disk0, fstype, size(value))
-          elif key in part_names:
-            if vg:
-              print "logvol %s --vgname=%s --size=%s --name=%s %s" \
-                    % (part_names[key], vg, size(value), key, fstype)
-            else:
-              print "part %s --ondisk=%s %s --size=%d" \
-                    % (part_names[key], disk0, fstype, size(value))
-      elif len(disks)==2:
-        # raid 1 partition scheme
-        sum = spare # 1
-        disk0 = disks[0]
-        disk1 = disks[1]
-        raid = mk_raid(disks)
-        for key, value in parts:
-          if ':' in value:
-            fstype = "--fstype=%s" %value.split(':', 1)[1]
-            value = value.split(':', 1)[0]
-          elif key=='swap':
-            fstype = ''
+            print "part %s --ondisk=%s %s --size=%d" \
+                  % (part_names[key], disk0, fstype, size(value))
+    elif len(disks)==2:
+      # raid 1 partition scheme
+      sum = spare # 1
+      disk0 = disks[0]
+      disk1 = disks[1]
+      raid = mk_raid(disks)
+      for key, value in parts:
+        if ':' in value:
+          fstype = "--fstype=%s" %value.split(':', 1)[1]
+          value = value.split(':', 1)[0]
+        elif key=='swap':
+          fstype = ''
+        else:
+          fstype = '--fstype=ext4'
+        print "# key, value, fstype:", key, value, fstype
+        if key=='vg':
+          vg = value
+          # calculate pv size
+          #s = 0
+          #for k, v in parts:
+          #  if k=='vg':
+          #    s = 1
+          #  elif s>0:
+          #    if v.isdigit():
+          #      s += int(v)*1024
+          #    else:
+          #      s += 1
+          # add pv
+          # --grow disabled in F14 for raid partitions :-(
+          #raid.add_vg(vg, "%d --grow" % s)
+          print "# disk size: %d-%d" % (disksize(*disks), sum)
+          raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
+        elif key=='root':
+          print "zerombr"
+          print "clearpart --all --initlabel"
+          if biosboot>0:
+            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                   % (disk0, biosboot)
+            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                   % (disk1, biosboot)
+            sum += biosboot
+          s = size(value, disks, sum)
+          raid.add_part("/", s, fstype)
+          sum += s
+        elif key in part_names:
+          if vg:
+            print "logvol %s --vgname=%s --size=%s --name=%s %s" \
+                  % (part_names[key], vg, size(value), key, fstype)
           else:
-            fstype = '--fstype=ext4'
-          print "# key, value, fstype:", key, value, fstype
-          if key=='vg':
-            vg = value
-            # calculate pv size
-            #s = 0
-            #for k, v in parts:
-            #  if k=='vg':
-            #    s = 1
-            #  elif s>0:
-            #    if v.isdigit():
-            #      s += int(v)*1024
-            #    else:
-            #      s += 1
-            # add pv
-            # --grow disabled in F14 for raid partitions :-(
-            #raid.add_vg(vg, "%d --grow" % s)
-            print "# disk size: %d-%d" % (disksize(*disks), sum)
-            raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
-          elif key=='root':
-            print "clearpart --all --initlabel"
-            if biosboot>0:
-              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                     % (disk0, biosboot)
-              print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                     % (disk1, biosboot)
-              sum += biosboot
             s = size(value, disks, sum)
-            raid.add_part("/", s, fstype)
+            raid.add_part(part_names[key], s, fstype)
             sum += s
-          elif key in part_names:
-            if vg:
-              print "logvol %s --vgname=%s --size=%s --name=%s %s" \
-                    % (part_names[key], vg, size(value), key, fstype)
-            else:
-              s = size(value, disks, sum)
-              raid.add_part(part_names[key], s, fstype)
-              sum += s
-          print "# sum=%d kB" % sum
+        print "# sum=%d kB" % sum
 
-#version_check()
-autopartition()
+repocfg = dict(
+  fc = dict(
+    base = [
+      'url --url=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Fedora/%(arch)s/os/',
+      'repo --name=Updates --baseurl=%(mirror)s/fedora/linux/updates/%(ver)d/%(arch)s/'
+    ],
+    other = [
+      'repo --name=Everything --baseurl=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Everything/%(arch)s/os/',
+      'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/%(ver)d/%(arch)s/'
+    ]
+  ),
+  el = dict(
+    base = [
+      'url --url=%(mirror)s/centos/%(ver)d/os/%(arch)s/',
+      'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
+      'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/%(arch)s/'
+    ],
+    other = [
+      'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/epel/%(ver)d/%(arch)s/'
+    ]
+  )
+)
+
+def repo_update(distro, version, arch, cmd_line_repo, all_repos):
+    repos = repocfg.get(distro)['base']
+    if all_repos:
+      repos.extend(repocfg.get(distro)['other'])
+    for repo in repos:
+      if repo.startswith("url") and cmd_line_repo:
+        print "url --url=%s" % cmd_line_repo
+      else:
+        print repo % dict(
+                mirror="http://ftp.upjs.sk/pub",
+                dir="releases",
+                ver=version,
+                arch=arch
+              )
+
+class geturl:
+  def __init__(self, url):
+      if "://" in url:
+        self.url = url
+      else:
+        self.url = os.path.join(os.path.dirname(cmd_line['ks']), url)
+  def get(self):
+      return urllib2.urlopen(self.url).read().strip().split("\n")
+
+def package_update(distro, version, packages):
+    distro_packages = dict(
+      fc = ["gdisk"],
+      el = ["epel-release"]
+    )
+    group_packages = dict(
+      desktop = geturl('desktop.pkgs')
+    )
+    print "%packages --ignoremissing"
+    print "\n".join(distro_packages.get(distro))
+    if packages:
+      for pkg in packages.split(','):
+        if pkg in group_packages:
+          print "\n".join(group_packages[pkg].get())
+        else:
+          print pkg
+    print "%end"
+
+autopartition(
+  cmd_line.get('disk') or cmd_line.get('disks'),
+  cmd_line.get('part')
+)
+repo_update(
+  distro[:2], int(distro[2:]),
+  arch, cmd_line.get('repo'),
+  ('pkgs' in cmd_line) or ('packages' in cmd_line)
+)
+package_update(
+  distro[:2], int(distro[2:]),
+  cmd_line.get('pkgs') or cmd_line.get('packages')
+)
 %end
 
 %post --interpreter /bin/bash
 cd /etc/yum.repos.d
 #wget -q http://158.197.16.66/pub/yum/yum.repos.d/salstar.repo
 if grep -q -E '^(CentOS|Red|Scientific)' /etc/redhat-release; then
-  centos="-centos"
+  distro="-el"
 else
-  centos=""
+  distro="-fedora"
 fi
 cat > /etc/yum.repos.d/salstar.repo << KSEOF
 [salstar.sk]
 name=Salstar.sk \$releasever - \$basearch - Base
 #baseurl=http://ftp.upjs.sk/pub/users/sal/Fedora/\$releasever/
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar$centos
+mirrorlist=http://www.salstar.sk/download/mirrors/salstar$distro
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=1
@@ -299,7 +338,7 @@ metadata_expire=1
 
 [salstar.sk-test]
 name=Salstar.sk \$releasever - \$basearch - Testing
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar$centos-testing
+mirrorlist=http://www.salstar.sk/download/mirrors/salstar$distro-testing
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=0
@@ -307,7 +346,7 @@ metadata_expire=1
 
 [salstar.sk-builder]
 name=builder.salstar.sk
-baseurl=http://builder.salstar.sk/local/\$releasever$centos/\$basearch/
+baseurl=http://builder.salstar.sk/local/\$releasever$distro/\$basearch/
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=0
 enabled=0
@@ -338,26 +377,27 @@ mkdir -p /root/.ssh
 echo 'from="work.salstar.sk,158.197.240.41" ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAou3n+SuHVsuM5QXAKnIKilPHnJdKm/KP31Ho2VahJIC7mK0+snbXZYXeQmnwYvqQaDVCl8p0ANMonbs189t+RdBZ86Yq6/boc7zhyrj3gqzflsjyGWp5Gfo2AGQ9pgW3JMHefHMMXqF2uB9pT7PRL873gGfMG1WE3W+loFpDYPgg5TQvDifDP+cnlEdT/30JROFBbJ6sJro5la+7vZT/Yd9JOyNSvjizSsqLyva/t1zhQ2Bb37xGJOgVoRc1Hj+fYe1+jaD2ebtGWWIykvfIb33tpoBg3KkN01rrniTiVD8t1yNPGxc9VecqJoK5QJOCZ6zpjeFtvmiZwdd9bgfznQ== ondrejj@work.salstar.sk' >> /root/.ssh/authorized_keys
 #chkconfig network on
 #chkconfig postfix on
-% if fedora
-GRUB_MODULES="part_gpt part_msdos raid mdraid09 mdraid1x"
-if [ -e /sys/block/vdb ]; then
-  GRUB_HD=/dev/vd
+if [ "$distro" = "fedora" ]; then
+  GRUB_MODULES="part_gpt part_msdos raid mdraid09 mdraid1x"
+  if [ -e /sys/block/vdb ]; then
+    GRUB_HD=/dev/vd
+  fi
+  if [ -e /sys/block/sdb ]; then
+    GRUB_HD=/dev/sd
+  fi
+  if [ "$GRUB_HD" ]; then
+    echo "Configuring grub2 on $GRUB_HD*"
+    /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}b
+    /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}a
+    echo "GRUB_PRELOAD_MODULES='$GRUB_MODULES'" >> /etc/default/grub
+  fi >> /root/kslog
+else # distro=el
+  if [ -e /sys/block/vdb -o -e /sys/block/sdb ]; then
+    echo -e 'root (hd0,0)\nsetup (hd0)' \
+      | grub --device-map=/boot/grub/device.map
+    echo -e 'root (hd1,0)\nsetup (hd1)' \
+      | grub --device-map=/boot/grub/device.map
+  fi
 fi
-if [ -e /sys/block/sdb ]; then
-  GRUB_HD=/dev/sd
-fi
-if [ "$GRUB_HD" ]; then
-  echo "Configuring grub2 on $GRUB_HD*"
-  /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}b
-  /sbin/grub2-install --modules="$GRUB_MODULES" ${GRUB_HD}a
-  echo "GRUB_PRELOAD_MODULES='$GRUB_MODULES'" >> /etc/default/grub
-fi >> /root/kslog
-% endif fedora
-% if centos
-if [ -e /sys/block/vdb -o -e /sys/block/sdb ]; then
-  echo -e 'root (hd0,0)\nsetup (hd0)' | grub --device-map=/boot/grub/device.map
-  echo -e 'root (hd1,0)\nsetup (hd1)' | grub --device-map=/boot/grub/device.map
-fi
-% endif centos
 sync
 %end

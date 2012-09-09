@@ -1,0 +1,45 @@
+#!ipxe
+
+menu Predefined systems
+item --key m fedora_devel_nomodeset Fedora 18 development auto noKMS [m]
+item --key d fedora_devel Fedora 18 development auto KMS [d]
+item --key f fedora Fedora 17 auto [f]
+item --key c centos CentOS 6 auto [c]
+choose system || exit
+goto predef_${system}
+
+:predef_fedora
+set menu fedora
+set version 17
+set bt ks
+set params ${params} part=root=3,swap=1
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit
+
+:predef_centos
+set menu centos
+set version 6
+set bt ks
+set params ${params} part=root=3,swap=1
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit
+
+:predef_fedora_devel
+set menu fedora
+set version development
+set bt ks
+set params ${params} part=root=3,swap=1
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit
+
+:predef_fedora_devel_nomodeset
+set menu fedora
+set version development
+set bt ks
+set params ${params} nomodeset part=root=3,swap=1
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit

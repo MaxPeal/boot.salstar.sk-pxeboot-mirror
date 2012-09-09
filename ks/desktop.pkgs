@@ -1,0 +1,37 @@
+# group defaults
+@Base
+-prelink
+-sssd
+-ypbind
+@GNOME Desktop Environment
+@Graphical Internet
+-evolution*
+-empathy
+@Java
+@Sound and Video
+@Printing Support
+@DNS Name Server
+@X Window System
+@Hardware Support
+-@Input Methods
+-@Editors
+#@Office/Productivity
+#@Games and Entertainment
+#@Graphics
+#@Text-based Internet
+elinks
+mutt
+@System Tools
+-BackupPC
+-jigdo
+-@Administration Tools
+-@Fonts
+dejavu-sans-fonts
+dejavu-sans-mono-fonts
+dejavu-serif-fonts
+liberation-mono-fonts
+liberation-sans-fonts
+liberation-serif-fonts
+# Language packages
+@Slovak Support
+@Czech Support

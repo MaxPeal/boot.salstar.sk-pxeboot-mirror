@@ -1,6 +1,0 @@
-#!/bin/bash
-
-DIR=`dirname $0`
-rsync -avPH --delete $DIR/ ftp:public_html/ks/ \
-  --exclude=.svn --exclude=rsync \
-  "$@"

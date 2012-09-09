@@ -26,7 +26,8 @@ iseq ${version} 17 && set params rd.debug ${params} ||
 goto fedora_${version} ||
 set dir fedora/linux/releases/${version}/${os}/${arch}/os
 :fedora_setvars
-set osks ${ksurl}${version}
+#set osks ${ksurl}${version}
+set osks ${ksurl}fedora
 goto boottype
 
 :fedora_development
@@ -100,7 +101,7 @@ isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
 isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ksdevice=bootif ks=${osks} ${params} ||
-iseq ${bt} desktop && set params ksdevice=bootif ks=${ksurl}/desktop${version} ${params} ||
+iseq ${bt} desktop && set params ksdevice=bootif ks=${ksurl}/pc pkgs=desktop ${params} ||
 iseq ${bt} rescue && set params rescue ${params} ||
 iseq ${bt} remote && set params ksdevice=bootif ks=${ksurl}rescue ${params} ||
 goto bootos_${bt} ||
