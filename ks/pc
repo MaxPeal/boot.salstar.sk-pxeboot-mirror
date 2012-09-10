@@ -9,9 +9,8 @@ auth --useshadow  --enablemd5
 rootpw --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
 # System bootloader configuration
 bootloader --append="" --location=mbr --timeout=1
-# Firewall configuration
+# Firewall configuration (ssh is enabled by default)
 firewall --enabled
-# --port=ssh:tcp # ssh is enabled by default
 # Run the Setup Agent on first boot
 firstboot --enable
 # System keyboard
