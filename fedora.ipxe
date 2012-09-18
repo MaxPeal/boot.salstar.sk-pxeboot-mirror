@@ -14,8 +14,8 @@ menu Fedora
 item --key 7 17 ${os} 17 ${arch} [7]
 item --key 6 16 ${os} 16 ${arch} [6]
 item --key 5 15 ${os} 15 ${arch} [5]
-item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
 item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
+item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
 item --key d development ${os} ${devel_version} (development) ${arch} [d]
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${version} || choose version || goto main_menu
