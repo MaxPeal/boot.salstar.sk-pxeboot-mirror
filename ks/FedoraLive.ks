@@ -23,4 +23,10 @@ timezone Europe/Bratislava
 %include http://boot.salstar.sk/ks/live.pkgs
 
 %post
+systemctl --no-reload enable chronyd.service 2> /dev/null || :
+
+sed -i 's/liveuser/ondrejj/' /etc/rc.d/init.d/livesys
+sed -i 's/Live System User/SAL/' /etc/rc.d/init.d/livesys
+#sed -i 's/ useradd / useradd -u 500 -g 500 /' /etc/rc.d/init.d/livesys
+
 %end

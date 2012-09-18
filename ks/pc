@@ -35,9 +35,7 @@ install
 services --disabled=netfs --enabled=network
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
-%include /tmp/salstar.ks
-
-%packages --nobase
+%packages
 dhclient
 yum
 yum-utils
@@ -83,11 +81,13 @@ if arch.endswith('86'):
   arch = "i386"
 
 # boot command line
-cmd_line = dict([
-  x.split('=', 1)
-  for x in open('/proc/cmdline').read().strip().split(' ')
-  if '=' in x
-])
+cmd_line = {}
+for cmd in open('/proc/cmdline').read().strip().split(' '):
+  arg = None
+  if '=' in cmd:
+    cmd, arg = cmd.split('=', 1)
+  cmd_line[cmd] = arg
+
 def disksize(*disks):
     ds = [
            int(open('/sys/class/block/%s/size' % x).read().strip())/2048
@@ -169,7 +169,8 @@ def autopartition(disks, parts):
           print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
           print "volgroup %s pv.01" % vg
         elif key=='root':
-          print "zerombr"
+          if 'zerombr' in cmd_line:
+            print "zerombr"
           print "clearpart --all --initlabel"
           if biosboot>0:
             print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
@@ -216,7 +217,8 @@ def autopartition(disks, parts):
           print "# disk size: %d-%d" % (disksize(*disks), sum)
           raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
         elif key=='root':
-          print "zerombr"
+          if 'zerombr' in cmd_line:
+            print "zerombr"
           print "clearpart --all --initlabel"
           if biosboot>0:
             print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
@@ -237,7 +239,7 @@ def autopartition(disks, parts):
             sum += s
         print "# sum=%d kB" % sum
 
-repocfg = dict(
+class repocfg_class:
   fc = dict(
     base = [
       'url --url=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Fedora/%(arch)s/os/',
@@ -246,8 +248,11 @@ repocfg = dict(
     other = [
       'repo --name=Everything --baseurl=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Everything/%(arch)s/os/',
       'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/%(ver)d/%(arch)s/'
+    ],
+    testing = [
+      'repo --name=Updates-testing --baseurl=%(mirror)s/fedora/linux/updates/testing/%(ver)d/%(arch)s/'
     ]
-  ),
+  )
   el = dict(
     base = [
       'url --url=%(mirror)s/centos/%(ver)d/os/%(arch)s/',
@@ -256,65 +261,78 @@ repocfg = dict(
     ],
     other = [
       'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/epel/%(ver)d/%(arch)s/'
+    ],
+    testing = [
+      'repo --name=EPEL-testing --baseurl=%(mirror)s/mirrors/epel/testing/%(ver)d/%(arch)s/'
     ]
   )
-)
-
-def repo_update(distro, version, arch, cmd_line_repo, all_repos):
-    repos = repocfg.get(distro)['base']
-    if all_repos:
-      repos.extend(repocfg.get(distro)['other'])
-    for repo in repos:
-      if repo.startswith("url") and cmd_line_repo:
-        print "url --url=%s" % cmd_line_repo
-      else:
-        print repo % dict(
-                mirror="http://ftp.upjs.sk/pub",
-                dir="releases",
-                ver=version,
-                arch=arch
-              )
-
-class geturl:
-  def __init__(self, url):
-      if "://" in url:
-        self.url = url
-      else:
-        self.url = os.path.join(os.path.dirname(cmd_line['ks']), url)
-  def get(self):
-      return urllib2.urlopen(self.url).read().strip().split("\n")
-
-def package_update(distro, version, packages):
-    distro_packages = dict(
-      fc = ["gdisk"],
-      el = ["epel-release"]
-    )
-    group_packages = dict(
-      desktop = geturl('desktop.pkgs')
-    )
-    print "%packages --ignoremissing"
-    print "\n".join(distro_packages.get(distro))
-    if packages:
-      for pkg in packages.split(','):
-        if pkg in group_packages:
-          print "\n".join(group_packages[pkg].get())
+  all_repos = ('pkgs' in cmd_line) or ('packages' in cmd_line)
+  cmd_line_testing = 'testing' in cmd_line
+  cmd_line_repo = cmd_line.get('repo')
+  cmd_line_packages = cmd_line.get('pkgs') or cmd_line.get('packages')
+  def get(self, distro):
+      grps = getattr(self, distro)
+      ret = grps['base']
+      if self.cmd_line_testing:
+        ret.extend(grps['testing'])
+      if self.all_repos:
+        ret.extend(grps['other'])
+      return ret
+  def repo_update(self, distro, version, arch):
+      for repo in self.get(distro):
+        if repo.startswith("url") and self.cmd_line_repo:
+          print "url --url=%s" % self.cmd_line_repo
         else:
-          print pkg
-    print "%end"
+          print repo % dict(
+                  mirror="http://ftp.upjs.sk/pub",
+                  dir="releases",
+                  ver=version,
+                  arch=arch
+                )
+  def geturl(self, url):
+      if "://" not in url:
+        url = os.path.join(os.path.dirname(cmd_line['ks']), url)
+      return urllib2.urlopen(url).read().strip().split("\n")
+  def package_update(self, distro, version):
+      distro_packages = dict(
+        fc = ["gdisk"],
+        el = ["epel-release"]
+      )
+      group_packages = dict(
+        desktop = self.geturl('desktop.pkgs')
+      )
+      print "%packages --ignoremissing"
+      print "\n".join(distro_packages.get(distro))
+      if self.cmd_line_packages:
+        for pkg in self.cmd_line_packages.split(','):
+          if pkg in group_packages:
+            print "\n".join(group_packages[pkg].get())
+          else:
+            print pkg
+      print "%end"
+
+def lang(lang):
+    if not lang:
+      return
+    langs = dict(
+      en = "en_US",
+      sk = "sk_SK",
+      cs = "cs_CZ"
+    )
+    if "_" not in lang and lang in langs:
+      lang = langs[lang]
+    if "." not in lang:
+      lang += ".UTF-8"
+    print "lang", lang
 
 autopartition(
   cmd_line.get('disk') or cmd_line.get('disks'),
   cmd_line.get('part')
 )
-repo_update(
-  distro[:2], int(distro[2:]),
-  arch, cmd_line.get('repo'),
-  ('pkgs' in cmd_line) or ('packages' in cmd_line)
-)
-package_update(
-  distro[:2], int(distro[2:]),
-  cmd_line.get('pkgs') or cmd_line.get('packages')
-)
+repocfg = repocfg_class()
+repocfg.repo_update(distro[:2], int(distro[2:]), arch)
+repocfg.package_update(distro[:2], int(distro[2:]))
+lang(cmd_line.get('lang'))
 %end
 
 %post --interpreter /bin/bash
@@ -399,4 +417,9 @@ else # distro=el
   fi
 fi
 sync
+%end
+
+%include /tmp/salstar.ks
+
+%packages --nobase
 %end

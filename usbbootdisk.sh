@@ -17,6 +17,7 @@ PART=$1
 LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
+SIZE=${SIZE:-4}
 FEDORA=17
 FEDORA_PREV=$((FEDORA-1))
 CENTOS=6
@@ -182,11 +183,13 @@ cfgos fedora$FEDORA x86_64 "^Fedora $FEDORA"
 addos fedora$FEDORA i386 $RELEASES/$FEDORA/Fedora/i386/os
 cfgos fedora$FEDORA i386 "Fedora $FEDORA"
 
-addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/Fedora/x86_64/os
-cfgos fedora$FEDORA_PREV x86_64 "Fedora $FEDORA_PREV"
+if [ $SIZE -gt 3 ]; then
+  addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/Fedora/x86_64/os
+  cfgos fedora$FEDORA_PREV x86_64 "Fedora $FEDORA_PREV"
 
-addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/Fedora/i386/os
-cfgos fedora$FEDORA_PREV i386 "Fedora $FEDORA_PREV"
+  addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/Fedora/i386/os
+  cfgos fedora$FEDORA_PREV i386 "Fedora $FEDORA_PREV"
+fi
 
 RELEASES=$MIRROR/centos
 addos centos$CENTOS x86_64 $RELEASES/$CENTOS/os/x86_64
@@ -198,7 +201,12 @@ cfgos centos$CENTOS i386 "CentOS $CENTOS"
 # Parted Magic
 if [ "$PMAGIC" ]; then
   RELEASES=/home/ftp/pub/mirrors/pmagic
-  for arch in x86_64 "" i486; do
+  if [ $SIZE -gt 3 ]; then
+    PM_ARCHS='x86_64 i486'
+  else
+    PM_ARCHS='x86_64'
+  fi
+  for arch in $PM_ARCHS ""; do
     mkdir -p $DIR/pmagic/$arch
     if [ -f $DIR/pmagic/$arch/bzImage ]; then
       echo "Pmagic bzImage present, use force to overwrite."
