@@ -32,28 +32,28 @@ set space:hex 20:20
 set space ${space:string}
 iseq ${arch} i386 && set arch5 i586 || set arch5 ${arch}
 iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
-menu SAL's BOOT MENU
+menu SAL's BOOT MENU [Local IP: ${netX/ip}]
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
 item --gap Operating systems:
 # RPM based systems
 item --key f fedora ${space} Fedora ${arch} [f]
 item --key c centos ${space} CentOS ${arch} [c]
-isset ${extended_menu} && item scientific ${space} Scientific Linux ${arch} ||
+isset ${extended_menu} && item --key S scientific ${space} Scientific Linux ${arch} [S] ||
 isset ${extended_menu} && item --key o opensuse ${space} openSUSE ${arch} [o] ||
-isset ${extended_menu} && item mageia ${space} Mageia ${arch5} ||
-isset ${extended_menu} && item mandriva ${space} Mandriva ${arch5} ||
+isset ${extended_menu} && item --key M mageia ${space} Mageia ${arch5} [M] ||
+isset ${extended_menu} && item --key D mandriva ${space} Mandriva ${arch5} [D] ||
 # Deb based systems
 item --key b debian ${space} Debian ${arch_a} [b]
 item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
 # Others
-isset ${extended_menu} && item archlinux ${space} ArchLinux ${arch_a} ||
-isset ${extended_menu} && item slackware ${space} Slackware ${bits} bit ||
+isset ${extended_menu} && item --key A archlinux ${space} ArchLinux ${arch_a} [A] ||
+isset ${extended_menu} && item --key L slackware ${space} Slackware ${bits} bit [L] ||
 item --key p pmagic ${space} Parted Magic [p]
 isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||
-#isset ${extended_menu} && item rescatux ${space} RescaTux ||
+#isset ${extended_menu} && item --key R rescatux ${space} RescaTux [R] ||
 # BSD systems
-isset ${extended_menu} && item bsd ${space} BSD systems ||
+isset ${extended_menu} && item --key y bsd ${space} BSD systems [y] ||
 # DOS
 item --key d dos ${space} FreeDOS [d]
 isset ${extended_menu} || item --key x extended_menu ${space} Other systems [x]
@@ -62,6 +62,7 @@ iseq ${arch} x86_64 && set bits 64 || set bits 32
 item --key a changebits ${space} Architecture: ${arch} (${bits}bit) [a]
 item --key 0x09 params_menu ${space} Kernel parameters: ${params}
 item --gap Tools:
+isset ${extended_menu} && item --key N netinfo ${space} Network card info [N] ||
 item --key h hdt ${space} Hardware detection tool [h]
 item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
 item --key . predefined ${space} Predefined systems menu [.]
@@ -96,6 +97,27 @@ set 210:string tftp://${next-server}/
 kernel ${url}pxelinux.0
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
+
+:netinfo
+menu Network info
+item --gap MAC:
+item mac ${space} ${netX/mac}
+item --gap IP/mask:
+item ip ${space} ${netX/ip}/${netX/netmask}
+item --gap Gateway:
+item gw ${space} ${netX/gateway}
+item --gap Domain:
+item domain ${space} ${netX/domain}
+item --gap DNS:
+item dns ${space} ${netX/dns}
+item --gap DHCP server:
+item dhcpserver ${space} ${netX/dhcp-server}
+item --gap Next-server:
+item nextserver ${space} ${next-server}
+item --gap Filename:
+item filename ${space} ${netX/filename}
+choose empty ||
+goto main_menu
 
 :hdt
 set 209:string hdt

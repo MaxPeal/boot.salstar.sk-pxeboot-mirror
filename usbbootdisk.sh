@@ -200,7 +200,7 @@ cfgos centos$CENTOS i386 "CentOS $CENTOS"
 
 # Parted Magic
 if [ "$PMAGIC" ]; then
-  RELEASES=/home/ftp/pub/mirrors/pmagic
+  RELEASES=$MIRROR/mirrors/pmagic
   if [ $SIZE -gt 3 ]; then
     PM_ARCHS='x86_64 i486'
   else
