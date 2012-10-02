@@ -5,6 +5,7 @@ iseq ${arch} x86_64 && set sbits 64 || clear sbits
 set os Slackware
 menu ${os}
 item current ${os} Current ${bits} bit
+item 14.0 ${os} 14.0 ${bits} bit
 item 13.37 ${os} 13.37 ${bits} bit
 item 13.1 ${os} 13.1 ${bits} bit
 item 13.0 ${os} 13.0 ${bits} bit
@@ -24,4 +25,6 @@ imgtrust --allow
 kernel ${mirror}${dir}/kernels/huge.s/bzImage
 initrd ${mirror}${dir}/isolinux/initrd.img
 imgargs bzImage load_ramdisk=1 prompt_ramdisk=0 rw printk.time=0 SLACK_KERNEL=huge.s ${params}
+imgstat
+isset ${debug} && prompt ||
 boot

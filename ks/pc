@@ -33,6 +33,10 @@ timezone --utc Europe/Bratislava
 install
 # Services
 services --disabled=netfs --enabled=network
+# iSCSI
+#ignoredisk --interactive
+#iscsiname iqn.2012-09.test
+#iscsi --ipaddr=158.197.16.70 --target=iqn.2012-09.sk.upjs.ftp:fedora 
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
 %packages
@@ -55,7 +59,7 @@ parted
 %pre --interpreter /usr/bin/python
 # SAL's fedora/centos kickstart script
 
-import os, sys, re, urllib2
+import os, sys, re, socket, urllib2
 
 part_names = dict(
   swap='swap',
@@ -142,15 +146,24 @@ def not_cdrom_or_lun(hd):
       pass
     return True
 
+def detect_disks():
+    return [x for x in os.listdir('/sys/block')
+            if (x[0:2] in ['sd','vd','hd']) and not_cdrom_or_lun(x)]
+
 def autopartition(disks, parts):
+    if disks.startswith("iscsi:"):
+      #print "ignoredisk --interactive"
+      print "iscsiname iqn.2012-09.test"
+      print "iscsi --ipaddr=%s --target=%s --user=%s --password=%s" \
+            % tuple(disks[6:].split(";", 3))
+      return
     if not parts:
       return
     if disks:
       print "ignoredisk --only-use=%s" % disks
       disks = disks.split(',')
     else:
-      disks = [x for x in os.listdir('/sys/block')
-               if (x[0:2] in ['sd','vd','hd']) and not_cdrom_or_lun(x)]
+      disks = detect_disks()
     parts = [x.split('=', 1) for x in parts.split(',')]
     vg = None
     if len(disks)==1:
@@ -292,21 +305,21 @@ class repocfg_class:
   def geturl(self, url):
       if "://" not in url:
         url = os.path.join(os.path.dirname(cmd_line['ks']), url)
-      return urllib2.urlopen(url).read().strip().split("\n")
+      return urllib2.urlopen(url).read()
   def package_update(self, distro, version):
       distro_packages = dict(
         fc = ["gdisk"],
         el = ["epel-release"]
       )
       group_packages = dict(
-        desktop = self.geturl('desktop.pkgs')
+        desktop = 'desktop.pkgs'
       )
       print "%packages --ignoremissing"
       print "\n".join(distro_packages.get(distro))
       if self.cmd_line_packages:
         for pkg in self.cmd_line_packages.split(','):
           if pkg in group_packages:
-            print "\n".join(group_packages[pkg].get())
+            print self.geturl(group_packages[pkg])
           else:
             print pkg
       print "%end"

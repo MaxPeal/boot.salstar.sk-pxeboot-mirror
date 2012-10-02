@@ -11,8 +11,10 @@ echo IPXE version too old, rechaining ...
 chain --replace ${url}/ipxe/ipxe.kpxe ||
 :version_ok
 
+iseq ${cls} serial && goto ignore_cls ||
 set cls:hex 1b:5b:4a  # ANSI clear screen sequence - "^[[J"
 set cls ${cls:string}
+:ignore_cls
 
 set memtest_version 4.20
 

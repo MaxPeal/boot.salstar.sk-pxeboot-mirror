@@ -1,8 +1,8 @@
 #!ipxe
 
 menu Predefined systems
-item --key m fedora_devel_nomodeset Fedora 18 development auto nomodeset [m]
 item --key d fedora_devel Fedora 18 development auto KMS [d]
+item --key m fedora_devel_nomodeset Fedora 18 development auto nomodeset [m]
 item --key f fedora Fedora 17 auto [f]
 item --key c centos CentOS 6 auto [c]
 choose system || exit
