@@ -205,6 +205,7 @@ item --key s set Set parameters [s]
 item --key v vnc VNC installation [v]
 item --key 0 ttyS0 Serial console ttyS0 [0]
 item --key 1 ttyS1 Serial cosnole ttyS1 [1]
+item --key t text Text mode install [t]
 item --key n network Static network configuration [n]
 item --key m nomodeset Disable KMS (nomodeset) [m]
 item --key a autopart Autopartition [a]
@@ -238,6 +239,10 @@ item --key 4 ,9600 9600 [4]
 choose serial_speed || goto params_menu
 iseq ${serial_speed} none && clear serial_speed ||
 set params ${params} console=${serial_port}${serial_speed}
+goto params_menu
+
+:params_text
+set params ${params} text nomodeset
 goto params_menu
 
 :params_network

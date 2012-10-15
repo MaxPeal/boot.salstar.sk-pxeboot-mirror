@@ -15,9 +15,10 @@
 @Hardware Support
 -@Input Methods
 -@Editors
-#@Office/Productivity
+@Office/Productivity
 #@Games and Entertainment
-#@Graphics
+@Graphics
+-shotwell
 #@Text-based Internet
 elinks
 mutt

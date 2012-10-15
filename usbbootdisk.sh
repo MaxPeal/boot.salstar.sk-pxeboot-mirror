@@ -4,6 +4,8 @@ set -e -x
 
 if [ -z "$1" ]; then
   echo "Usage: $0 /dev/sdx1 [/dev/sdx2 [http://mirror.site/and/path]]"
+  echo "Variables: FORCE_UPDATE=1  -  remove files before download to force update"
+  echo "           SIZE=2          -  target size"
   exit 1
 fi
 
@@ -21,7 +23,7 @@ SIZE=${SIZE:-4}
 FEDORA=17
 FEDORA_PREV=$((FEDORA-1))
 CENTOS=6
-HDT=0.5.0
+HDT=0.5.2
 MEMTEST=4.20
 PMAGIC=`grep item pmagic.ipxe | head -1 | cut -d" " -f2`
 CFG=$MOUNT/syslinux/syslinux.cfg
@@ -37,6 +39,12 @@ copy() {
   #  fi
   #fi
   rsync -crtvP --inplace "$@"
+}
+
+unlink() {
+  if [ "$FORCE_UPDATE" ]; then
+    rm -f "$@" || :
+  fi
 }
 
 addos() {
@@ -138,8 +146,9 @@ mount $PART $MOUNT
 # IPXE menu
 copy /usr/share/syslinux/menu.c32 $MOUNT/syslinux
 copy /usr/share/syslinux/memdisk $MOUNT/syslinux
+unlink $MOUNT/syslinux/hdt.iso
 wget -c -O $MOUNT/syslinux/hdt.iso \
-  http://hdt-project.org/raw-attachment/wiki/hdt-$HDT/hdt-$HDT.iso
+  http://hdt-project.org/raw-attachment/wiki/hdt-${HDT:0:4}0/hdt-$HDT.iso
 copy /boot/memtest86+-${MEMTEST} $MOUNT/syslinux/memtest
 cat > $CFG << EOF
 DEFAULT menu.c32
@@ -172,6 +181,7 @@ LABEL memtest
   APPEND -
 
 EOF
+unlink $MOUNT/syslinux/ipxe.lkrn
 wget --no-check-certificate -O $MOUNT/syslinux/ipxe.lkrn \
   https://boot.salstar.sk/ipxe/ipxe.lkrn
 #cp -a ~ondrejj/svn/pxeboot/ipxe/ipxe.lkrn $MOUNT/syslinux/
@@ -208,10 +218,14 @@ if [ "$PMAGIC" ]; then
   fi
   for arch in $PM_ARCHS ""; do
     mkdir -p $DIR/pmagic/$arch
+    unlink $DIR/pmagic/$arch/bzImage $DIR/pmagic/$arch/initrd.img
     if [ -f $DIR/pmagic/$arch/bzImage ]; then
-      echo "Pmagic bzImage present, use force to overwrite."
+      echo "Pmagic bzImage present, use FORCE_UPDATE=1 to overwrite."
     else
-      copy $RELEASES/$arch/pmagic_pxe_$PMAGIC/pmagic/ $DIR/pmagic/$arch/
+      for pmfn in bzImage initrd.img; do
+        wget -O $DIR/pmagic/$arch/$pmfn \
+          $RELEASES/$arch/pmagic_pxe_$PMAGIC/pmagic/$pmfn
+      done
     fi
   done
   cfgpmagic x86_64 ^
@@ -232,19 +246,3 @@ umount $MOUNT
 sync
 echo 3 > /proc/sys/vm/drop_caches
 sync
-
-exit 0
-
-# Update those on Live system:
-
-yum remove -y selinux\* policycoreutils\*
-yum install -y salpack roxterm hdparm \
-  xorg-x11-drv-\* --exclude='*-devel'
-
-sed -i 's/.none./usb.salstar.sk/' /etc/sysconfig/network
-sed -i 's/defaults/noatime/' /etc/fstab
-dracut -f
-
-echo "hdparm -S 10 /dev/sda" >> /etc/rc.d/rc.local
-
-#edit firewall

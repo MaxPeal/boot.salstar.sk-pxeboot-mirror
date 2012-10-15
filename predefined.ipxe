@@ -2,9 +2,10 @@
 
 menu Predefined systems
 item --key d fedora_devel Fedora 18 development auto KMS [d]
-item --key m fedora_devel_nomodeset Fedora 18 development auto nomodeset [m]
+item --key m fedora_devel_nomodeset Fedora 18 development auto text nomodeset [m]
 item --key f fedora Fedora 17 auto [f]
 item --key c centos CentOS 6 auto [c]
+item --key t test Test config [t]
 choose system || exit
 goto predef_${system}
 
@@ -30,16 +31,22 @@ exit
 set menu fedora
 set version development
 set bt ks
-set params ${params} part=root=3,swap=1
+set params ${params} part=root=3,swap=1 disks=vda
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 exit
 
 :predef_fedora_devel_nomodeset
 set menu fedora
-set version development
+#set version development
+set version alt_stage
 set bt ks
-set params ${params} nomodeset part=root=3,swap=1
+set params ${params} text nomodeset part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
+exit
+
+:predef_test
+imgtrust --allow
+chain test.ipxe
 exit

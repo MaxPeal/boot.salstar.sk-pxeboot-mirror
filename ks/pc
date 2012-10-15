@@ -151,7 +151,7 @@ def detect_disks():
             if (x[0:2] in ['sd','vd','hd']) and not_cdrom_or_lun(x)]
 
 def autopartition(disks, parts):
-    if disks.startswith("iscsi:"):
+    if disks and disks.startswith("iscsi:"):
       #print "ignoredisk --interactive"
       print "iscsiname iqn.2012-09.test"
       print "iscsi --ipaddr=%s --target=%s --user=%s --password=%s" \
@@ -338,6 +338,8 @@ def lang(lang):
       lang += ".UTF-8"
     print "lang", lang
 
+if "text" in cmd_line:
+  print "text"
 autopartition(
   cmd_line.get('disk') or cmd_line.get('disks'),
   cmd_line.get('part')
