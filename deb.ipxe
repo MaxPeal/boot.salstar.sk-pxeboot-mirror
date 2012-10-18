@@ -26,6 +26,7 @@ set debmirror http://${country}.releases.ubuntu.com/ubuntu/
 
 set os Ubuntu
 menu ${os} ${arch_a}
+item --key q quantal ${os} 12.10 Quantal Quetzal
 item --key p precise ${os} 12.04 LTS Precise Pangolin
 item --key o oneiric ${os} 11.10 Oneiric Ocelot
 item --key n natty ${os} 11.04 Natty Narwhal
