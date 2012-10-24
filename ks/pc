@@ -150,6 +150,14 @@ def detect_disks():
     return [x for x in os.listdir('/sys/block')
             if (x[0:2] in ['sd','vd','hd']) and not_cdrom_or_lun(x)]
 
+def initdisks(disks):
+    if 'zerombr' in cmd_line:
+      print "zerombr"
+    if disks:
+      print "clearpart --all --initlabel --drives=%s" % ','.join(disks)
+    else:
+      print "clearpart --all --initlabel"
+
 def autopartition(disks, parts):
     if disks and disks.startswith("iscsi:"):
       #print "ignoredisk --interactive"
@@ -182,9 +190,7 @@ def autopartition(disks, parts):
           print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
           print "volgroup %s pv.01" % vg
         elif key=='root':
-          if 'zerombr' in cmd_line:
-            print "zerombr"
-          print "clearpart --all --initlabel"
+          initdisks(disks)
           if biosboot>0:
             print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
                   % (disk0, biosboot)
@@ -230,9 +236,7 @@ def autopartition(disks, parts):
           print "# disk size: %d-%d" % (disksize(*disks), sum)
           raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
         elif key=='root':
-          if 'zerombr' in cmd_line:
-            print "zerombr"
-          print "clearpart --all --initlabel"
+          initdisks(disks)
           if biosboot>0:
             print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
                    % (disk0, biosboot)

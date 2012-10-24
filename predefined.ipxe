@@ -31,7 +31,7 @@ exit
 set menu fedora
 set version development
 set bt ks
-set params ${params} part=root=3,swap=1 disks=vda
+set params ${params} part=root=3,swap=1 disks=vda zerombr
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 exit
