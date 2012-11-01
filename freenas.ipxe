@@ -1,0 +1,9 @@
+#!ipxe
+
+set project freenas
+set version 8.3.0
+iseq ${bits} 64 && set fnarch x64 || set fnarch x86
+set iso FreeNAS-${version}/RELEASE/${fnarch}/FreeNAS-${version}-RELEASE-${fnarch}.iso
+set sfboot memdisk
+imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
+chain sourceforge.ipxe

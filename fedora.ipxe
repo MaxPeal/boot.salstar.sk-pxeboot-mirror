@@ -89,6 +89,7 @@ echo ${cls}
 echo -n Enter version: ${} && read version
 :centos_skip_read_version
 set dir ${menu}/${version}/os/${arch}
+set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${version}
 goto boottype
 
