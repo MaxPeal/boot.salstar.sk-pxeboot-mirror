@@ -1,0 +1,143 @@
+# SAL's Live CD packages
+
+%packages
+
+# Drop the Java plugin
+-icedtea-web
+-java-*-openjdk
+
+# No printing
+-foomatic-db-ppds
+-foomatic
+-man-pages*
+
+# Help and art can be big, too
+-gnome-user-docs
+-evolution-help
+-gnome-games-help
+-desktop-backgrounds-basic
+-*backgrounds-extras
+
+-anaconda
+
+# Drop some system-config things
+-system-config-boot
+-system-config-language
+-system-config-network
+-system-config-rootpassword
+-system-config-services
+-policycoreutils-gui
+# required for selinux --disabled
+system-config-firewall-base
+
+# SAL's changes
+
+dhclient
+yum
+yum-utils
+openssh-clients
+openssh-server
+screen
+wget
+rsync
+which
+iptables
+joe
+mc
+parted
+-sendmail
+
+elinks
+mutt
+pv
+hdparm
+fuse-sshfs
+
+@DNS Name Server
+#@Slovak Support
+@slovak-support
+-m17n*
+-scim*
+-ibus*
+-iok*
+
+# SAL's packages
+roxterm
+lshw
+devilspie
+gthumb
+qemu-kvm
+kismet
+aircrack-ng
+
+# Fonts
+-@Fonts
+# don't install unnecessary fonts
+#-abyssinica-fonts
+-cjkuni*fonts*
+-jomolhari*fonts*
+-kacst*fonts*
+-khmeros*fonts*
+-lklug*fonts*
+-lohit*fonts*
+#-padauk*fonts*
+-paktype*fonts*
+-smc*fonts*
+-stix*fonts*
+-thai*fonts*
+#-un-core-fonts-dotum
+-vlgothic*fonts*
+dejavu-sans-fonts
+dejavu-sans-mono-fonts
+dejavu-serif-fonts
+liberation-mono-fonts
+liberation-sans-fonts
+liberation-serif-fonts
+
+-@Administration Tools
+
+@System Tools
+-BackupPC
+-jigdo
+-prelink
+-sssd
+-ypbind
+-rpcbind
+-nfs-utils
+
+# GNOME shell extensions
+gnome-tweak-tool
+gnome-shell-extension-native-window-placement
+gnome-shell-extension-weather
+gnome-shell-extension-alternative-status-menu
+gnome-shell-extension-cpu-temperature
+gnome-shell-extension-alternate-tab
+gnome-shell-extension-system-monitor-applet
+
+# Office
+@Office/Productivity
+-planner
+-shotwell
+gimp
+gimp-data-extras
+
+# rpmfusion packages
+rpmfusion-free-release
+rpmfusion-nonfree-release
+vlc
+python-vlc
+#mplayer
+gstreamer-ffmpeg
+gstreamer-plugins-bad
+gstreamer-plugins-bad-nonfree
+gstreamer-plugins-ugly
+
+# svplayer and python dependencies
+git
+python-gdata
+youtube-dl
+python-imaging
+python-BeautifulSoup
+pywebkitgtk
+
+%end
