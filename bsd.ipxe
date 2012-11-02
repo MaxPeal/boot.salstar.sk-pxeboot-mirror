@@ -22,6 +22,7 @@ exit
 :openbsd
 set os OpenBSD
 menu ${os} ${arch_a}
+item 5.2 ${os} 5.2
 item 5.1 ${os} 5.1
 item 5.0 ${os} 5.0
 item 4.9 ${os} 4.9
@@ -34,6 +35,7 @@ echo ${cls}
 echo -n Enter version: ${} && read version
 :skip_read_version_openbsd
 
+iseq ${version} 5.3 && set ver 53 ||
 iseq ${version} 5.2 && set ver 52 ||
 iseq ${version} 5.1 && set ver 51 ||
 iseq ${version} 5.0 && set ver 50 ||
