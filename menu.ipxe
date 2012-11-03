@@ -133,9 +133,9 @@ goto main_menu
 #kernel ${url}images/memtest
 #imgverify memtest ${sigs}images/memtest.sig
 #boot
-imgverify memtest.0 ${sigs}memtest.0.sig
-chain memtest.0 ${params} && goto main_menu
-echo MEMORY ERROR DETECTED!
+imgverify ${url}images/memtest.0 ${sigs}images/memtest.0.sig
+chain memtest.0 ${params} && goto main_menu ||
+echo MEMORY ERROR DETECTED! ${errno}
 echo Press any key to continue ...
 read a
 goto main_menu
