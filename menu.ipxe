@@ -49,7 +49,7 @@ isset ${extended_menu} && item --key D mandriva ${space} Mandriva ${arch5} [D] |
 item --key b debian ${space} Debian ${arch_a} [b]
 item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
 # Others
-isset ${extended_menu} && item --key A archlinux ${space} ArchLinux ${arch_a} [A] ||
+isset ${extended_menu} && item --key A archlinux ${space} ArchLinux [A] ||
 isset ${extended_menu} && item --key L slackware ${space} Slackware ${bits} bit [L] ||
 item --key p pmagic ${space} Parted Magic [p]
 isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||

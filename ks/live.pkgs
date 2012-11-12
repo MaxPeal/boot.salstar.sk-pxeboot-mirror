@@ -106,6 +106,7 @@ liberation-serif-fonts
 -nfs-utils
 
 # GNOME shell extensions
+dconf-editor
 gnome-tweak-tool
 gnome-shell-extension-native-window-placement
 gnome-shell-extension-weather
