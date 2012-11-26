@@ -135,6 +135,7 @@ gstreamer-plugins-ugly
 
 # svplayer and python dependencies
 git
+ipython
 python-gdata
 youtube-dl
 python-imaging
