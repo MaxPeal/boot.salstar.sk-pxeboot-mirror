@@ -70,7 +70,8 @@ part_names = dict(
   www='/var/www',
   backuppc='/var/lib/BackupPC',
   mysql='/var/lib/mysql',
-  pgsql='/var/lib/pgsql'
+  pgsql='/var/lib/pgsql',
+  opt='/opt'
 )
 sys.stdout = open('/tmp/salstar.ks', 'wt')
 spare = 2
@@ -117,19 +118,23 @@ class mk_raid:
   def __init__(self, disks):
       self.disks = disks
   def add(self, s):
+      raids = []
       self.cntr += 1
       for i in 0, 1:
-        print "part raid.%d%d --size=%s --ondisk=%s" \
-              % (self.cntr, i+1, s, self.disks[i])
+        if self.disks[i]:
+          print "part raid.%d%d --size=%s --ondisk=%s" \
+                % (self.cntr, i+1, s, self.disks[i])
+          raids.append("raid.%d%d" % (self.cntr, i+1))
+      return raids
+  def add_raid1(self, name, s, fstype=""):
+      raids = self.add(s)
+      print "raid %s --level=1 --device=md%d %s %s" \
+            % (name, self.cntr, fstype, " ".join(raids))
   def add_vg(self, vg, s):
-      self.add(s)
-      print "raid pv.01 --level=1 --device=md%d raid.%d1 raid.%d2" \
-            % (self.cntr, self.cntr, self.cntr)
+      self.add_raid1("pv.01", s)
       print "volgroup %s pv.01" % vg
   def add_part(self, mp, s, fstype='--fstype=ext4'):
-      self.add(s)
-      print "raid %s --level=1 --device=md%d %s raid.%d1 raid.%d2" \
-            % (mp, self.cntr, fstype, self.cntr, self.cntr)
+      self.add_raid1(mp, s, fstype)
 
 def not_cdrom_or_lun(hd):
     try:
@@ -154,7 +159,8 @@ def initdisks(disks):
     if 'zerombr' in cmd_line:
       print "zerombr"
     if disks:
-      print "clearpart --all --initlabel --drives=%s" % ','.join(disks)
+      print "clearpart --all --initlabel --drives=%s" \
+            % ','.join([x for x in disks if x])
     else:
       print "clearpart --all --initlabel"
 
@@ -168,7 +174,7 @@ def autopartition(disks, parts):
     if not parts:
       return
     if disks:
-      print "ignoredisk --only-use=%s" % disks
+      print "ignoredisk --only-use=%s" % disks.strip(',')
       disks = disks.split(',')
     else:
       disks = detect_disks()
