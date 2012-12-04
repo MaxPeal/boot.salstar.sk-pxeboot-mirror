@@ -22,7 +22,7 @@ exit
 set menu centos
 set version 6
 set bt ks
-set params ${params} part=root=4,vg=vg1,swap=2,opt=90 disks=vda,vdb console=ttyS0
+set params ${params} part=root=4,vg=vg1,swap=2,opt=40 disks=vda,vdb console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 exit

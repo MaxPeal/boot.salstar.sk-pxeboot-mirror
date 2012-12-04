@@ -1,10 +1,10 @@
 #!ipxe
 
 menu BSD systems
-item --key o openbsd OpenBSD
-item --key n netbsd NetBSD
-item --key f freebsd FreeBSD
-item --key p pcbsd PC-BSD
+item --key o openbsd OpenBSD [o]
+item --key n netbsd NetBSD [n]
+item --key f freebsd FreeBSD [f]
+item --key p pcbsd PC-BSD [p]
 choose bsd || goto bsd_exit
 
 goto ${bsd}
@@ -15,7 +15,7 @@ exit 0
 echo ${cls}
 imgfree
 imgtrust --allow
-initrd ${mirror}${dir}/${iso}
+initrd ${mirror}${dir}/${iso} || initrd ${mirror}${dir}/${iso2}
 chain ${url}memdisk iso raw
 exit
 
@@ -50,6 +50,8 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
+item 6.0 ${os} 6.0
+item 5.2 ${os} 5.2
 item 5.1.2 ${os} 5.1.2
 item 5.0.2 ${os} 5.0.2
 item 4.0.1 ${os} 4.0.1
@@ -61,9 +63,10 @@ echo ${cls}
 echo -n Enter version: ${} && read version
 :skip_read_version_netbsd
 
-set mirror http://ftp.availo.se/pub/
+set mirror http://iso.se.netbsd.org/pub/
 set dir NetBSD/iso/${version}
 set iso ${arch_a}cd-${version}.iso
+set iso2 NetBSD-${version}-${arch_a}.iso
 goto boot_bsd
 
 :freebsd
