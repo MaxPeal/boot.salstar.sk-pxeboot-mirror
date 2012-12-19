@@ -28,6 +28,7 @@ menu ${os} ${version}
 item --key 6 x86_64 ${os} ${version} (x86_64) [6]
 iseq ${arch} i386 && set default --default || set default --
 item --key p ${default} base ${os} ${version} (Pentium III class+) [p]
+item --key 5 i586 ${os} ${version} (i586) [5]
 item --key 4 i486 ${os} ${version} (i486, i586, PII) [4]
 #item --key x exit Exit to main menu [x]
 choose value || exit 0
@@ -50,6 +51,11 @@ exit
 :boot_pmagic_i486
 set pmarch _i486
 set dir ${dir}/i486
+goto boot_pmagic_base
+
+:boot_pmagic_i586
+set pmarch _i586
+set dir ${dir}/i586
 goto boot_pmagic_base
 
 :boot_pmagic_x86_64

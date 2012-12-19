@@ -26,6 +26,7 @@ mutt
 -BackupPC
 -jigdo
 -@Administration Tools
+freerdp
 -@Fonts
 dejavu-sans-fonts
 dejavu-sans-mono-fonts

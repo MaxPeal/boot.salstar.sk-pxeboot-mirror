@@ -1,13 +1,13 @@
 #!/bin/bash
 
-set -e -x
-
 if [ -z "$1" ]; then
   echo "Usage: $0 /dev/sdx1 [/dev/sdx2 [http://mirror.site/and/path]]"
   echo "Variables: FORCE_UPDATE=1  -  remove files before download to force update"
   echo "           SIZE=2          -  target size"
   exit 1
 fi
+
+set -e -x
 
 if [ -z "$3" ]; then
   MIRROR="http://ftp.upjs.sk/pub"
@@ -70,6 +70,10 @@ EOF
 }
 
 cfgpmagic() {
+if [ ! -f $DIR/pmagic/$1/bzImage ]; then
+  echo "PMagic image not found, skipping config option..."
+  return
+fi
 cat >> $CFG << EOF
 LABEL pmagic$1
   MENU LABEL $2Parted Magic $PMAGIC $1
@@ -147,8 +151,9 @@ mount $PART $MOUNT
 copy /usr/share/syslinux/menu.c32 $MOUNT/syslinux
 copy /usr/share/syslinux/memdisk $MOUNT/syslinux
 unlink $MOUNT/syslinux/hdt.iso
-wget -c -O $MOUNT/syslinux/hdt.iso \
-  http://hdt-project.org/raw-attachment/wiki/hdt-${HDT:0:4}0/hdt-$HDT.iso
+wget -c --timeout=5 --tries=2 -O $MOUNT/syslinux/hdt.iso \
+  http://hdt-project.org/raw-attachment/wiki/hdt-${HDT:0:4}0/hdt-$HDT.iso \
+  || echo "HDT download error"
 copy /boot/memtest86+-${MEMTEST} $MOUNT/syslinux/memtest
 cat > $CFG << EOF
 DEFAULT menu.c32
@@ -187,11 +192,13 @@ wget --no-check-certificate -O $MOUNT/syslinux/ipxe.lkrn \
 #cp -a ~ondrejj/svn/pxeboot/ipxe/ipxe.lkrn $MOUNT/syslinux/
 
 RELEASES=$MIRROR/fedora/linux/releases
-addos fedora$FEDORA x86_64 $RELEASES/$FEDORA/Fedora/x86_64/os
-cfgos fedora$FEDORA x86_64 "^Fedora $FEDORA"
+if [ $SIZE -gt 1 ]; then
+  addos fedora$FEDORA x86_64 $RELEASES/$FEDORA/Fedora/x86_64/os
+  cfgos fedora$FEDORA x86_64 "^Fedora $FEDORA"
 
-addos fedora$FEDORA i386 $RELEASES/$FEDORA/Fedora/i386/os
-cfgos fedora$FEDORA i386 "Fedora $FEDORA"
+  addos fedora$FEDORA i386 $RELEASES/$FEDORA/Fedora/i386/os
+  cfgos fedora$FEDORA i386 "Fedora $FEDORA"
+fi
 
 if [ $SIZE -gt 3 ]; then
   addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/Fedora/x86_64/os
@@ -202,19 +209,21 @@ if [ $SIZE -gt 3 ]; then
 fi
 
 RELEASES=$MIRROR/centos
-addos centos$CENTOS x86_64 $RELEASES/$CENTOS/os/x86_64
-cfgos centos$CENTOS x86_64 "^CentOS $CENTOS"
+if [ $SIZE -gt 1 ]; then
+  addos centos$CENTOS x86_64 $RELEASES/$CENTOS/os/x86_64
+  cfgos centos$CENTOS x86_64 "^CentOS $CENTOS"
 
-addos centos$CENTOS i386 $RELEASES/$CENTOS/os/i386
-cfgos centos$CENTOS i386 "CentOS $CENTOS"
+  addos centos$CENTOS i386 $RELEASES/$CENTOS/os/i386
+  cfgos centos$CENTOS i386 "CentOS $CENTOS"
+fi
 
 # Parted Magic
 if [ "$PMAGIC" ]; then
   RELEASES=$MIRROR/mirrors/pmagic
   if [ $SIZE -gt 3 ]; then
-    PM_ARCHS='x86_64 i486'
+    PM_ARCHS='x86_64 i586'
   else
-    PM_ARCHS='x86_64'
+    PM_ARCHS=''
   fi
   for arch in $PM_ARCHS ""; do
     mkdir -p $DIR/pmagic/$arch
@@ -230,7 +239,7 @@ if [ "$PMAGIC" ]; then
   done
   cfgpmagic x86_64 ^
   cfgpmagic ""
-  cfgpmagic i486
+  cfgpmagic i586
 fi
 
 # Fedora Live (installed on HDD)
