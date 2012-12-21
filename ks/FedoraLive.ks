@@ -34,11 +34,12 @@ do
   systemctl --no-reload disable $service.service 2> /dev/null || :
 done
 
-sed -i~ \
-  -e '/^livedir=/aLIVEUSER=liveuser\
-LIVENAME="Live System User"' \
-  -e '/^# add fedora user/a[\ -r\ /home/.rcinit\ ]\ &&\ .\ /home/.rcinit' \
-  -e 's/\([^~]\)liveuser/\1$LIVEUSER/g' \
-  -e 's/Live System User/$LIVENAME/' \
-  /etc/rc.d/init.d/livesys
+sed -i~ -f - /etc/rc.d/init.d/livesys << EOF
+  /^livedir=/aLIVEUSER=liveuser\n\
+LIVENAME="Live System User"
+  /^# add fedora user/a[\ -r\ /home/.rcinit\ ]\ &&\ .\ /home/.rcinit
+  s/\([^~]\)liveuser/\1\$LIVEUSER/g
+  s/Live System User/\$LIVENAME/
+EOF
+
 %end
