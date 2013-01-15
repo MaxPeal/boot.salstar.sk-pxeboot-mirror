@@ -26,7 +26,9 @@ mutt
 -BackupPC
 -jigdo
 -@Administration Tools
-freerdp
+remmina-plugins-*
+wireshark-gnome
+ngrep
 -@Fonts
 dejavu-sans-fonts
 dejavu-sans-mono-fonts

@@ -201,7 +201,7 @@ menu Kernel parameters
 item --gap Current: ${params}
 item --gap
 #item --key x exit Return to main menu [x]
-item --key s set Set parameters [s]
+item --key e set Edit parameters [e]
 item --key v vnc VNC installation [v]
 item --key 0 ttyS0 Serial console ttyS0 [0]
 item --key 1 ttyS1 Serial cosnole ttyS1 [1]

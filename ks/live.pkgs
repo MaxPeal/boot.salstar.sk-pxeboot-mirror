@@ -50,8 +50,12 @@ parted
 elinks
 mutt
 pv
+lvm2
+mdadm
 hdparm
 fuse-sshfs
+
+firefox
 
 @DNS Name Server
 #@Slovak Support
@@ -87,6 +91,7 @@ aircrack-ng
 -thai*fonts*
 #-un-core-fonts-dotum
 -vlgothic*fonts*
+wqy-zenhei-fonts
 dejavu-sans-fonts
 dejavu-sans-mono-fonts
 dejavu-serif-fonts
@@ -104,6 +109,8 @@ liberation-serif-fonts
 -ypbind
 -rpcbind
 -nfs-utils
+wireshark-gnome
+ngrep
 
 # GNOME shell extensions
 dconf-editor
@@ -119,6 +126,7 @@ gnome-shell-extension-system-monitor-applet
 @Office/Productivity
 -planner
 -shotwell
+remmina-plugins-*
 gimp
 gimp-data-extras
 

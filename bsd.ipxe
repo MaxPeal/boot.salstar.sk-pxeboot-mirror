@@ -50,7 +50,7 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
-item 6.0 ${os} 6.0
+item 6.0.1 ${os} 6.0.1
 item 5.2 ${os} 5.2
 item 5.1.2 ${os} 5.1.2
 item 5.0.2 ${os} 5.0.2
@@ -65,8 +65,8 @@ echo -n Enter version: ${} && read version
 
 set mirror http://iso.se.netbsd.org/pub/
 set dir NetBSD/iso/${version}
-set iso ${arch_a}cd-${version}.iso
-set iso2 NetBSD-${version}-${arch_a}.iso
+set iso2 ${arch_a}cd-${version}.iso
+set iso NetBSD-${version}-${arch_a}.iso
 goto boot_bsd
 
 :freebsd

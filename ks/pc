@@ -315,7 +315,8 @@ class repocfg_class:
   def geturl(self, url):
       if "://" not in url:
         url = os.path.join(os.path.dirname(cmd_line['ks']), url)
-      return urllib2.urlopen(url).read()
+      #return urllib2.urlopen(url).read()
+      return '%include ' + url
   def package_update(self, distro, version):
       distro_packages = dict(
         fc = ["gdisk"],

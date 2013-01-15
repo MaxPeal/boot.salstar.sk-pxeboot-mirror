@@ -9,8 +9,9 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_version 18
+set devel_version 19
 menu Fedora
+item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
 item --key 6 16 ${os} 16 ${arch} [6]
 item --key 5 15 ${os} 15 ${arch} [5]
@@ -64,9 +65,9 @@ set dir fedora/linux/development/${devel_version}/${arch}/os
 set repo repo=${mirror}/${dir}
 # everything else to alt stage files
 set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
-set stage_version Beta-TC9
+set stage_version ${devel_version}-TC4
 echo -n Edit stage version: ${} && read stage_version
-set dir alt/stage/${devel_version}-${stage_version}/Fedora/${arch}/os
+set dir alt/stage/${stage_version}/Fedora/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 # signature checking is disabled for development version
 set version development
