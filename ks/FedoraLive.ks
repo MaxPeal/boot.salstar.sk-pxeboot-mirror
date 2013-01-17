@@ -12,10 +12,10 @@
 part / --size 6144 --fstype ext4
 
 # Fedora
-#repo --name=rawhide --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=$basearch
 repo --name=fedora --mirrorlist=http://www.salstar.sk/download/mirrors/$basearch/fedora-$releasever?arch=$basearch
 repo --name=updates --mirrorlist=http://www.salstar.sk/download/mirrors/updates-released-$releasever?arch=$basearch
 #repo --name=updates-testing --baseurl=http://ftp.upjs.sk/pub/fedora/linux/updates/testing/$releasever/$basearch/
+#repo --name=rawhide --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=$basearch
 
 # rpmfusion
 #repo --name=rpmfusion-free --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=$basearch
