@@ -1,35 +1,37 @@
 # group defaults
-@Base
+@standard
+@core
+@multimedia
+@base-x
+@hardware-support
 -prelink
 -sssd
 -ypbind
-@GNOME Desktop Environment
-@Graphical Internet
+@gnome-desktop
+@graphical-internet
 -evolution*
 -empathy
-@Java
-@Sound and Video
-@Printing Support
-@DNS Name Server
-@X Window System
-@Hardware Support
--@Input Methods
--@Editors
-@Office/Productivity
-#@Games and Entertainment
-@Graphics
+@java
+@sound-and-video
+@printing
+@dns-server
+-@input-methods
+-@editors
+@office
+#@games
+@graphics
 -shotwell
-#@Text-based Internet
+#@text-internet
 elinks
 mutt
-@System Tools
+@system-tools
 -BackupPC
 -jigdo
--@Administration Tools
+-@admin-tools
 remmina-plugins-*
 wireshark-gnome
 ngrep
--@Fonts
+-@fonts
 dejavu-sans-fonts
 dejavu-sans-mono-fonts
 dejavu-serif-fonts
@@ -37,5 +39,5 @@ liberation-mono-fonts
 liberation-sans-fonts
 liberation-serif-fonts
 # Language packages
-@Slovak Support
-@Czech Support
+#@slovak-support
+#@czech-support

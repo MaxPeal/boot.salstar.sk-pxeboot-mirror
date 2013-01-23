@@ -14,7 +14,7 @@
 # Help and art can be big, too
 -gnome-user-docs
 -evolution-help
--gnome-games-help
+#-gnome-games-help
 -desktop-backgrounds-basic
 -*backgrounds-extras
 
@@ -23,7 +23,7 @@
 # Drop some system-config things
 -system-config-boot
 -system-config-language
--system-config-network
+#-system-config-network
 -system-config-rootpassword
 -system-config-services
 -policycoreutils-gui
@@ -57,8 +57,7 @@ fuse-sshfs
 
 firefox
 
-@DNS Name Server
-#@Slovak Support
+@dns-server
 @slovak-support
 -m17n*
 -scim*
@@ -75,7 +74,7 @@ kismet
 aircrack-ng
 
 # Fonts
--@Fonts
+-@fonts
 # don't install unnecessary fonts
 #-abyssinica-fonts
 -cjkuni*fonts*
@@ -99,9 +98,9 @@ liberation-mono-fonts
 liberation-sans-fonts
 liberation-serif-fonts
 
--@Administration Tools
+-@admin-tools
 
-@System Tools
+@system-tools
 -BackupPC
 -jigdo
 -prelink
@@ -123,7 +122,7 @@ gnome-shell-extension-alternate-tab
 gnome-shell-extension-system-monitor-applet
 
 # Office
-@Office/Productivity
+@office
 -planner
 -shotwell
 remmina-plugins-*

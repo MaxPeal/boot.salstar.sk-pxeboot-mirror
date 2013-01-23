@@ -39,7 +39,7 @@ services --disabled=netfs --enabled=network
 #iscsi --ipaddr=158.197.16.70 --target=iqn.2012-09.sk.upjs.ftp:fedora 
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
-%packages
+%packages --ignoremissing
 dhclient
 yum
 yum-utils
