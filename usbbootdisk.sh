@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=17
+FEDORA=18
 FEDORA_PREV=$((FEDORA-1))
 CENTOS=6
 HDT=0.5.2
@@ -76,9 +76,9 @@ if [ ! -f $DIR/pmagic/$1/bzImage ]; then
 fi
 cat >> $CFG << EOF
 LABEL pmagic$1
-  MENU LABEL $2Parted Magic $PMAGIC $1
-  KERNEL pmagic/$1/bzImage
-  INITRD pmagic/$1/initrd.img
+  MENU LABEL $4Parted Magic $PMAGIC $1
+  KERNEL pmagic$2/bzImage$3
+  INITRD pmagic$2/initrd.img
   APPEND edd=off load_ramdisk=1 prompt_ramdisk=0 rw vga=normal loglevel=9 max_loop=256 firewall
 EOF
 }
@@ -220,26 +220,32 @@ fi
 # Parted Magic
 if [ "$PMAGIC" ]; then
   RELEASES=$MIRROR/mirrors/pmagic
-  if [ $SIZE -gt 3 ]; then
-    PM_ARCHS='x86_64 i586'
-  else
-    PM_ARCHS=''
-  fi
-  for arch in $PM_ARCHS ""; do
-    mkdir -p $DIR/pmagic/$arch
-    unlink $DIR/pmagic/$arch/bzImage $DIR/pmagic/$arch/initrd.img
-    if [ -f $DIR/pmagic/$arch/bzImage ]; then
-      echo "Pmagic bzImage present, use FORCE_UPDATE=1 to overwrite."
-    else
-      for pmfn in bzImage initrd.img; do
-        wget -O $DIR/pmagic/$arch/$pmfn \
-          $RELEASES/$arch/pmagic_pxe_$PMAGIC/pmagic/$pmfn
-      done
-    fi
+  #if [ $SIZE -gt 3 ]; then
+  #  PM_ARCHS='x86_64 i586'
+  #else
+  #  PM_ARCHS=''
+  #fi
+  #for arch in $PM_ARCHS ""; do
+  #  mkdir -p $DIR/pmagic/$arch
+  #  unlink $DIR/pmagic/$arch/bzImage $DIR/pmagic/$arch/initrd.img
+  #  if [ -f $DIR/pmagic/$arch/bzImage ]; then
+  #    echo "Pmagic bzImage present, use FORCE_UPDATE=1 to overwrite."
+  #  else
+  #    for pmfn in bzImage initrd.img; do
+  #      wget -O $DIR/pmagic/$arch/$pmfn \
+  #        $RELEASES/$arch/pmagic_pxe_$PMAGIC/pmagic/$pmfn
+  #    done
+  #  fi
+  #done
+  #cfgpmagic x86_64 "" ^
+  #cfgpmagic ""
+  #cfgpmagic i586
+  unlink $DIR/pmagic/bzImage $DIR/pmagic/bzImage64 $DIR/pmagic/initrd.img
+  for pmfn in bzImage bzImage64 initrd.img; do
+    wget -O $DIR/pmagic/$pmfn $RELEASES/pmagic_pxe_$PMAGIC/pmagic/$pmfn
   done
-  cfgpmagic x86_64 ^
-  cfgpmagic ""
-  cfgpmagic i586
+  cfgpmagic x86_64 "" 64 ^
+  cfgpmagic i686
 fi
 
 # Fedora Live (installed on HDD)

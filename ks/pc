@@ -45,13 +45,13 @@ yum
 yum-utils
 openssh-clients
 openssh-server
-screen
+#screen
 wget
 rsync
 which
 iptables
-joe
-mc
+#joe
+#mc
 parted
 -sendmail
 %end
