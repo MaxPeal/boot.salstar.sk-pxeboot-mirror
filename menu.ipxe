@@ -260,9 +260,11 @@ goto params_menu
 
 :params_autopart
 menu Autopartition
+item --key t root4max part=root=4,vg=vg1,swap=1 [t]
 item --key 4 root4 part=root=4,swap=1 [4]
 item --key 3 root3 part=root=3,swap=1 [3]
 choose autopart || goto params_menu
+iseq ${autopart} root4max && set params ${params} part=root=4,vg=vg1,swap=1
 iseq ${autopart} root4 && set params ${params} part=root=4,swap=1 ||
 iseq ${autopart} root3 && set params ${params} part=root=3,swap=1 ||
 goto params_menu
