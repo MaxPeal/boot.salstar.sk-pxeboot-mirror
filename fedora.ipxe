@@ -65,7 +65,7 @@ set dir fedora/linux/development/${devel_version}/${arch}/os
 set repo repo=${mirror}/${dir}
 # everything else to alt stage files
 set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
-set stage_version ${devel_version}-TC4
+set stage_version ${devel_version}-Alpha-TC2
 echo -n Edit stage version: ${} && read stage_version
 set dir alt/stage/${stage_version}/Fedora/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
