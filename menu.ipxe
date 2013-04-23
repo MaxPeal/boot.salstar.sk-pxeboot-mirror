@@ -209,6 +209,7 @@ item --key t text Text mode install [t]
 item --key n network Static network configuration [n]
 item --key m nomodeset Disable KMS (nomodeset) [m]
 item --key a autopart Autopartition [a]
+item --key p pkgs Package selection [p]
 choose kp || goto main_menu
 echo ${cls}
 goto params_${kp}
@@ -264,9 +265,22 @@ item --key t root4max part=root=4,vg=vg1,swap=1 [t]
 item --key 4 root4 part=root=4,swap=1 [4]
 item --key 3 root3 part=root=3,swap=1 [3]
 choose autopart || goto params_menu
-iseq ${autopart} root4max && set params ${params} part=root=4,vg=vg1,swap=1
+iseq ${autopart} root4max && set params ${params} part=root=4,vg=vg1,swap=1 ||
 iseq ${autopart} root4 && set params ${params} part=root=4,swap=1 ||
 iseq ${autopart} root3 && set params ${params} part=root=3,swap=1 ||
+goto params_menu
+
+:params_pkgs
+menu Package selection
+item --key g guestnrpe Guest with NRPE [g]
+item --key h kvmnrpe KVM host with NRPE [h]
+item --key w web Web server with mysql [w]
+item --key m mail Mail server with mysql [m]
+choose pkgs || goto params_menu
+iseq ${pkgs} guestnrpe && set params ${params} pkgs=salpack-nrpe,salpack-guest ||
+iseq ${pkgs} kvmnrpe && set params ${params} pkgs=salpack-nrpe,salpack-kvm ||
+iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mysql ||
+iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mysql ||
 goto params_menu
 
 :extended_menu
