@@ -22,6 +22,7 @@ exit
 :openbsd
 set os OpenBSD
 menu ${os} ${arch_a}
+item 5.3 ${os} 5.3
 item 5.2 ${os} 5.2
 item 5.1 ${os} 5.1
 item 5.0 ${os} 5.0

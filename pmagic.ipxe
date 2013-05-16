@@ -4,6 +4,7 @@
 set dir mirrors/pmagic
 set os Parted Magic
 menu ${os} (pmagic)
+item 2013_05_01 ${os} 2013_05_01
 item 2013_02_28 ${os} 2013_02_28
 item 2013_01_29 ${os} 2013_01_29
 #item 2012_12_25 ${os} 2012_12_25

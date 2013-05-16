@@ -40,6 +40,7 @@ selinux --disabled
 
 %post
 systemctl --no-reload enable chronyd.service 2> /dev/null || :
+systemctl --no-reload enable systemd-ask-password-wall.service 2> /dev/null || :
 for service in tcsd cups \
                abrtd abrt-ccpp abrt-oops abrt-vmcore abrt-xorg \
                ksm ksmtuned spice-vdagentd

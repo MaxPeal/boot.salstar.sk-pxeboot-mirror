@@ -14,8 +14,9 @@ set debmirror http://ftp.${country}.debian.org/debian/
 
 set os Debian
 menu ${os} ${arch_a}
-item --key s squeeze ${os} 6.0 squeeze (stable) [s]
-item --key t wheezy ${os} wheezy (testing) [t]
+item --key s wheezy ${os} 7.0 wheezy (stable) [s]
+item --key o squeeze ${os} 6.0 squeeze (oldstable) [o]
+item --key t jessie ${os} jessie (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose version || goto deb_exit
 goto deb_boot_type
@@ -38,8 +39,9 @@ choose version || goto deb_exit
 :deb_boot_type
 set dir dists/${version}/main/installer-${arch_a}/current/images/netboot/
 
-menu ${os} boot parameters
+menu ${os} ${version} boot parameters
 item --key k install ${os} install [k]
+item --key g gtk ${os} graphical install [g]
 item --key c rescue ${os} rescue mode [c]
 item --key a automated ${os} automated install [a]
 item --key e expert ${os} expert install [e]
@@ -69,13 +71,18 @@ goto deb_boot
 set install_params auto=true priority=critical
 goto deb_boot
 
-:dev_expert
+:deb_expert
 set install_params priority=low
+goto deb_boot
+
+:deb_gtk
+set install_params video=vesa:ywrap,mtrr vga=788
+set installer gtk/
 goto deb_boot
 
 :deb_install
 :deb_boot
-set dir ${dir}${menu}-installer/${arch_a}/
+set dir ${dir}${installer}${menu}-installer/${arch_a}/
 imgfree
 imgtrust --allow
 echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
