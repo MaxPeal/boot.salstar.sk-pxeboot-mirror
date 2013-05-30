@@ -207,6 +207,7 @@ item --key 0 ttyS0 Serial console ttyS0 [0]
 item --key 1 ttyS1 Serial cosnole ttyS1 [1]
 item --key t text Text mode install [t]
 item --key n network Static network configuration [n]
+item --key d ksdevice ksdevice configuration [d]
 item --key m nomodeset Disable KMS (nomodeset) [m]
 item --key a autopart Autopartition [a]
 item --key p pkgs Package selection [p]
@@ -253,6 +254,18 @@ item --key c centos CentOS style [c]
 choose netos || goto params_menu
 iseq ${netos} fedora && set params ${params} ip=${ip}::${gateway}:${netmask}:${ip}::none nameserver=${dns} ||
 iseq ${netos} centos && set params ${params} ip=${ip} gateway=${gateway} netmask=${netmask} dns=${dns} ||
+goto params_menu
+
+:params_ksdevice
+menu KSDevice configuration
+item --key l link ksdevice=link [l]
+item --key 0 eth0 ksdevice=eth0 [0]
+item --key 1 eth1 ksdevice=eth1 [1]
+item --key 2 eth2 ksdevice=eth2 [2]
+item --key 3 eth3 ksdevice=eth3 [3]
+item --key b bootif ksdevice=bootif (default) [b]
+choose ksdevice || goto params_menu
+set params ${params} ksdevice=${ksdevice}
 goto params_menu
 
 :params_nomodeset

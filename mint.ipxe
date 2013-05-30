@@ -1,0 +1,17 @@
+#!ipxe
+
+# This does not really works. Testing only.
+
+set version 15
+set desktop cinnamon
+#set desktop mate
+
+set iso http://ftp.sh.cvut.cz/MIRRORS/linuxmint/stable/${version}/linuxmint-${version}-${desktop}-dvd-${bits}bit.iso
+
+sanboot ${iso} || echo Trying memdisk method.
+
+imgtrust --allow
+kernel ${url}memdisk iso raw ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${iso}
+boot
