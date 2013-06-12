@@ -286,7 +286,7 @@ goto params_menu
 :params_pkgs
 menu Package selection
 item --key g guestnrpe Guest with NRPE [g]
-item --key h kvmnrpe KVM host with NRPE [h]
+item --key k kvmnrpe KVM host with NRPE [k]
 item --key w web Web server with mysql [w]
 item --key m mail Mail server with mysql [m]
 choose pkgs || goto params_menu

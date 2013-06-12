@@ -75,6 +75,7 @@ goto boot_bsd
 set os FreeBSD
 menu ${os}
 item 9.0 ${os} 9.0
+item 8.4 ${os} 8.4
 item 8.3 ${os} 8.3
 item other ${os} Choose other version
 choose version || exit 0
