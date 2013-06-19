@@ -115,7 +115,7 @@ item normal ${ova}
 item --key k ks ${ova} minimal server kickstart [k]
 item --key d desktop ${ova} desktop kickstart [d]
 item --key r rescue ${ova} rescue [r]
-item --key s remote ${ova} rescue with ssh [s]
+item --key s remote ${ova} rescue with sshd [s]
 item --key i isolinux ${ova} direct boot using isolinux [i]
 isset ${testing} && item --key l live_desktop ${ova} Live Desktop [l] ||
 isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
