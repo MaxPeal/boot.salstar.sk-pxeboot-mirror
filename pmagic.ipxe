@@ -20,7 +20,7 @@ echo -n Enter version: ${} && read version
 :pmagic_arch
 menu ${os} ${version}
 item --key 6 x86_64 ${os} ${version} (x86_64) [6]
-iseq ${arch} i686 && set default --default || set default --
+iseq ${arch} i386 && set default --default || set default --
 item --key p ${default} i686 ${os} ${version} (i686) [p]
 item --key 5 i586 ${os} ${version} (i586) [5]
 #item --key 4 i486 ${os} ${version} (i486, i586, PII) [4]
