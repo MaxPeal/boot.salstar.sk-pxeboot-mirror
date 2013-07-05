@@ -11,10 +11,9 @@ goto ${menu} ||
 set os Fedora
 set devel_version 19
 menu Fedora
+item --key 9 19 ${os} 19 ${arch} [9]
 item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
-item --key 6 16 ${os} 16 ${arch} [6]
-item --key 5 15 ${os} 15 ${arch} [5]
 item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
 item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
 item --key d development ${os} ${devel_version} (development) ${arch} [d]

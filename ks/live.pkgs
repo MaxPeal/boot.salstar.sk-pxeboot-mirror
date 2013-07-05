@@ -1,6 +1,7 @@
 # SAL's Live CD packages
 
 %packages
+coreutils
 
 # Drop the Java plugin
 -icedtea-web

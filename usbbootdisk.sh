@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=18
+FEDORA=19
 FEDORA_PREV=$((FEDORA-1))
 CENTOS=6
 HDT=0.5.2
@@ -240,6 +240,7 @@ if [ "$PMAGIC" ]; then
   #cfgpmagic x86_64 "" ^
   #cfgpmagic ""
   #cfgpmagic i586
+  mkdir -p $DIR/pmagic
   unlink $DIR/pmagic/bzImage $DIR/pmagic/bzImage64 $DIR/pmagic/initrd.img
   for pmfn in bzImage bzImage64 initrd.img; do
     wget -O $DIR/pmagic/$pmfn $RELEASES/pmagic_pxe_$PMAGIC/pmagic/$pmfn
