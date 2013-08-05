@@ -5,11 +5,11 @@ item 12.2 openSUSE 12.2
 item 11.4 openSUSE 11.4
 item 11.3 openSUSE 11.3
 item factory openSUSE factory
-choose version || goto opensuse_exit
+choose ver || goto opensuse_exit
 
 set mirror http://ftp.linux.cz/pub/linux/opensuse/
-set dir distribution/${version}/repo/oss/
-iseq ${version} factory && set dir ${version}/repo/oss/ ||
+set dir distribution/${ver}/repo/oss/
+iseq ${ver} factory && set dir ${ver}/repo/oss/ ||
 
 imgfree
 imgtrust --allow

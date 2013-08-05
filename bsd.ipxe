@@ -29,22 +29,22 @@ item 5.0 ${os} 5.0
 item 4.9 ${os} 4.9
 item 4.8 ${os} 4.8
 item other ${os} Choose other version
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version_openbsd
+iseq ${ver} other || goto skip_read_ver_openbsd
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version_openbsd
+echo -n Enter version: ${} && read ver
+:skip_read_ver_openbsd
 
-iseq ${version} 5.3 && set ver 53 ||
-iseq ${version} 5.2 && set ver 52 ||
-iseq ${version} 5.1 && set ver 51 ||
-iseq ${version} 5.0 && set ver 50 ||
-iseq ${version} 4.9 && set ver 49 ||
-iseq ${version} 4.8 && set ver 48 ||
+iseq ${ver} 5.3 && set ver 53 ||
+iseq ${ver} 5.2 && set ver 52 ||
+iseq ${ver} 5.1 && set ver 51 ||
+iseq ${ver} 5.0 && set ver 50 ||
+iseq ${ver} 4.9 && set ver 49 ||
+iseq ${ver} 4.8 && set ver 48 ||
 
 set mirror http://ftp.openbsd.org/pub/
-set dir OpenBSD/${version}/${arch_a}
+set dir OpenBSD/${ver}/${arch_a}
 set iso cd${ver}.iso
 goto boot_bsd
 
@@ -58,17 +58,17 @@ item 5.1.2 ${os} 5.1.2
 item 5.0.2 ${os} 5.0.2
 item 4.0.1 ${os} 4.0.1
 item other ${os} Choose other version
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version_netbsd
+iseq ${ver} other || goto skip_read_ver_netbsd
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version_netbsd
+echo -n Enter version: ${} && read ver
+:skip_read_ver_netbsd
 
 set mirror http://iso.se.netbsd.org/pub/
-set dir NetBSD/iso/${version}
-set iso2 ${arch_a}cd-${version}.iso
-set iso NetBSD-${version}-${arch_a}.iso
+set dir NetBSD/iso/${ver}
+set iso2 ${arch_a}cd-${ver}.iso
+set iso NetBSD-${ver}-${arch_a}.iso
 goto boot_bsd
 
 :freebsd
@@ -78,16 +78,16 @@ item 9.0 ${os} 9.0
 item 8.4 ${os} 8.4
 item 8.3 ${os} 8.3
 item other ${os} Choose other version
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version_freebsd
+iseq ${ver} other || goto skip_read_ver_freebsd
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version_freebsd
+echo -n Enter version: ${} && read ver
+:skip_read_ver_freebsd
 
 set mirror http://ftp.sk.freebsd.org/pub/
-set dir FreeBSD/releases/ISO-IMAGES/${version}
-set iso FreeBSD-${version}-RELEASE-${arch_a}-bootonly.iso
+set dir FreeBSD/releases/ISO-IMAGES/${ver}
+set iso FreeBSD-${ver}-RELEASE-${arch_a}-bootonly.iso
 goto boot_bsd
 
 :pcbsd
@@ -96,15 +96,15 @@ menu ${os}
 item 9.0 ${os} 9.0
 item 8.2 ${os} 8.2
 item other ${os} Choose other version
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version_pcbsd
+iseq ${ver} other || goto skip_read_ver_pcbsd
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version_pcbsd
+echo -n Enter version: ${} && read ver
+:skip_read_ver_pcbsd
 
 set mirror http://ftp.netbsd.se/PC-BSD/
 iseq ${arch} i386 && set xarch x86 || set xarch x64
-set dir ${version}/${arch_a}
-set iso PCBSD${version}-${xarch}-bootonly.iso
+set dir ${ver}/${arch_a}
+set iso PCBSD${ver}-${xarch}-bootonly.iso
 goto boot_bsd

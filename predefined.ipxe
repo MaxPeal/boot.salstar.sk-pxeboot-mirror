@@ -17,7 +17,7 @@ goto predef_${system}
 
 :predef_fedora
 set menu fedora
-set version 18
+set ver 18
 set bt ks
 set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -26,7 +26,7 @@ exit
 
 :predef_centos
 set menu centos
-set version 6
+set ver 6
 set bt ks
 set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -35,7 +35,7 @@ exit
 
 :predef_fedora_auto
 set menu fedora
-set version 18
+set ver 18
 set bt ks
 set params ${params} part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -44,7 +44,7 @@ exit
 
 :predef_centos_auto
 set menu centos
-set version 6
+set ver 6
 set bt ks
 set params ${params} part=root=4,vg=vg1,swap=2,opt=40 disks=vda,vdb console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -53,7 +53,7 @@ exit
 
 :predef_fedora_devel
 set menu fedora
-set version development
+set ver development
 set bt ks
 set params ${params} part=root=3,swap=1 disks=vda zerombr
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -62,8 +62,8 @@ exit
 
 :predef_fedora_devel_nomodeset
 set menu fedora
-#set version development
-set version alt_stage
+#set ver development
+set ver alt_stage
 set bt ks
 set params ${params} text nomodeset part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig

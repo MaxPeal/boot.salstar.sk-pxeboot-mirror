@@ -10,15 +10,15 @@ item 13.37 ${os} 13.37 ${bits} bit
 item 13.1 ${os} 13.1 ${bits} bit
 item 13.0 ${os} 13.0 ${bits} bit
 item --key o other Choose other version [o]
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version
+iseq ${ver} other || goto skip_read_ver
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version
+echo -n Enter version: ${} && read ver
+:skip_read_ver
 
 set mirror http://ftp.linux.cz/pub/
-set dir linux/slackware/slackware${sbits}-${version}
+set dir linux/slackware/slackware${sbits}-${ver}
 
 imgfree
 imgtrust --allow

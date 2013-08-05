@@ -9,67 +9,76 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_version 20
+set devel_ver 20
 menu Fedora
 item --key 9 19 ${os} 19 ${arch} [9]
 item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
-item --key b Beta ${os} ${devel_version}-Beta ${arch} [b]
-item --key a Alpha ${os} ${devel_version}-Aplha ${arch} [a]
-item --key d development ${os} ${devel_version} (development) ${arch} [d]
+item --key r rawhide ${os} rawhide ${arch} [r]
+item --key d development ${os} development ${arch} [d]
+item --key b Beta ${os} ${devel_ver}-Beta ${arch} [b]
+item --key a Alpha ${os} ${devel_ver}-Aplha ${arch} [a]
 item --key A alt_stage ${os} dl.fedoraproject.org/pub/alt/stage ${arch} [A]
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
-isset ${version} || choose version || goto main_menu
+isset ${ver} || choose ver || goto main_menu
 
 # workaround for fedora 17
-iseq ${version} 17 && set params rd.debug ${params} ||
+iseq ${ver} 17 && set params rd.debug ${params} ||
 
-goto fedora_${version} ||
-set dir fedora/linux/releases/${version}/${os}/${arch}/os
+goto fedora_${ver} ||
+set dir fedora/linux/releases/${ver}/${os}/${arch}/os
 set repo repo=${mirror}/${dir}
 :fedora_setvars
-#set osks ${ksurl}${version}
+#set osks ${ksurl}${ver}
 set osks ${ksurl}fedora
 goto boottype
 
 :fedora_development
-set dir fedora/linux/development/${devel_version}/${arch}/os
+set dir fedora/linux/development/${devel_ver}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
+:fedora_rawhide
+set dir fedora/linux/development/rawhide/${arch}/os
+set repo repo=${mirror}/${dir}
+set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
+# signature checking is disabled for development version
+set ver development
+goto fedora_setvars
+
 :fedora_Alpha
-set version ${devel_version}-Alpha
-set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
+set ver ${devel_ver}-Alpha
+set dir fedora/linux/releases/test/${ver}/${os}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_Beta
-set version ${devel_version}-Beta
-set dir fedora/linux/releases/test/${version}/${os}/${arch}/os
+set ver ${devel_ver}-Beta
+set dir fedora/linux/releases/test/${ver}/${os}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_live
-set dir fedora/linux/releases/${version}/Live/${arch}
-set img ${os}-${version}-${arch}-Live-Desktop.iso
+set dir fedora/linux/releases/${ver}/Live/${arch}
+set img ${os}-${ver}-${arch}-Live-Desktop.iso
 prompt
 goto main_menu
 
 :fedora_alt_stage
 # point repo do development tree
-set dir fedora/linux/development/${devel_version}/${arch}/os
+set dir fedora/linux/development/${devel_ver}/${arch}/os
 set repo repo=${mirror}/${dir}
 # everything else to alt stage files
 set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
-set stage_version ${devel_version}-TC6
-echo -n Edit stage version: ${} && read stage_version
-set dir alt/stage/${stage_version}/Fedora/${arch}/os
+set stage_ver ${devel_ver}-TC6
+echo -n Edit stage version: ${} && read stage_ver
+set dir alt/stage/${stage_ver}/Fedora/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
-# signature checking is disabled for development version
-set version development
+# signature checking is disabled for development ver
+set ver development
 goto fedora_setvars
 
 # boot.fedoraproject.org online boot
@@ -85,14 +94,14 @@ menu ${os}
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 item --key o other Choose other version [o]
-isset ${version} || choose version || goto main_menu
-iseq ${version} other || goto centos_skip_read_version
+isset ${ver} || choose ver || goto main_menu
+iseq ${ver} other || goto centos_skip_read_ver
 echo ${cls}
-echo -n Enter version: ${} && read version
-:centos_skip_read_version
-set dir ${menu}/${version}/os/${arch}
+echo -n Enter version: ${} && read ver
+:centos_skip_read_ver
+set dir ${menu}/${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
-set osks ${ksurl}centos${version}
+set osks ${ksurl}centos${ver}
 goto boottype
 
 :scientific
@@ -100,15 +109,15 @@ set os Scientific Linux
 menu ${os}
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
-isset ${version} || choose version || goto main_menu
-set dir ${menu}/${version}x/${arch}/os
-iseq ${version} 5 && set dir ${menu}/${version}x/${arch} ||
-set osks ${ksurl}centos${version}
+isset ${ver} || choose ver || goto main_menu
+set dir ${menu}/${ver}x/${arch}/os
+iseq ${ver} 5 && set dir ${menu}/${ver}x/${arch} ||
+set osks ${ksurl}centos${ver}
 set mirror http://ftp.scientificlinux.org/linux
 goto boottype
 
 :boottype
-set ova ${os} ${version} ${arch}
+set ova ${os} ${ver} ${arch}
 menu ${os} boot type
 item normal ${ova}
 item --key k ks ${ova} minimal server kickstart [k]
@@ -135,17 +144,17 @@ echo ${}  ${params}
 imgfree
 # load vmlinuz and initrd
 kernel ${mirror}/${dir}/isolinux/vmlinuz
-iseq ${version} development && imgtrust --allow ||
-iseq ${version} development && goto bootos_images_skip_verify_vmlinuz ||
+iseq ${ver} development && imgtrust --allow ||
+iseq ${ver} development && goto bootos_images_skip_verify_vmlinuz ||
 imgverify vmlinuz ${sigs}${dir}/isolinux/vmlinuz.sig
 :bootos_images_skip_verify_vmlinuz
 initrd ${mirror}/${dir}/isolinux/initrd.img
-iseq ${version} development && goto bootos_images_skip_verify_initrd ||
+iseq ${ver} development && goto bootos_images_skip_verify_initrd ||
 imgverify initrd.img ${sigs}${dir}/isolinux/initrd.img.sig
 :bootos_images_skip_verify_initrd
 imgargs vmlinuz ${repo} ${params}
 # use method= instad of repo= for CentOS 5
-iseq ${version} 5 && imgargs vmlinuz method=${mirror}/${dir} ${params} ||
+iseq ${ver} 5 && imgargs vmlinuz method=${mirror}/${dir} ${params} ||
 imgstat
 isset ${debug} && prompt ||
 boot vmlinuz
@@ -162,15 +171,15 @@ boot
 goto main_menu
 
 :bootos_live_desktop
-set img ${os}-${version}-${arch}-Live-Desktop.iso
+set img ${os}-${ver}-${arch}-Live-Desktop.iso
 goto bootos_live
 
 :bootos_live_kde
-set img ${os}-${version}-${arch}-Live-KDE.iso
+set img ${os}-${ver}-${arch}-Live-KDE.iso
 goto bootos_live
 
 :bootos_live
-set dir fedora/linux/releases/${version}/Live/${arch}
+set dir fedora/linux/releases/${ver}/Live/${arch}
 set next-server 158.197.16.70
 set params ip=${ip}:${next-server}:${gateway}:${netmask} BOOTIF=${mac}
 echo params: ${params}

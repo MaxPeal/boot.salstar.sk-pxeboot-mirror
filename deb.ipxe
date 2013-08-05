@@ -18,7 +18,7 @@ item --key s wheezy ${os} 7.0 wheezy (stable) [s]
 item --key o squeeze ${os} 6.0 squeeze (oldstable) [o]
 item --key t jessie ${os} jessie (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
-choose version || goto deb_exit
+choose ver || goto deb_exit
 goto deb_boot_type
 
 :ubuntu
@@ -34,12 +34,12 @@ item --key o oneiric ${os} 11.10 Oneiric Ocelot
 item --key n natty ${os} 11.04 Natty Narwhal
 # lucid's pxelinux scripts are not compatible :-(
 #item --key l lucid ${os} 10.04.3 LTS Lucid Lynx
-choose version || goto deb_exit
+choose ver || goto deb_exit
 
 :deb_boot_type
-set dir dists/${version}/main/installer-${arch_a}/current/images/netboot/
+set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
 
-menu ${os} ${version} boot parameters
+menu ${os} ${ver} boot parameters
 item --key k install ${os} install [k]
 item --key g gtk ${os} graphical install [g]
 item --key c rescue ${os} rescue mode [c]

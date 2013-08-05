@@ -5,11 +5,11 @@
 set major 7
 set minor 0
 set patch 3
-set version ${major}.${minor}.${patch}
+set ver ${major}.${minor}.${patch}
 set lang Slovak
 iseq ${arch} x86_64 && set arch4 x86_64 || set arch4 i486
 
-set iso http://ftp.linux.cz/pub/linux/slax/Slax-${major}.x/${version}/slax-${lang}-${version}-${arch4}.iso
+set iso http://ftp.linux.cz/pub/linux/slax/Slax-${major}.x/${ver}/slax-${lang}-${ver}-${arch4}.iso
 
 sanboot ${iso} || echo Trying memdisk method.
 

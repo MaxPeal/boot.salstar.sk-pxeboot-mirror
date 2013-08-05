@@ -3,9 +3,9 @@
 menu ArchLinux
 item --key g ipxe ArchLinux Graphical Menu
 item --key t ipxe_text ArchLinux Text Menu
-choose version || exit
+choose ver || exit
 
 imgfree
 imgtrust --allow
-chain http://releng.archlinux.org/pxeboot/${version}.pxe
+chain http://releng.archlinux.org/pxeboot/${ver}.pxe
 exit

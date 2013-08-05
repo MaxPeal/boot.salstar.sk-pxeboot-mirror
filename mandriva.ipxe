@@ -12,16 +12,16 @@ item 2009.1 ${os} ${arch5} 2009.1
 item 2009.0 ${os} ${arch5} 2009.0
 item 2008.1 ${os} ${arch5} 2008.1
 item --key o other Choose other version [o]
-choose version || exit 0
+choose ver || exit 0
 
-iseq ${version} other || goto skip_read_version
+iseq ${ver} other || goto skip_read_ver
 echo ${cls}
-echo -n Enter version: ${} && read version
-:skip_read_version
+echo -n Enter version: ${} && read ver
+:skip_read_ver
 
 set server mandriva.mirror.dkm.cz
 set mirror http://${server}/
-set dir pub/mandriva/official/${version}/${arch5}
+set dir pub/mandriva/official/${ver}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 
 imgfree
