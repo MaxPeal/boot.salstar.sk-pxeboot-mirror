@@ -86,6 +86,19 @@ Optional but recommended:
   Look into <a href="ipxe/">ipxe/</a> dir for how to boot your favorite system.
   </li>
   <li>
+  What is the shortest way to chainload this menu from another ipxe/gpxe
+  (for example from qemu's internal pxe)?<br/>
+  chain http://boot.salstar.sk<br/>
+  No need to specify filename, ipxe/gpxe user-agent is autodetected and
+  proper content will be sent.
+  </li>
+  <li>
+  What is the shortest way to call other scripts, which are not present
+  in menu?<br/>
+  Just type "chain scriptname". For example "chain lspci". No need to
+  type ".ipxe" extension, it will be added automatically.
+  </li>
+  <li>
   Do you have more questions/suggestions?<br/>
   Contact me at <a href="mailto:ondrejj(at)salstar.sk">ondrejj(at)salstar.sk</a>.
   </li>

@@ -1,0 +1,58 @@
+#!ipxe
+
+:tools_menu
+menu Tools
+item --key p lspci ${space} List PCI devices [p]
+item --key n netinfo ${space} Network card info [n]
+item --key h hdt ${space} Hardware detection tool [h]
+item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
+item --key s shell ${space} iPXE shell [s]
+choose tool || exit
+echo ${cls}
+goto tool_${tool} ||
+exit
+
+:tool_netinfo
+menu Network info
+item --gap MAC:
+item mac ${space} ${netX/mac}
+item --gap IP/mask:
+item ip ${space} ${netX/ip}/${netX/netmask}
+item --gap Gateway:
+item gw ${space} ${netX/gateway}
+item --gap Domain:
+item domain ${space} ${netX/domain}
+item --gap DNS:
+item dns ${space} ${netX/dns}
+item --gap DHCP server:
+item dhcpserver ${space} ${netX/dhcp-server}
+item --gap Next-server:
+item nextserver ${space} ${next-server}
+item --gap Filename:
+item filename ${space} ${netX/filename}
+choose empty ||
+goto tools_menu
+
+:tool_hdt
+set 209:string hdt
+set 210:string ${url}pxelinux.cfg/
+kernel ${url}pxelinux.0
+imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
+goto tools_menu
+
+:tool_memtest
+#kernel ${url}images/memtest
+#imgverify memtest ${sigs}images/memtest.sig
+#boot
+imgverify ${url}images/memtest.0 ${sigs}images/memtest.0.sig
+chain memtest.0 ${params} && goto main_menu ||
+echo MEMORY ERROR DETECTED! ${errno}
+echo Press any key to continue ...
+read a
+goto tools_menu
+
+:tool_lspci
+imgverify lspci.ipxe ${sigs}lspci.ipxe.sig
+chain lspci.ipxe
+goto tools_menu

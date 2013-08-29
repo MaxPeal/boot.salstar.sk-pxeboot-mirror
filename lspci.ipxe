@@ -10,6 +10,9 @@ set spaces2:hex 20:20
 set spaces4:hex 20:20:20:20
 
 imgfetch pciids.ipxe
+isset ${sigs} || goto skip_verify
+imgverify pciids.ipxe ${sigs}pciids.ipxe.sig ||
+:skip_verify
 
 clear addr
 menu PCI device list
@@ -26,3 +29,4 @@ menu PCI device list
 choose press_enter ||
 
 imgfree pciids.ipxe
+exit
