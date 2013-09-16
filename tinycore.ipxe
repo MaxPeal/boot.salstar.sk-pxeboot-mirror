@@ -6,20 +6,32 @@
 set mirror http://distro.ibiblio.org/tinycorelinux/
 
 :tinycore_menu
-set dir 4.x/x86/release
+set os TinyCore
+menu ${os} version
+item 5.x ${os} 5.x
+item 4.x ${os} 4.x
+item other ${os} Choose other version
+choose ver || exit 0
+
+iseq ${ver} other && echo -n ${cls}Enter version: ${} ||
+iseq ${ver} other && clear ver && read ver ||
+
+#iseq ${arch} x86_64 && set tinycore_arch x86_64 || set tinycore_arch x86
+# there is no TinyCore release for x86_64
+set tinycore_arch x86
+
+set dir ${ver}/${tinycore_arch}/release
+
 menu TinyCoreLinux
 item --key t TinyCore TinyCore (12 MB)
 item --key p CorePlus CorePlus (64 MB)
 item --key c Core Core (8 MB)
-choose ver || goto tinycore_exit
+choose vertype || goto exit 0
 
 echo ${cls}
 
 imgfree
 kernel ${url}memdisk iso raw ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}${dir}/${ver}-current.iso
+initrd ${mirror}${dir}/${vertype}-current.iso
 boot
-
-:tinycore_exit
-exit 0

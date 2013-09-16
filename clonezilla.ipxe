@@ -1,6 +1,15 @@
 #!ipxe
 
-set ver 1.2.12-67
+set os Clonezilla
+menu ${os} version
+item 2.1.2-43 ${os} 2.1.2-43
+item 2.1.2-20 ${os} 2.1.2-20
+item 2.1.1-25 ${os} 2.1.1-25
+item other ${os} Choose other version
+choose ver || exit 0
+
+iseq ${ver} other && echo -n ${cls}Enter version: ${} ||
+iseq ${ver} other && clear ver && read ver ||
 
 iseq ${arch} x86_64 && set cz_arch amd64 || set cz_arch i686-pae
 
