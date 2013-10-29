@@ -93,6 +93,8 @@ goto boot_bsd
 :pcbsd
 set os PC-BSD
 menu ${os}
+item 9.2 ${os} 9.2
+item 9.1 ${os} 9.1
 item 9.0 ${os} 9.0
 item 8.2 ${os} 8.2
 item other ${os} Choose other version
@@ -103,7 +105,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_pcbsd
 
-set mirror http://ftp.netbsd.se/PC-BSD/
+set mirror http://ftp.heanet.ie/mirrors/pcbsd/iso/
 iseq ${arch} i386 && set xarch x86 || set xarch x64
 set dir ${ver}/${arch_a}
 set iso PCBSD${ver}-${xarch}-bootonly.iso
