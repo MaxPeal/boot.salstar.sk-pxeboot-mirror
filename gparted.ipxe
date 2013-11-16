@@ -2,9 +2,11 @@
 
 # This doesn't really works. This ISO is not compatible with memdisk. :-(
 
+iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i486
+
+set ver 0.16.2-11
 set project gparted
-set ver 0.13.0-1
-set iso ${project}-live-${ver}.iso
+set iso ${project}-live-stable/${ver}/${project}-live-${ver}-${gp_arch}.iso
 
 imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
 chain sourceforge.ipxe
