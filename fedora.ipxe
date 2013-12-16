@@ -11,6 +11,7 @@ goto ${menu} ||
 set os Fedora
 set devel_ver 20
 menu Fedora
+item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]
 item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
@@ -24,6 +25,8 @@ isset ${ver} || choose ver || goto main_menu
 
 # workaround for fedora 17
 iseq ${ver} 17 && set params rd.debug ${params} ||
+
+set bootdev ks.device=${mac}
 
 goto fedora_${ver} ||
 set dir fedora/linux/releases/${ver}/${os}/${arch}/os
@@ -102,6 +105,7 @@ echo -n Enter version: ${} && read ver
 set dir ${menu}/${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
+set bootdev ksdevice=bootif BOOTIF=${mac}
 goto boottype
 
 :scientific
@@ -113,6 +117,7 @@ isset ${ver} || choose ver || goto main_menu
 set dir ${menu}/${ver}x/${arch}/os
 iseq ${ver} 5 && set dir ${menu}/${ver}x/${arch} ||
 set osks ${ksurl}centos${ver}
+set bootdev ksdevice=bootif BOOTIF=${mac}
 set mirror http://ftp.scientificlinux.org/linux
 goto boottype
 
@@ -129,10 +134,10 @@ isset ${testing} && item --key l live_desktop ${ova} Live Desktop [l] ||
 isset ${testing} && item --key d live_kde ${ova} Live KDE [d] ||
 isset ${bt} || choose bt || goto main_menu
 echo ${cls}
-iseq ${bt} ks && set params ksdevice=bootif BOOTIF=${mac} ks=${osks} ${params} ||
-iseq ${bt} desktop && set params ksdevice=bootif ks=${ksurl}/pc pkgs=desktop ${params} ||
+iseq ${bt} ks && set params ${bootdev} ks=${osks} ${params} ||
+iseq ${bt} desktop && set params ${bootdev} ks=${ksurl}/pc pkgs=desktop ${params} ||
 iseq ${bt} rescue && set params rescue ${params} ||
-iseq ${bt} remote && set params ksdevice=bootif ks=${ksurl}rescue ${params} ||
+iseq ${bt} remote && set params ${bootdev} ks=${ksurl}rescue ${params} ||
 goto bootos_${bt} ||
 goto bootos_images
 
