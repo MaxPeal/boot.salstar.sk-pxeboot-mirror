@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=19
+FEDORA=20
 FEDORA_PREV=$((FEDORA-1))
 CENTOS=6
 HDT=0.5.2
@@ -70,7 +70,7 @@ EOF
 }
 
 cfgpmagic() {
-if [ ! -f $DIR/pmagic/$1/bzImage ]; then
+if [ ! -f $DIR/pmagic$2/bzImage$3 ]; then
   echo "PMagic image not found, skipping config option..."
   return
 fi

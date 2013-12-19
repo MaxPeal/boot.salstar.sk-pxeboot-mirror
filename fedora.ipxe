@@ -9,7 +9,7 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_ver 20
+set devel_ver 21
 menu Fedora
 item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]

@@ -13,23 +13,35 @@ goto tool_${tool} ||
 exit
 
 :tool_netinfo
-menu Network info
+menu Select network card
+item netX Default (netX)
+set idx:int32 0
+:sel_card_loop isset ${net${idx}/mac} || goto sel_card_done
+  item net${idx} net${idx}
+  inc idx && goto sel_card_loop
+:sel_card_done
+choose netcard || goto tools_menu
+
+:tool_netinfo_show
+menu Network info for ${netcard}
+item --gap Chip:
+item chip ${space} ${${netcard}/chip}
 item --gap MAC:
-item mac ${space} ${netX/mac}
+item mac ${space} ${${netcard}/mac}
 item --gap IP/mask:
-item ip ${space} ${netX/ip}/${netX/netmask}
+item ip ${space} ${${netcard}/ip}/${${netcard}/netmask}
 item --gap Gateway:
-item gw ${space} ${netX/gateway}
+item gw ${space} ${${netcard}/gateway}
 item --gap Domain:
-item domain ${space} ${netX/domain}
+item domain ${space} ${${netcard}/domain}
 item --gap DNS:
-item dns ${space} ${netX/dns}
+item dns ${space} ${${netcard}/dns}
 item --gap DHCP server:
-item dhcpserver ${space} ${netX/dhcp-server}
+item dhcpserver ${space} ${${netcard}/dhcp-server}
 item --gap Next-server:
 item nextserver ${space} ${next-server}
 item --gap Filename:
-item filename ${space} ${netX/filename}
+item filename ${space} ${${netcard}/filename}
 choose empty ||
 goto tools_menu
 

@@ -34,7 +34,7 @@ set space:hex 20:20
 set space ${space:string}
 iseq ${arch} i386 && set arch5 i586 || set arch5 ${arch}
 iseq ${arch} x86_64 && set arch_a amd64 || set arch_a ${arch}
-menu SAL's BOOT MENU [Local IP: ${netX/ip}]
+menu SAL's BOOT MENU [Local IP: ${netX/ip} on ${netX/chip}]
 item --gap Default:
 item --key l local ${space} Boot local hdd [l]
 item --gap Operating systems:

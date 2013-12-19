@@ -118,8 +118,8 @@ dconf-editor
 gnome-tweak-tool
 gnome-shell-extension-native-window-placement
 gnome-shell-extension-weather
-gnome-shell-extension-alternative-status-menu
-gnome-shell-extension-cpu-temperature
+#gnome-shell-extension-alternative-status-menu
+#gnome-shell-extension-cpu-temperature
 gnome-shell-extension-alternate-tab
 gnome-shell-extension-system-monitor-applet
 
