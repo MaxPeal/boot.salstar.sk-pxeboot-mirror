@@ -6,6 +6,8 @@ item --key p lspci ${space} List PCI devices [p]
 item --key n netinfo ${space} Network card info [n]
 item --key h hdt ${space} Hardware detection tool [h]
 item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
+item --key a boothda ${space} Boot local HDD0 (hda) [a]
+item --key b boothdb ${space} Boot local HDD1 (hdb) [b]
 item --key s shell ${space} iPXE shell [s]
 choose tool || exit
 echo ${cls}
@@ -67,4 +69,14 @@ goto tools_menu
 :tool_lspci
 imgverify lspci.ipxe ${sigs}lspci.ipxe.sig
 chain lspci.ipxe
+goto tools_menu
+
+:tool_boothda
+sanboot --no-describe --drive 0x80 ||
+read a
+goto tools_menu
+
+:tool_boothdb
+sanboot --no-describe --drive 0x81 ||
+read a
 goto tools_menu
