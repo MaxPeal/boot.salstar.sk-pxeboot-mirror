@@ -25,10 +25,6 @@ menu ${os} ${arch_a}
 item 5.4 ${os} 5.4
 item 5.3 ${os} 5.3
 item 5.2 ${os} 5.2
-item 5.1 ${os} 5.1
-item 5.0 ${os} 5.0
-item 4.9 ${os} 4.9
-item 4.8 ${os} 4.8
 item other ${os} Choose other version
 choose ver || exit 0
 
@@ -52,12 +48,10 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
-item 6.1 ${os} 6.1
-item 6.0.1 ${os} 6.0.1
-item 5.2 ${os} 5.2
-item 5.1.2 ${os} 5.1.2
-item 5.0.2 ${os} 5.0.2
-item 4.0.1 ${os} 4.0.1
+item 6.1.3 ${os} 6.1.3
+item 6.0.4 ${os} 6.0.4
+item 5.2.2 ${os} 5.2.2
+item 5.1.4 ${os} 5.1.4
 item other ${os} Choose other version
 choose ver || exit 0
 
@@ -76,9 +70,8 @@ goto boot_bsd
 set os FreeBSD
 menu ${os}
 item 10.0 ${os} 10.0
-item 9.0 ${os} 9.0
+item 9.2 ${os} 9.2
 item 8.4 ${os} 8.4
-item 8.3 ${os} 8.3
 item other ${os} Choose other version
 choose ver || exit 0
 
@@ -95,10 +88,10 @@ goto boot_bsd
 :pcbsd
 set os PC-BSD
 menu ${os}
-item 9.2 ${os} 9.2
-item 9.1 ${os} 9.1
+item 10.0-RELEASE ${os} 10.0
+item 9.2-RELEASE ${os} 9.2
+item 9.1-RELEASE ${os} 9.1
 item 9.0 ${os} 9.0
-item 8.2 ${os} 8.2
 item other ${os} Choose other version
 choose ver || exit 0
 
@@ -110,5 +103,6 @@ echo -n Enter version: ${} && read ver
 set mirror http://ftp.heanet.ie/mirrors/pcbsd/iso/
 iseq ${arch} i386 && set xarch x86 || set xarch x64
 set dir ${ver}/${arch_a}
-set iso PCBSD${ver}-${xarch}-bootonly.iso
+#set iso PCBSD${ver}-${xarch}-bootonly.iso
+set iso latest.iso
 goto boot_bsd

@@ -3,9 +3,9 @@
 set os Mageia
 
 menu ${os}
+item 4 ${os} ${arch5} 4
 item 3 ${os} ${arch5} 3
 item 2 ${os} ${arch5} 2
-item 1 ${os} ${arch5} 1
 item --key o other Choose other version [o]
 choose ver || exit 0
 
@@ -15,7 +15,7 @@ echo -n Enter version: ${} && read ver
 :skip_read_ver
 
 menu ${os} boot type
-item alt0 Normal boot using vmlinuz and initrd
+item normal Normal boot using vmlinuz and initrd
 item pxe PXElinux boot
 choose boot_type || exit 0
 echo ${cls}
@@ -26,6 +26,17 @@ set dir pub/linux/mageia/distrib/${ver}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 
 goto ${boot_type}_boot
+
+:normal_boot
+iseq ${ver} 2 && goto alt0_boot ||
+iseq ${ver} 3 && goto alt0_boot ||
+imgfree
+imgtrust --allow
+kernel ${mirror}${dir}/isolinux/${arch}/vmlinuz
+initrd ${mirror}${dir}/isolinux/${arch}/all.rdz
+imgargs vmlinuz automatic=${automatic} vga=788 splash=silent ${params}
+boot  
+exit 0
 
 :alt0_boot
 imgfree

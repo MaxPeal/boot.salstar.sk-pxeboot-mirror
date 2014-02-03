@@ -6,6 +6,7 @@ item --key p lspci ${space} List PCI devices [p]
 item --key n netinfo ${space} Network card info [n]
 item --key h hdt ${space} Hardware detection tool [h]
 item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
+item --key M memtest5 ${space} MemTest86+ 5.01 [M]
 item --key a boothda ${space} Boot local HDD0 (hda) [a]
 item --key b boothdb ${space} Boot local HDD1 (hdb) [b]
 item --key s shell ${space} iPXE shell [s]
@@ -64,6 +65,12 @@ chain memtest.0 ${params} && goto main_menu ||
 echo MEMORY ERROR DETECTED! ${errno}
 echo Press any key to continue ...
 read a
+goto tools_menu
+
+:tool_memtest5
+kernel ${url}images/memtest5.lkrn
+imgverify memtest5.lkrn ${sigs}images/memtest5.lkrn.sig
+boot
 goto tools_menu
 
 :tool_lspci
