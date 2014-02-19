@@ -15,34 +15,41 @@ exit 0
 echo ${cls}
 imgfree
 imgtrust --allow
+echo URL: ${mirror}${dir}/${iso}
 initrd ${mirror}${dir}/${iso} || initrd ${mirror}${dir}/${iso2}
 chain ${url}memdisk iso raw
 exit
 
 :openbsd
 set os OpenBSD
-menu ${os} ${arch_a}
-item 5.4 ${os} 5.4
-item 5.3 ${os} 5.3
-item 5.2 ${os} 5.2
+menu Choose major version for ${os} ${arch_a}
+item 5 ${os} 5
 item other ${os} Choose other version
-choose ver || exit 0
+choose ver_major || exit 0
 
-iseq ${ver} other || goto skip_read_ver_openbsd
+iseq ${ver_major} other || goto skip_read_ver_major_openbsd
 echo ${cls}
-echo -n Enter version: ${} && read ver
-:skip_read_ver_openbsd
+echo -n Enter major version: ${} && read ver_major
+:skip_read_ver_major_openbsd
 
-iseq ${ver} 5.3 && set ver 53 ||
-iseq ${ver} 5.2 && set ver 52 ||
-iseq ${ver} 5.1 && set ver 51 ||
-iseq ${ver} 5.0 && set ver 50 ||
-iseq ${ver} 4.9 && set ver 49 ||
-iseq ${ver} 4.8 && set ver 48 ||
+menu Choose minor version for ${os} ${ver_major} ${arch_a}
+item 4 ${os} ${ver_major}.4
+item 3 ${os} ${ver_major}.3
+item 2 ${os} ${ver_major}.2
+item other ${os} Choose other version
+choose ver_minor || exit 0
 
-set mirror http://ftp.openbsd.org/pub/
+iseq ${ver_minor} other || goto skip_read_ver_minor_openbsd
+echo ${cls}
+echo -n Enter minor version: ${} && read ver_minor
+:skip_read_ver_minor_openbsd
+
+set ver ${ver_major}.${ver_minor}
+set verpl ${ver_major}${ver_minor}
+#set mirror http://ftp.openbsd.org/pub/
+set mirror http://mirror.steadynet.cz/pub/
 set dir OpenBSD/${ver}/${arch_a}
-set iso cd${ver}.iso
+set iso cd${verpl}.iso
 goto boot_bsd
 
 :netbsd
