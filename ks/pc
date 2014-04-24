@@ -417,7 +417,7 @@ JqwZbPlWrR9FRP8ZAJ94pSLvMM6rfXlMbeOejfvFcdwc8w==
 -----END PGP PUBLIC KEY BLOCK-----
 KSEOF
 mkdir -p /root/.ssh
-echo 'from="work.salstar.sk,158.197.240.41" ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAou3n+SuHVsuM5QXAKnIKilPHnJdKm/KP31Ho2VahJIC7mK0+snbXZYXeQmnwYvqQaDVCl8p0ANMonbs189t+RdBZ86Yq6/boc7zhyrj3gqzflsjyGWp5Gfo2AGQ9pgW3JMHefHMMXqF2uB9pT7PRL873gGfMG1WE3W+loFpDYPgg5TQvDifDP+cnlEdT/30JROFBbJ6sJro5la+7vZT/Yd9JOyNSvjizSsqLyva/t1zhQ2Bb37xGJOgVoRc1Hj+fYe1+jaD2ebtGWWIykvfIb33tpoBg3KkN01rrniTiVD8t1yNPGxc9VecqJoK5QJOCZ6zpjeFtvmiZwdd9bgfznQ== ondrejj@work.salstar.sk' >> /root/.ssh/authorized_keys
+echo 'from="work.salstar.sk,158.197.240.41,work6.salstar.sk,2001:4118:400:1::/64" ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAou3n+SuHVsuM5QXAKnIKilPHnJdKm/KP31Ho2VahJIC7mK0+snbXZYXeQmnwYvqQaDVCl8p0ANMonbs189t+RdBZ86Yq6/boc7zhyrj3gqzflsjyGWp5Gfo2AGQ9pgW3JMHefHMMXqF2uB9pT7PRL873gGfMG1WE3W+loFpDYPgg5TQvDifDP+cnlEdT/30JROFBbJ6sJro5la+7vZT/Yd9JOyNSvjizSsqLyva/t1zhQ2Bb37xGJOgVoRc1Hj+fYe1+jaD2ebtGWWIykvfIb33tpoBg3KkN01rrniTiVD8t1yNPGxc9VecqJoK5QJOCZ6zpjeFtvmiZwdd9bgfznQ== ondrejj@work.salstar.sk' >> /root/.ssh/authorized_keys
 #chkconfig network on
 #chkconfig postfix on
 #if [ "$distro" = "fedora" ]; then
