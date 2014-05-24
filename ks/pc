@@ -1,8 +1,12 @@
 #based on "pc" configuration
-#accepted kernel parameters:
-#  part=root=4,vg=VGNAME,swap=4,var=20,home=max
-#  disks=vda,vdb
-#  pkgs=desktop,salpack
+# Accepted kernel parameters:
+#   part=root=4,vg=LVM_VG_NAME,swap=4,var=20,home=max
+#   disks=vda,vdb
+#   zerombr			!!!USE WITH CAUTION!!!
+#   lang=en_US
+#   pkgs=desktop,salpack
+#   repo=testing repo=other repo=http://...
+#   text
 #
 # System authorization information and root password
 auth --useshadow  --enablemd5 
