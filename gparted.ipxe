@@ -4,7 +4,7 @@
 
 iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i486
 
-set ver 0.16.2-11
+set ver 0.19.0-1
 set project gparted
 set iso ${project}-live-stable/${ver}/${project}-live-${ver}-${gp_arch}.iso
 

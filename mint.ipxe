@@ -2,7 +2,7 @@
 
 # This does not really works. Testing only.
 
-set ver 15
+set ver 17
 set desktop cinnamon
 #set desktop mate
 
