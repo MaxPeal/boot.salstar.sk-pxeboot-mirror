@@ -169,6 +169,7 @@ item --key v vnc VNC installation [v]
 item --key 0 ttyS0 Serial console ttyS0 [0]
 item --key 1 ttyS1 Serial cosnole ttyS1 [1]
 item --key t text Text mode install [t]
+item --key c custom_config Custom configuration URL [c]
 item --key n network Static network configuration [n]
 item --key d ksdevice ksdevice configuration [d]
 item --key m nomodeset Disable KMS (nomodeset) [m]
@@ -208,6 +209,11 @@ goto params_menu
 
 :params_text
 set params ${params} text nomodeset
+goto params_menu
+
+:params_custom_config
+echo -n Enter custom config URL: ${} && read custom_config_url
+set params ${params} config=${custom_config_url}
 goto params_menu
 
 :params_network

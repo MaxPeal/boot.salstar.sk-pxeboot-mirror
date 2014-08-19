@@ -94,10 +94,13 @@ exit
 :centos
 set os CentOS
 menu ${os}
+item --key 7 7 ${os} 7 ${arch} [7]
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 item --key o other Choose other version [o]
+item --key c bco boot.centos.org [c]
 isset ${ver} || choose ver || goto main_menu
+iseq ${ver} bco && goto boot_centos_org ||
 iseq ${ver} other || goto centos_skip_read_ver
 echo ${cls}
 echo -n Enter version: ${} && read ver
@@ -107,6 +110,14 @@ set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
 set bootdev ksdevice=bootif BOOTIF=${mac}
 goto boottype
+
+:boot_centos_org
+imgtrust --allow
+initrd http://boot.centos.org/bco/images/CentOS-BootService-ipxe.iso
+chain memdisk iso raw
+echo "Boot failed, press ENTER."
+read i
+exit
 
 :scientific
 set os Scientific Linux
