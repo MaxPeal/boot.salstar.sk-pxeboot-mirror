@@ -13,6 +13,8 @@ ipxe/ipxe.kpxe
 ipxe/ipxe.lkrn
 ipxe/ipxe.usb
 ipxe/undionly.kpxe
+ipxe/com1
+ipxe/com2
 pciids.ipxe
 pxelinux.cfg/pci.ids
 pxelinux.cfg/modules.pcimap
