@@ -8,7 +8,7 @@ set sigs ${url}sigs/
 iseq ${boot_salstar_version} 1 && goto version_ok ||
 echo
 echo IPXE version too old, rechaining ...
-chain --replace ${url}/ipxe/ipxe.kpxe ||
+chain ${url}/ipxe/ipxe.kpxe ||
 :version_ok
 
 iseq ${cls} serial && goto ignore_cls ||
@@ -51,13 +51,17 @@ item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
 # Others
 isset ${extended_menu} && item --key A archlinux ${space} ArchLinux [A] ||
 isset ${extended_menu} && item --key L slackware ${space} Slackware ${bits} bit [L] ||
-item --key p pmagic ${space} Parted Magic [p]
+isset ${extended_menu} && item --key g gparted ${space} GParted ${bits} bit [g] ||
+isset ${extended_menu} && item --key p pmagic ${space} Parted Magic [p] ||
 isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||
+isset ${extended_menu} && item --key C coreos ${space} CoreOS [C] ||
 #isset ${extended_menu} && item --key R rescatux ${space} RescaTux [R] ||
 # BSD systems
 isset ${extended_menu} && item --key y bsd ${space} BSD systems [y] ||
 # DOS
 item --key d dos ${space} FreeDOS [d]
+# Other netboot sites
+item --key O chained ${space} Chain other netboot sites [O]
 isset ${extended_menu} || item --key x extended_menu ${space} Other systems [x]
 item --gap Options:
 iseq ${arch} x86_64 && set bits 64 || set bits 32

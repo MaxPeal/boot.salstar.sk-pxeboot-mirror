@@ -22,7 +22,6 @@ MOUNT=/mnt/t
 SIZE=${SIZE:-4}
 FEDORA=20
 FEDORA_PREV=$((FEDORA-1))
-CENTOS=6
 HDT=0.5.2
 MEMTEST=5.01
 PMAGIC=`grep item pmagic.ipxe | head -1 | cut -d" " -f2`
@@ -210,11 +209,14 @@ fi
 
 RELEASES=$MIRROR/centos
 if [ $SIZE -gt 1 ]; then
-  addos centos$CENTOS x86_64 $RELEASES/$CENTOS/os/x86_64
-  cfgos centos$CENTOS x86_64 "^CentOS $CENTOS"
+  addos centos7 x86_64 $RELEASES/7/os/x86_64
+  cfgos centos7 x86_64 "^CentOS 7"
 
-  addos centos$CENTOS i386 $RELEASES/$CENTOS/os/i386
-  cfgos centos$CENTOS i386 "CentOS $CENTOS"
+  addos centos6 x86_64 $RELEASES/6/os/x86_64
+  cfgos centos6 x86_64 "CentOS 6"
+
+  addos centos6 i386 $RELEASES/6/os/i386
+  cfgos centos6 i386 "CentOS 6"
 fi
 
 # Parted Magic

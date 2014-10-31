@@ -2,6 +2,7 @@
 
 set os Clonezilla
 menu ${os} version
+item 2.2.4-12 ${os} 2.2.4-12
 item 2.2.3-25 ${os} 2.2.3-25
 item 2.2.3-10 ${os} 2.2.3-10
 item 2.2.2-32 ${os} 2.2.2-32

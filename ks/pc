@@ -228,6 +228,8 @@ def autopartition(disks, parts):
           value = value.split(':', 1)[0]
         elif key=='swap':
           fstype = ''
+        elif distro=='el7':
+          fstype = '--fstype=xfs'
         else:
           fstype = '--fstype=ext4'
         print "# key, value, fstype:", key, value, fstype

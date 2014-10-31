@@ -1,0 +1,22 @@
+#!ipxe
+
+menu Select CoreOS channel
+item --key s stable Stable Channel
+item --key b beta Beta Channel
+item --key a alpha Alpha Channel
+choose ver || exit 0
+
+menu CoreOS autologin configuration
+item nologin Wait for login/password
+item autologin Autologin on all consoles
+choose autologin || exit 0
+
+iseq ${autologin} autologin && set params ${params} coreos.autologin ||
+
+imgtrust --allow
+set base-url http://${ver}.release.core-os.net/amd64-usr/current
+#set params ${params} sshkey="ssh-rsa ... comment"
+echo ${params}
+kernel ${base-url}/coreos_production_pxe.vmlinuz ${params}
+initrd ${base-url}/coreos_production_pxe_image.cpio.gz
+boot

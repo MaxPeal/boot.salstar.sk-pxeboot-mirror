@@ -1,12 +1,26 @@
 #!ipxe
 
-# This doesn't really works. This ISO is not compatible with memdisk. :-(
+# Works with latest gparted testing release only.
+# Requires vmalloc=256MiB for 32bit versions.
 
-iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i486
+iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i686-pae
 
-set ver 0.19.0-1
+set os GParted
+menu Choose ${os}
+item 0.20.0-3 ${os} 0.20.0-3
+item --key o other Choose other version [o]
+choose ver || exit
+
+iseq ${ver} other || goto skip_read_ver
+echo ${cls}
+clear ver
+echo -n Enter version: ${} && read ver
+:skip_read_ver
+
 set project gparted
-set iso ${project}-live-stable/${ver}/${project}-live-${ver}-${gp_arch}.iso
+set sfboot memdisk
+set stability testing
+set iso ${project}-live-${stability}/${ver}/${project}-live-${ver}-${gp_arch}.iso
 
 imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
 chain sourceforge.ipxe

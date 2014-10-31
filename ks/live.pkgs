@@ -67,6 +67,7 @@ firefox
 
 # SAL's packages
 roxterm
+pygame
 lshw
 devilspie
 gthumb
@@ -96,6 +97,7 @@ wqy-zenhei-fonts
 dejavu-sans-fonts
 dejavu-sans-mono-fonts
 dejavu-serif-fonts
+dejavu-lgc-sans-fonts
 liberation-mono-fonts
 liberation-sans-fonts
 liberation-serif-fonts

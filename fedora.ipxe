@@ -76,9 +76,14 @@ set dir fedora/linux/development/${devel_ver}/${arch}/os
 set repo repo=${mirror}/${dir}
 # everything else to alt stage files
 set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
-set stage_ver ${devel_ver}-TC6
+set stage_ver ${devel_ver}_Beta_RC1
 echo -n Edit stage version: ${} && read stage_ver
-set dir alt/stage/${stage_ver}/Fedora/${arch}/os
+menu Choose product
+item --key s Server Server
+item --key w Workstation Workstation
+item --key c Cloud Cloud
+choose product || exit 0
+set dir alt/stage/${stage_ver}/${product}/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 # signature checking is disabled for development ver
 set ver development
@@ -122,6 +127,7 @@ exit
 :scientific
 set os Scientific Linux
 menu ${os}
+item --key 7 7 ${os} 7 ${arch} [7]
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
 isset ${ver} || choose ver || goto main_menu

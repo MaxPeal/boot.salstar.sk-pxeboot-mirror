@@ -19,6 +19,9 @@ item --key o squeeze ${os} 6.0 squeeze (oldstable) [o]
 item --key t jessie ${os} jessie (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
+set ver_alias ${ver}
+iseq ${ver} wheezy && set ver_alias stable ||
+iseq ${ver} squeeze && set ver_alias oldstable ||
 goto deb_boot_type
 
 :ubuntu
@@ -27,14 +30,28 @@ set debmirror http://${country}.releases.ubuntu.com/ubuntu/
 
 set os Ubuntu
 menu ${os} ${arch_a}
-item --key r raring ${os} 13.04 Raring Ringtail
-item --key q quantal ${os} 12.10 Quantal Quetzal
-item --key p precise ${os} 12.04 LTS Precise Pangolin
-item --key o oneiric ${os} 11.10 Oneiric Ocelot
-item --key n natty ${os} 11.04 Natty Narwhal
+item --gap Current (supported)
+item --key u utopic ${os} 14.10 Utopic Unicorn [u]
+item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
+item --key p precise ${os} 12.04 LTS Precise Pangolin [p]
+item --gap End of life (unsupported)
+item saucy ${os} 13.10 Saucy Salamander
+item raring ${os} 13.04 Raring Ringtail
+item quantal ${os} 12.10 Quantal Quetzal
+item oneiric ${os} 11.10 Oneiric Ocelot
+item natty ${os} 11.04 Natty Narwhal
 # lucid's pxelinux scripts are not compatible :-(
-#item --key l lucid ${os} 10.04.3 LTS Lucid Lynx
+#item lucid ${os} 10.04.3 LTS Lucid Lynx
+item --gap Other versions
+item --key D devel Future version (development) [D]
+item --key o other Choose other version [o]
 choose ver || goto deb_exit
+
+iseq ${ver} other || goto skip_read_ver
+echo ${cls}
+set ver
+echo -n Enter version: ${} && read ver
+:skip_read_ver
 
 :deb_boot_type
 set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
@@ -45,6 +62,7 @@ item --key g gtk ${os} graphical install [g]
 item --key c rescue ${os} rescue mode [c]
 item --key a automated ${os} automated install [a]
 item --key e expert ${os} expert install [e]
+item --key l live ${os} live boot [l]
 # desktop selection for Debian only
 iseq ${menu} debian && item --key d desktop ${os} desktop selection [d] ||
 item --key p pxe ${os} pxelinux boot [p]
@@ -97,6 +115,29 @@ set 210:string ${debmirror}${dir}
 imgfree
 kernel ${url}pxelinux.0 ${params}
 imgverify pxelinux.0 ${sigs}pxelinux.0.sig
+boot
+
+:deb_live
+menu ${os} desktop selection
+item --key g gnome-desktop GNOME [g]
+item --key k kde-desktop KDE [k]
+item --key l lxde-desktop LXDE [l]
+item --key x xfce-desktop XFCE [x]
+item --key r rescue Rescue [r]
+item --key s standard Standard [s]
+choose desktop || goto deb_exit
+
+#nslookup host cdimage.debian.org
+#set url http://${host}/debian-cd/current-live/${arch_a}/webboot
+nslookup host live.debian.net
+set url http://${host}/cdimage/release/${ver_alias}/${arch_a}/web
+iseq ${ver_alias} stable && set ver_number 7.6.0 ||
+iseq ${ver_alias} oldstable && set ver_number 6.0.10 ||
+set deblive ${url}/debian-live-${ver_number}-${arch_a}-${desktop}
+imgfree
+imgtrust --allow
+kernel ${deblive}.vmlinuz boot=live components fetch=${deblive}.squashfs live-config ${params}
+initrd ${deblive}.initrd.img
 boot
 
 :deb_exit

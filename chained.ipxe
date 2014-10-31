@@ -1,0 +1,36 @@
+#!ipxe
+
+# Chainload boot scripts for various networks
+
+menu Please select
+item --key c cloudboot cloudboot.nchc.org.tw/cloudboot [c]
+item --key n netbootme netboot.me [n]
+item --key f fedora boot.fedoraproject.org [f]
+choose ver || exit 0
+goto chained_${ver}
+exit 0
+
+# cloudboot.nchc.org.tw
+:chained_cloudboot
+imgtrust --allow
+chain http://cloudboot.nchc.org.tw/cloudboot/rom-image.ipxe
+exit
+
+# netboot.me
+:chained_netbootme
+imgtrust --allow
+chain http://static.netboot.me/gpxe/netbootme.kpxe
+exit
+
+# boot.fedoraproject.org online boot
+:chained_fedora
+echo ${cls}
+imgverify boot.fedoraproject.org.ipxe ${sigs}boot.fedoraproject.org.ipxe.sig
+chain boot.fedoraproject.org.ipxe
+exit
+
+# boot.kernel.org - currently not working
+:chained_kernel
+imgtrust --allow
+chain http://boot.kernel.org/
+exit
