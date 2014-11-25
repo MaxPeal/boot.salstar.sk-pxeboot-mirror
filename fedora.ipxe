@@ -11,17 +11,33 @@ goto ${menu} ||
 set os Fedora
 set devel_ver 21
 menu Fedora
+item --gap Current (supported)
 item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]
+item --gap End of life (unsupported)
 item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
+item --gap Testing and development
 item --key r rawhide ${os} rawhide ${arch} [r]
 item --key d development ${os} development ${arch} [d]
 item --key b Beta ${os} ${devel_ver}-Beta ${arch} [b]
 item --key a Alpha ${os} ${devel_ver}-Aplha ${arch} [a]
 item --key A alt_stage ${os} dl.fedoraproject.org/pub/alt/stage ${arch} [A]
+item --gap Official netboot
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${ver} || choose ver || goto main_menu
+
+iseq ${ver} 20 && goto fedora_product_end ||
+iseq ${ver} 19 && goto fedora_product_end ||
+iseq ${ver} 18 && goto fedora_product_end ||
+iseq ${ver} 17 && goto fedora_product_end ||
+menu Choose product
+item --key s Server Server [s]
+item --key w Workstation Workstation [w]
+item --key c Cloud Cloud [c]
+isset ${fed_product} || choose fed_product || goto main_menu
+:fedora_product_end
+isset ${fed_product} || set fed_product ${os}
 
 # workaround for fedora 17
 iseq ${ver} 17 && set params rd.debug ${params} ||
@@ -29,7 +45,7 @@ iseq ${ver} 17 && set params rd.debug ${params} ||
 set bootdev ks.device=${mac}
 
 goto fedora_${ver} ||
-set dir fedora/linux/releases/${ver}/${os}/${arch}/os
+set dir fedora/linux/releases/${ver}/${fed_product}/${arch}/os
 set repo repo=${mirror}/${dir}
 :fedora_setvars
 #set osks ${ksurl}${ver}
@@ -52,14 +68,14 @@ goto fedora_setvars
 
 :fedora_Alpha
 set ver ${devel_ver}-Alpha
-set dir fedora/linux/releases/test/${ver}/${os}/${arch}/os
+set dir fedora/linux/releases/test/${ver}/${fed_product}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_Beta
 set ver ${devel_ver}-Beta
-set dir fedora/linux/releases/test/${ver}/${os}/${arch}/os
+set dir fedora/linux/releases/test/${ver}/${fed_product}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
@@ -78,12 +94,7 @@ set repo repo=${mirror}/${dir}
 set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
 set stage_ver ${devel_ver}_Beta_RC1
 echo -n Edit stage version: ${} && read stage_ver
-menu Choose product
-item --key s Server Server
-item --key w Workstation Workstation
-item --key c Cloud Cloud
-choose product || exit 0
-set dir alt/stage/${stage_ver}/${product}/${arch}/os
+set dir alt/stage/${stage_ver}/${fed_product}/${arch}/os
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 # signature checking is disabled for development ver
 set ver development

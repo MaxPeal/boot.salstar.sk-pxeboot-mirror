@@ -175,9 +175,10 @@ item --key 1 ttyS1 Serial cosnole ttyS1 [1]
 item --key t text Text mode install [t]
 item --key c custom_config Custom configuration URL [c]
 item --key n network Static network configuration [n]
-item --key d ksdevice ksdevice configuration [d]
+item --key k ksdevice ksdevice configuration [k]
 item --key m nomodeset Disable KMS (nomodeset) [m]
 item --key a autopart Autopartition [a]
+item --key d disks Disk selection [d]
 item --key p pkgs Package selection [p]
 choose kp || goto main_menu
 echo ${cls}
@@ -256,17 +257,26 @@ iseq ${autopart} root4 && set params ${params} part=root=4,swap=1 ||
 iseq ${autopart} root3 && set params ${params} part=root=3,swap=1 ||
 goto params_menu
 
+:params_disks
+menu Disk selection
+item --key 2 mirror vda, vdb [2]
+item --key 1 vda vda only [1]
+choose disks || goto params_menu
+iseq ${disks} mirror && set params ${params} disks=vda,vdb ||
+iseq ${disks} vda && set params ${params} disks=vda ||
+goto params_menu
+
 :params_pkgs
 menu Package selection
 item --key g guestnrpe Guest with NRPE [g]
 item --key k kvmnrpe KVM host with NRPE [k]
-item --key w web Web server with mysql [w]
-item --key m mail Mail server with mysql [m]
+item --key w web Web server with mariadb [w]
+item --key m mail Mail server with mariadb [m]
 choose pkgs || goto params_menu
 iseq ${pkgs} guestnrpe && set params ${params} pkgs=salpack-nrpe,salpack-guest ||
 iseq ${pkgs} kvmnrpe && set params ${params} pkgs=salpack-nrpe,salpack-kvm ||
-iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mysql ||
-iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mysql ||
+iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mariadb ||
+iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mariadb ||
 goto params_menu
 
 :extended_menu

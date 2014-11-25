@@ -33,6 +33,7 @@ echo -n Enter major version: ${} && read ver_major
 :skip_read_ver_major_openbsd
 
 menu Choose minor version for ${os} ${ver_major} ${arch_a}
+item 6 ${os} ${ver_major}.6
 item 5 ${os} ${ver_major}.5
 item 4 ${os} ${ver_major}.4
 item 3 ${os} ${ver_major}.3
@@ -77,7 +78,7 @@ goto boot_bsd
 :freebsd
 set os FreeBSD
 menu ${os}
-item 10.0 ${os} 10.0
+item 10.1 ${os} 10.1
 item 9.2 ${os} 9.2
 item 8.4 ${os} 8.4
 item other ${os} Choose other version
