@@ -22,7 +22,7 @@ coreutils
 -anaconda
 
 # Drop some system-config things
--system-config-boot
+#-system-config-boot
 -system-config-language
 #-system-config-network
 -system-config-rootpassword
@@ -75,6 +75,9 @@ qemu-kvm
 httptunnel
 kismet
 aircrack-ng
+clamav
+clamav-data
+clamav-update
 
 # Fonts
 -@fonts
@@ -152,5 +155,9 @@ youtube-dl
 python-imaging
 python-BeautifulSoup
 pywebkitgtk
+
+# Fedora 21
+NetworkManager-wifi
+NetworkManager-bluetooth
 
 %end

@@ -20,8 +20,9 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=20
+FEDORA=21
 FEDORA_PREV=$((FEDORA-1))
+PRODUCT=Server
 HDT=0.5.2
 MEMTEST=5.01
 PMAGIC=`grep item pmagic.ipxe | head -1 | cut -d" " -f2`
@@ -143,6 +144,8 @@ umount $MOUNT
 syslinux --install --mbr --active --directory syslinux ${PART}
 # copy boot sector
 dd if=/usr/share/syslinux/mbr.bin of=${DEV} conv=notrunc bs=440 count=1
+sync
+sleep 1s
 
 mount $PART $MOUNT
 
@@ -192,18 +195,18 @@ wget --no-check-certificate -O $MOUNT/syslinux/ipxe.lkrn \
 
 RELEASES=$MIRROR/fedora/linux/releases
 if [ $SIZE -gt 1 ]; then
-  addos fedora$FEDORA x86_64 $RELEASES/$FEDORA/Fedora/x86_64/os
+  addos fedora$FEDORA x86_64 $RELEASES/$FEDORA/$PRODUCT/x86_64/os
   cfgos fedora$FEDORA x86_64 "^Fedora $FEDORA"
 
-  addos fedora$FEDORA i386 $RELEASES/$FEDORA/Fedora/i386/os
+  addos fedora$FEDORA i386 $RELEASES/$FEDORA/$PRODUCT/i386/os
   cfgos fedora$FEDORA i386 "Fedora $FEDORA"
 fi
 
 if [ $SIZE -gt 3 ]; then
-  addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/Fedora/x86_64/os
+  addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/$PRODUCT/x86_64/os
   cfgos fedora$FEDORA_PREV x86_64 "Fedora $FEDORA_PREV"
 
-  addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/Fedora/i386/os
+  addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/$PRODUCT/i386/os
   cfgos fedora$FEDORA_PREV i386 "Fedora $FEDORA_PREV"
 fi
 

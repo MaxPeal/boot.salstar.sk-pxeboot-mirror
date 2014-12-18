@@ -9,9 +9,10 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_ver 21
+set devel_ver 22
 menu Fedora
 item --gap Current (supported)
+item --key 1 21 ${os} 21 ${arch} [1]
 item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]
 item --gap End of life (unsupported)
