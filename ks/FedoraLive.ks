@@ -54,10 +54,10 @@ LIVENAME="Live System User"
   /^# add fedora user/a[\ -r\ /home/.rcinit\ ]\ &&\ .\ /home/.rcinit
   s/\([^~]\)liveuser/\1\$LIVEUSER/g
   s/Live System User/\$LIVENAME/
+EOF
 
 if [ -f /etc/freshclam.conf ]; then
   sed -i 's/^#Example/Example/' /etc/freshclam.conf
 fi
-EOF
 
 %end

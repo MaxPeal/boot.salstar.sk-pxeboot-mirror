@@ -83,10 +83,6 @@ spare = 2
 
 # check distribution (el6 or fc20)
 distro, arch = os.popen('uname -r').read().strip().split('.')[-2:]
-if distro.startswith("fc"):
-  biosboot = 2
-else:
-  biosboot = 0
 if arch.endswith('86'):
   arch = "i386"
 
@@ -170,6 +166,10 @@ def initdisks(disks):
       print "clearpart --all --initlabel"
 
 def autopartition(disks, parts):
+    if distro.startswith("fc"):
+      biosboot = 2
+    else:
+      biosboot = 0
     if disks and disks.startswith("iscsi:"):
       #print "ignoredisk --interactive"
       print "iscsiname iqn.2012-09.test"
@@ -202,6 +202,8 @@ def autopartition(disks, parts):
           vg = value
           print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
           print "volgroup %s pv.01" % vg
+        elif key=='biosboot':
+          biosboot = size(value)
         elif key=='root':
           initdisks(disks)
           if biosboot>0:
@@ -250,6 +252,8 @@ def autopartition(disks, parts):
           #raid.add_vg(vg, "%d --grow" % s)
           print "# disk size: %d-%d" % (disksize(*disks), sum)
           raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
+        elif key=='biosboot':
+          biosboot = size(value)
         elif key=='root':
           initdisks(disks)
           if biosboot>0:

@@ -34,7 +34,8 @@ iseq ${ver} 18 && goto fedora_product_end ||
 iseq ${ver} 17 && goto fedora_product_end ||
 menu Choose product
 item --key s Server Server [s]
-item --key w Workstation Workstation [w]
+# Fedora Workstation contains only ISO files
+#item --key w Workstation Workstation [w]
 item --key c Cloud Cloud [c]
 isset ${fed_product} || choose fed_product || goto main_menu
 :fedora_product_end
