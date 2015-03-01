@@ -279,15 +279,19 @@ goto params_menu
 
 :params_pkgs
 menu Package selection
+item --key b core Core salpack only [c]
 item --key g guestnrpe Guest with NRPE [g]
 item --key k kvmnrpe KVM host with NRPE [k]
-item --key w web Web server with mariadb [w]
-item --key m mail Mail server with mariadb [m]
+item --key w web Guest web server with mariadb and NRPE [w]
+item --key m mail Guest mail server with mariadb and NRPE [m]
+item --key n nrpe Core and NRPE salpack [n]
 choose pkgs || goto params_menu
+iseq ${pkgs} core && set params ${params} pkgs=salpack ||
 iseq ${pkgs} guestnrpe && set params ${params} pkgs=salpack-nrpe,salpack-guest ||
 iseq ${pkgs} kvmnrpe && set params ${params} pkgs=salpack-nrpe,salpack-kvm ||
 iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mariadb ||
 iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mariadb ||
+iseq ${pkgs} nrpe && set params ${params} pkgs=salpack-nrpe ||
 goto params_menu
 
 :extended_menu
