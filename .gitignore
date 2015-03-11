@@ -1,5 +1,6 @@
 test.ipxe
 sigs/*.sig
+sigs/ipxe
 sigs/images
 sigs/fedora
 sigs/centos
