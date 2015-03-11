@@ -1,15 +1,15 @@
 #!ipxe
 
 menu Predefined systems
-item --key f centos Fedora 18 kickstart vnc ttyS0 [f]
+item --key f centos Fedora 21 kickstart vnc ttyS0 [f]
 item --key c centos CentOS 7 kickstart vnc ttyS0 [c]
 item --gap
-item --gap WARNING! Systems below this line can kill your installation!
+item --gap WARNING! Systems below this line can kill your current installation!
 item --gap WARNING! Use with caution!
 item --gap
-item --key D fedora_devel Fedora 18 development auto KMS [D]
-item --key M fedora_devel_nomodeset Fedora 18 development auto text nomodeset [M]
-item --key F fedora_auto Fedora 18 auto [F]
+item --key D fedora_devel Fedora 21 development auto KMS [D]
+item --key M fedora_devel_nomodeset Fedora 21 development auto text nomodeset [M]
+item --key F fedora_auto Fedora 21 auto [F]
 item --key C centos_auto CentOS 7 auto [C]
 item --key T test Test config [T]
 choose system || exit
@@ -17,7 +17,7 @@ goto predef_${system}
 
 :predef_fedora
 set menu fedora
-set ver 18
+set ver 21
 set bt ks
 set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -35,7 +35,7 @@ exit
 
 :predef_fedora_auto
 set menu fedora
-set ver 18
+set ver 21
 set bt ks
 set params ${params} part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
