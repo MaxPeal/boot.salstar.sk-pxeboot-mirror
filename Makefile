@@ -5,7 +5,6 @@ TARGETS=\
 	bin/ipxe.iso\
 	bin/ipxe.usb\
 	bin/undionly.kpxe
-IPXECONFIGS="" com1 com2
 MEM=1024
 OUT=gtk
 MONITOR=stdio
@@ -16,7 +15,7 @@ NET=-net nic,model=$(NETMODEL) -net user,hostfwd=tcp::2220-:22
 USB=-usb -usbdevice tablet
 PARAMS:=
 MAIN_SCRIPT=menu.ipxe
-BOOTFILE=ipxe/com1/undionly.kpxe
+BOOTFILE=ipxe/undionly.kpxe
 UNAME=$(shell uname -r)
 MEMTEST_VERSION=$(shell	awk '/^set memtest_version / { print $$3 }' $(MAIN_SCRIPT))
 C32S=hdt menu sysdump
@@ -25,7 +24,7 @@ DISKS="test.img"
 DISKDRV="virtio"
 override PARAMS+=$(foreach disk,$(DISKS),-drive file=$(IMGDIR)/$(disk),cache=none,if=$(DISKDRV))
 
-all:	rsync pciids.ipxe
+all:	compile rsync pciids.ipxe
 
 .PHONY:	all clean sigs rsync compile syslinux
 
@@ -39,17 +38,14 @@ rsync:	images/modules.cgz sigs
 	rsync -avPH --inplace --delete ./ ftp:public_html/boot/ \
 	  --exclude='**/.svn' --exclude='**/rsync'
 	# to tftp server for dhcp boot
-	rsync -avPH --inplace ipxe/*pxe ipxe/com* ftp:/var/lib/tftpboot/ipxe/
+	rsync -avPH --inplace ipxe/*pxe ftp:/var/lib/tftpboot/ipxe/
 
 TRUST=$(shell find `pwd`/certs/ -name \*.crt -o -name \*.pem | xargs echo | tr ' ' ',')
 compile:	syslinux
-	for config in $(IPXECONFIGS); do \
-		make -j1 -C $(IPXEDIR) EMBEDDED_IMAGE=`pwd`/link.ipxe \
-			TRUST=$(TRUST) $(TARGETS) NO_WERROR=1 $(IPXE_OPTS) \
-			CONFIG=$$config; \
-		for i in $(TARGETS); do \
-			cp -a $(IPXEDIR)/$$i ipxe/$$config/; \
-		done; \
+	make -j1 -C $(IPXEDIR) EMBEDDED_IMAGE=`pwd`/link.ipxe \
+		TRUST=$(TRUST) $(TARGETS) NO_WERROR=1 $(IPXE_OPTS)
+	for i in $(TARGETS); do \
+		cp -a $(IPXEDIR)/$$i ipxe/; \
 	done
 
 images/modules.cgz: images/pmagic/scripts/*
@@ -59,7 +55,7 @@ images/modules.cgz: images/pmagic/scripts/*
 		> ../../$@
 
 boot:	all
-	qemu-kvm -m $(MEM) -kernel ipxe/com1/ipxe.lkrn -monitor $(MONITOR) \
+	qemu-kvm -m $(MEM) -kernel ipxe/ipxe.lkrn -monitor $(MONITOR) \
 		$(USB) $(PARAMS) $(OPTION_ROM) $(NET) -display $(OUT) $(ARGS)
 	@echo ""
 

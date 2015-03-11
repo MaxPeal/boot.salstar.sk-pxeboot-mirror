@@ -8,5 +8,7 @@
 //#define       CONSOLE_DEBUGCON        /* Debug port console */
 #define       CONSOLE_VESAFB          /* VESA framebuffer console */
 
+#define       CONSOLE_SERIAL          /* Serial port */
+
 //#define COMCONSOLE COM2
 //#define COMSPEED 57600

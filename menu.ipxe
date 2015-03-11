@@ -326,12 +326,7 @@ item --key v vga VGA only [v]
 item --key 0 ttyS0 VGA + ttyS0 (com1) [0]
 item --key 1 ttyS1 VGA + ttyS1 (com2) [1]
 choose ipxecon || goto main_menu
-iseq ${ipxecon} vga && set ipxecondir ipxe/ ||
-iseq ${ipxecon} ttyS0 && set ipxecondir ipxe/com1/ ||
-iseq ${ipxecon} ttyS1 && set ipxecondir ipxe/com2/ ||
-set ipxeconurl ${ipxecondir}ipxe.lkrn
-imgfree
-kernel ${ipxeconurl} || goto error
-imgverify ipxe.lkrn ${sigs}${ipxecondir}ipxe.lkrn.sig || goto error
-boot
+iseq ${ipxecon} vga && console --port= ||
+iseq ${ipxecon} ttyS0 && console --port=0 ||
+iseq ${ipxecon} ttyS1 && console --port=1 ||
 goto main_menu
