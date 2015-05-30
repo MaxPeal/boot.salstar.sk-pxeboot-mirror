@@ -158,7 +158,4 @@ pywebkitgtk
 NetworkManager-wifi
 NetworkManager-bluetooth
 
-# Fedora 22
--plymouth
-
 %end
