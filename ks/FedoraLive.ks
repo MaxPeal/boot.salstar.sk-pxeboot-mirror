@@ -6,7 +6,7 @@
 # livecd-iso-to-disk --msdos --multi --noverify $WITH_HOME \
 #   livecd-FedoraLive-*.iso /dev/sdx1
 
-%include /usr/share/spin-kickstarts/fedora-live-desktop.ks
+%include /usr/share/spin-kickstarts/fedora-live-workstation.ks
 %include /usr/share/spin-kickstarts/fedora-live-minimization.ks
 
 part / --size 6144 --fstype ext4

@@ -14,7 +14,8 @@ set debmirror http://ftp.${country}.debian.org/debian/
 
 set os Debian
 menu ${os} ${arch_a}
-item --key s wheezy ${os} 7.0 wheezy (stable) [s]
+item --key j jessie ${os} 8 jessie (stable) [j]
+item --key s wheezy ${os} 7 wheezy (oldstable) [s]
 item --key o squeeze ${os} 6.0 squeeze (oldstable) [o]
 item --key t jessie ${os} jessie (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
@@ -31,6 +32,7 @@ set debmirror http://${country}.releases.ubuntu.com/ubuntu/
 set os Ubuntu
 menu ${os} ${arch_a}
 item --gap Current (supported)
+item --key v vivid ${os} 15.04 Vivid Vervet [v]
 item --key u utopic ${os} 14.10 Utopic Unicorn [u]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
 item --key p precise ${os} 12.04 LTS Precise Pangolin [p]

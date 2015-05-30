@@ -196,12 +196,12 @@ goto params_menu
 
 :params_serial
 menu Serial console speed
-item --key 0 ttS0 ttyS0 - com1, don't set speed [0]
+item --key 0 ttyS0 ttyS0 - com1, don't set speed [0]
 item --key a ttyS0,115200 ttyS0,115200 [a]
 item --key b ttyS0,57600 ttyS0,57600 [b]
 item --key c ttyS0,38400 ttyS0,38400 [c]
 item --key d ttyS0,9600 ttyS0,9600 [d]
-item --key 1 ttS1 ttyS1 - com2, don't set speed [1]
+item --key 1 ttyS1 ttyS1 - com2, don't set speed [1]
 item --key 2 ttyS1,115200 ttyS1,115200 [2]
 item --key 3 ttyS1,57600 ttyS1,57600 [3]
 item --key 4 ttyS1,38400 ttyS1,38400 [4]

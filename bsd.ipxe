@@ -33,6 +33,7 @@ echo -n Enter major version: ${} && read ver_major
 :skip_read_ver_major_openbsd
 
 menu Choose minor version for ${os} ${ver_major} ${arch_a}
+item 7 ${os} ${ver_major}.7
 item 6 ${os} ${ver_major}.6
 item 5 ${os} ${ver_major}.5
 item 4 ${os} ${ver_major}.4
@@ -97,6 +98,7 @@ goto boot_bsd
 :pcbsd
 set os PC-BSD
 menu ${os}
+item 10.1-RELEASE ${os} 10.1
 item 10.0-RELEASE ${os} 10.0
 item 9.2-RELEASE ${os} 9.2
 item 9.1-RELEASE ${os} 9.1
@@ -109,7 +111,8 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_pcbsd
 
-set mirror http://ftp.heanet.ie/mirrors/pcbsd/iso/
+#set mirror http://ftp.heanet.ie/mirrors/pcbsd/iso/
+set mirror http://iso.cdn.pcbsd.org/
 iseq ${arch} i386 && set xarch x86 || set xarch x64
 set dir ${ver}/${arch_a}
 #set iso PCBSD${ver}-${xarch}-bootonly.iso

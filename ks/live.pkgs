@@ -59,7 +59,6 @@ fuse-sshfs
 firefox
 
 @dns-server
-@slovak-support
 -m17n*
 -scim*
 -ibus*
@@ -140,7 +139,6 @@ gimp-data-extras
 rpmfusion-free-release
 rpmfusion-nonfree-release
 vlc
-python-vlc
 #mplayer
 gstreamer-ffmpeg
 gstreamer-plugins-bad
@@ -159,5 +157,8 @@ pywebkitgtk
 # Fedora 21
 NetworkManager-wifi
 NetworkManager-bluetooth
+
+# Fedora 22
+-plymouth
 
 %end

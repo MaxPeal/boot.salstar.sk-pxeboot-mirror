@@ -9,20 +9,21 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_ver 22
+set devel_ver 23
 menu Fedora
 item --gap Current (supported)
+item --key 1 22 ${os} 22 ${arch} [2]
 item --key 1 21 ${os} 21 ${arch} [1]
 item --key 0 20 ${os} 20 ${arch} [0]
-item --key 9 19 ${os} 19 ${arch} [9]
 item --gap End of life (unsupported)
+item --key 9 19 ${os} 19 ${arch} [9]
 item --key 8 18 ${os} 18 ${arch} [8]
 item --key 7 17 ${os} 17 ${arch} [7]
 item --gap Testing and development
 item --key r rawhide ${os} rawhide ${arch} [r]
 item --key d development ${os} development ${arch} [d]
-item --key b Beta ${os} ${devel_ver}-Beta ${arch} [b]
-item --key a Alpha ${os} ${devel_ver}-Aplha ${arch} [a]
+item --key b Beta ${os} ${devel_ver}_Beta ${arch} [b]
+item --key a Alpha ${os} ${devel_ver}_Aplha ${arch} [a]
 item --key A alt_stage ${os} dl.fedoraproject.org/pub/alt/stage ${arch} [A]
 item --gap Official netboot
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
@@ -69,14 +70,14 @@ set ver development
 goto fedora_setvars
 
 :fedora_Alpha
-set ver ${devel_ver}-Alpha
+set ver ${devel_ver}_Alpha
 set dir fedora/linux/releases/test/${ver}/${fed_product}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_Beta
-set ver ${devel_ver}-Beta
+set ver ${devel_ver}_Beta
 set dir fedora/linux/releases/test/${ver}/${fed_product}/${arch}/os
 set repo repo=${mirror}/${dir}
 set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}

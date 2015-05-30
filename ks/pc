@@ -76,6 +76,8 @@ part_names = dict(
   backuppc='/var/lib/BackupPC',
   mysql='/var/lib/mysql',
   pgsql='/var/lib/pgsql',
+  mongodb='/var/lib/mongodb',
+  redis='/var/lib/redis',
   opt='/opt'
 )
 sys.stdout = open('/tmp/salstar.ks', 'wt')
@@ -123,8 +125,11 @@ class mk_raid:
       self.cntr += 1
       for i in 0, 1:
         if self.disks[i]:
-          print "part raid.%d%d --size=%s --ondisk=%s" \
-                % (self.cntr, i+1, s, self.disks[i])
+          args = ""
+          if self.cntr==0:
+            args += " --asprimary"
+          print "part raid.%d%d --size=%s --ondisk=%s%s" \
+                % (self.cntr, i+1, s, self.disks[i], args)
           raids.append("raid.%d%d" % (self.cntr, i+1))
       return raids
   def add_raid1(self, name, s, fstype=""):
@@ -461,7 +466,7 @@ JqwZbPlWrR9FRP8ZAJ94pSLvMM6rfXlMbeOejfvFcdwc8w==
 
 ssh_authorized_keys='''\
 from="work.salstar.sk,158.197.240.41,work6.salstar.sk,2001:4118:400:1::/64" \
-ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAou3n+SuHVsuM5QXAKnIKilPHnJdKm/KP31Ho2VahJIC7mK0+snbXZYXeQmnwYvqQaDVCl8p0ANMonbs189t+RdBZ86Yq6/boc7zhyrj3gqzflsjyGWp5Gfo2AGQ9pgW3JMHefHMMXqF2uB9pT7PRL873gGfMG1WE3W+loFpDYPgg5TQvDifDP+cnlEdT/30JROFBbJ6sJro5la+7vZT/Yd9JOyNSvjizSsqLyva/t1zhQ2Bb37xGJOgVoRc1Hj+fYe1+jaD2ebtGWWIykvfIb33tpoBg3KkN01rrniTiVD8t1yNPGxc9VecqJoK5QJOCZ6zpjeFtvmiZwdd9bgfznQ== ondrejj@work.salstar.sk
+ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAAORxvbaG3OX99nkgSkVCPbptyfeBUUdlOtz5wPkN/EZozVQ56ZsKMHLXpHiBb973/PCrVQz1B4+n+D7Ud/UMSZIgGBThb2+Mh46qqrgPu1QhbvzcK1W4qEOsDWu4KQgCpxfFEaaF6a7V7MOrtXdSZmauMmSpSHO7BWM7Aq3PTVXH0Hvg== ondrejj@work.salstar.sk
 '''
 
 # detect distribution
