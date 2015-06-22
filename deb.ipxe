@@ -56,7 +56,7 @@ echo -n Enter version: ${} && read ver
 :skip_read_ver
 
 :deb_boot_type
-set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
+set dir dists/${ver}-updates/main/installer-${arch_a}/current/images/netboot/
 
 menu ${os} ${ver} boot parameters
 item --key k install ${os} install [k]
