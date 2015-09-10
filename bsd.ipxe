@@ -79,6 +79,7 @@ goto boot_bsd
 :freebsd
 set os FreeBSD
 menu ${os}
+item 10.2 ${os} 10.2
 item 10.1 ${os} 10.1
 item 9.2 ${os} 9.2
 item 8.4 ${os} 8.4
@@ -98,6 +99,7 @@ goto boot_bsd
 :pcbsd
 set os PC-BSD
 menu ${os}
+item 10.2-RELEASE ${os} 10.2
 item 10.1-RELEASE ${os} 10.1
 item 10.0-RELEASE ${os} 10.0
 item 9.2-RELEASE ${os} 9.2
