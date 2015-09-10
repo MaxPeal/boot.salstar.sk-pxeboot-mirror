@@ -13,7 +13,7 @@ coreutils
 -man-pages*
 
 # Help and art can be big, too
--gnome-user-docs
+-gnome-*-docs
 -evolution-help
 #-gnome-games-help
 -desktop-backgrounds-basic
@@ -31,11 +31,18 @@ coreutils
 # required for selinux --disabled
 system-config-firewall-base
 
+# Large packages
+-PackageKit-cached-metadata
+-ibus-kkc
+-ibus-libpinyin
+-libkkc*
+-libpinyin*
+
 # SAL's changes
 
 dhclient
-yum
-yum-utils
+dnf
+dnf-plugins-core
 openssh-clients
 openssh-server
 screen
@@ -56,15 +63,10 @@ mdadm
 hdparm
 fuse-sshfs
 
-firefox
-
 @dns-server
--m17n*
--scim*
--ibus*
--iok*
 
 # SAL's packages
+firefox
 roxterm
 pygame
 lshw
@@ -81,19 +83,19 @@ clamav-update
 # Fonts
 -@fonts
 # don't install unnecessary fonts
-#-abyssinica-fonts
+-sil-abyssinica-fonts
 -cjkuni*fonts*
 -jomolhari*fonts*
 -kacst*fonts*
 -khmeros*fonts*
 -lklug*fonts*
 -lohit*fonts*
-#-padauk*fonts*
+-sil-padauk*fonts*
 -paktype*fonts*
 -smc*fonts*
 -stix*fonts*
 -thai*fonts*
-#-un-core-fonts-dotum
+-un-core-*fonts*
 -vlgothic*fonts*
 wqy-zenhei-fonts
 dejavu-sans-fonts
@@ -128,7 +130,7 @@ gnome-shell-extension-alternate-tab
 gnome-shell-extension-system-monitor-applet
 
 # Office
-@office
+#@office
 -planner
 -shotwell
 remmina-plugins-*

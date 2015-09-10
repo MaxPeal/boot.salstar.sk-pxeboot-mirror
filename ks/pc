@@ -78,6 +78,7 @@ part_names = dict(
   pgsql='/var/lib/pgsql',
   mongodb='/var/lib/mongodb',
   redis='/var/lib/redis',
+  squid='/var/spool/squid',
   opt='/opt'
 )
 sys.stdout = open('/tmp/salstar.ks', 'wt')
