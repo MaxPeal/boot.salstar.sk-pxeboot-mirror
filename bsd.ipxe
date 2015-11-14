@@ -33,6 +33,7 @@ echo -n Enter major version: ${} && read ver_major
 :skip_read_ver_major_openbsd
 
 menu Choose minor version for ${os} ${ver_major} ${arch_a}
+item 8 ${os} ${ver_major}.8
 item 7 ${os} ${ver_major}.7
 item 6 ${os} ${ver_major}.6
 item 5 ${os} ${ver_major}.5

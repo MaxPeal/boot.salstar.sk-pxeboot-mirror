@@ -32,6 +32,7 @@ set debmirror http://${country}.releases.ubuntu.com/ubuntu/
 set os Ubuntu
 menu ${os} ${arch_a}
 item --gap Current (supported)
+item --key w wily ${os} 15.10 Wily Werewolf [w]
 item --key v vivid ${os} 15.04 Vivid Vervet [v]
 item --key u utopic ${os} 14.10 Utopic Unicorn [u]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
