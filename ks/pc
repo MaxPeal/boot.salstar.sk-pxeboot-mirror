@@ -45,9 +45,8 @@ services --disabled=netfs --enabled=network
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
 %packages --ignoremissing
+-@Base
 dhclient
-yum
-yum-utils
 openssh-clients
 openssh-server
 #screen
@@ -496,6 +495,3 @@ os.system('sync')
 %end
 
 %include /tmp/salstar.ks
-
-%packages --nobase
-%end
