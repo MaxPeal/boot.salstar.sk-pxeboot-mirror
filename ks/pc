@@ -5,7 +5,7 @@
 #   zerombr			!!!USE WITH CAUTION!!!
 #   lang=en_US
 #   pkgs=desktop,salpack
-#   repo=testing repo=other repo=http://...
+#   repo=testing repo=other repo=cr repo=http://...
 #   config=http://boot.salstar.sk/ks/custom
 #   text
 #
@@ -299,6 +299,9 @@ class repocfg_class:
       'url --url=%(mirror)s/centos/%(ver)d/os/%(arch)s/',
       'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
       'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/%(arch)s/'
+    ],
+    cr = [
+      'repo --name=CR --baseurl=%(mirror)/centos/%(ver)/cr/%(arch)/',
     ],
     other = [
       'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/epel/%(ver)d/%(arch)s/'

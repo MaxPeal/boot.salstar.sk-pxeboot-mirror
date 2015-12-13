@@ -114,7 +114,7 @@ echo Type "exit" to return to menu.
 imgtrust --allow
 set menu main_menu
 shell
-imgtrust
+imgtrust ||
 goto main_menu
 
 :changebits

@@ -124,6 +124,7 @@ iseq ${ver} bco && goto boot_centos_org ||
 iseq ${ver} other || goto centos_skip_read_ver
 echo ${cls}
 echo -n Enter version: ${} && read ver
+imgtrust --allow
 :centos_skip_read_ver
 set dir ${menu}/${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
