@@ -51,7 +51,7 @@ echo -n Enter minor version: ${} && read ver_minor
 set ver ${ver_major}.${ver_minor}
 set verpl ${ver_major}${ver_minor}
 #set mirror http://ftp.openbsd.org/pub/
-set mirror http://mirror.steadynet.cz/pub/
+set mirror http://ftp.nluug.nl/pub/
 set dir OpenBSD/${ver}/${arch_a}
 set iso cd${verpl}.iso
 goto boot_bsd

@@ -14,8 +14,8 @@ menu Fedora
 item --gap Current (supported)
 item --key 1 23 ${os} 23 ${arch} [3]
 item --key 1 22 ${os} 22 ${arch} [2]
-item --key 1 21 ${os} 21 ${arch} [1]
 item --gap End of life (unsupported)
+item --key 1 21 ${os} 21 ${arch} [1]
 item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]
 item --key 8 18 ${os} 18 ${arch} [8]
@@ -130,6 +130,14 @@ set dir ${menu}/${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
 set bootdev ksdevice=bootif BOOTIF=${mac}
+# fix i386 mirror for CentOS 7
+iseq ${os} CentOS || goto boottype
+iseq ${ver} 7 || goto boottype
+iseq ${arch} i386 || goto boottype
+set mirror http://mirror.centos.org/altarch
+set dir ${ver}/os/${arch}
+set repo repo=${mirror}/${dir}
+set sigs ${sigs}centos/
 goto boottype
 
 :boot_centos_org
@@ -178,7 +186,6 @@ goto bootos_images
 echo Loading from ${mirror}/${dir}/isolinux/
 echo ${}  ${repo}
 echo ${}  ${params}
-#set next-server 158.197.16.70
 imgfree
 # load vmlinuz and initrd
 kernel ${mirror}/${dir}/isolinux/vmlinuz
