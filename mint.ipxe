@@ -8,7 +8,7 @@ set desktop cinnamon
 #set desktop mate
 
 set dir stable/${ver}/linuxmint-${ver}-${desktop}-${bits}bit.iso
-set mirror http://mirrors.nic.cz/linuxmint-cd/linuxmint.com
+iseq ${mirror} ${default_mirror} && set mirror http://mirrors.nic.cz/linuxmint-cd/linuxmint.com ||
 set iso ${mirror}/${dir}
 
 sanboot ${iso} || echo Trying memdisk method.

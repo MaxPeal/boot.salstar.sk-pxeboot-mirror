@@ -9,7 +9,7 @@ item 11.3 openSUSE 11.3
 item factory openSUSE factory
 choose ver || goto opensuse_exit
 
-set mirror http://ftp.linux.cz/pub/linux/opensuse/
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.linux.cz/pub/linux/opensuse/ ||
 set dir distribution/${ver}/repo/oss/
 iseq ${ver} factory && set dir ${ver}/repo/oss/ ||
 

@@ -15,7 +15,7 @@ echo -n Enter version: ${} && read ver
 
 isset ${ver} || set ver ${default_ver}
 
-set mirror http://ftp.fi.muni.cz/pub/linux/gentoo
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.fi.muni.cz/pub/linux/gentoo
 set dir releases/${gt_arch}/autobuilds/current-iso/
 set iso install-${gt_arch}-minimal-${ver}.iso
 

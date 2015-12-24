@@ -20,7 +20,7 @@ echo -n Enter version: ${} && read ver
 :skip_read_ver
 
 set server mandriva.mirror.dkm.cz
-set mirror http://${server}/
+iseq ${mirror} ${default_mirror} && set mirror http://${server}/ ||
 set dir pub/mandriva/official/${ver}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 

@@ -51,7 +51,7 @@ echo -n Enter minor version: ${} && read ver_minor
 set ver ${ver_major}.${ver_minor}
 set verpl ${ver_major}${ver_minor}
 #set mirror http://ftp.openbsd.org/pub/
-set mirror http://ftp.nluug.nl/pub/
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.nluug.nl/pub/ ||
 set dir OpenBSD/${ver}/${arch_a}
 set iso cd${verpl}.iso
 goto boot_bsd
@@ -71,7 +71,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_netbsd
 
-set mirror http://iso.se.netbsd.org/pub/
+iseq ${mirror} ${default_mirror} && set mirror http://iso.se.netbsd.org/pub/ ||
 set dir NetBSD/iso/${ver}
 set iso2 ${arch_a}cd-${ver}.iso
 set iso NetBSD-${ver}-${arch_a}.iso
@@ -92,7 +92,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_freebsd
 
-set mirror http://ftp.cz.freebsd.org/pub/
+isqr ${mirror} ${default_mirror} && set mirror http://ftp.cz.freebsd.org/pub/ ||
 set dir FreeBSD/releases/ISO-IMAGES/${ver}
 set iso FreeBSD-${ver}-RELEASE-${arch_a}-bootonly.iso
 goto boot_bsd
@@ -114,8 +114,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_pcbsd
 
-#set mirror http://ftp.heanet.ie/mirrors/pcbsd/iso/
-set mirror http://iso.cdn.pcbsd.org/
+iseq ${mirror} ${default_mirror} && set mirror http://iso.cdn.pcbsd.org/ ||
 iseq ${arch} i386 && set xarch x86 || set xarch x64
 set dir ${ver}/${arch_a}
 #set iso PCBSD${ver}-${xarch}-bootonly.iso

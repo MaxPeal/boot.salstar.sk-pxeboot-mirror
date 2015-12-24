@@ -95,7 +95,7 @@ goto main_menu
 set dir fedora/linux/development/${devel_ver}/${arch}/os
 set repo repo=${mirror}/${dir}
 # everything else to alt stage files
-set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.upjs.sk/pub/mirrors/fedoraproject ||
 set stage_ver ${devel_ver}_Beta_RC1
 echo -n Edit stage version: ${} && read stage_ver
 set dir alt/stage/${stage_ver}/${fed_product}/${arch}/os
@@ -134,7 +134,7 @@ set bootdev ksdevice=bootif BOOTIF=${mac}
 iseq ${os} CentOS || goto boottype
 iseq ${ver} 7 || goto boottype
 iseq ${arch} i386 || goto boottype
-set mirror http://mirror.centos.org/altarch
+iseq ${mirror} ${default_mirror} && set mirror http://mirror.centos.org/altarch ||
 set dir ${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
 set sigs ${sigs}centos/
@@ -159,7 +159,7 @@ set dir ${menu}/${ver}x/${arch}/os
 iseq ${ver} 5 && set dir ${menu}/${ver}x/${arch} ||
 set osks ${ksurl}centos${ver}
 set bootdev ksdevice=bootif BOOTIF=${mac}
-set mirror http://ftp.scientificlinux.org/linux
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.scientificlinux.org/linux ||
 goto boottype
 
 :boottype

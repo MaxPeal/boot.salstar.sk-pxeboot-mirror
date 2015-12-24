@@ -10,7 +10,7 @@ choose menu || goto deb_exit
 goto ${menu}
 
 :debian
-set debmirror http://ftp.${country}.debian.org/debian/
+iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.org/debian/ || set debmirror ${mirror}
 
 set os Debian
 menu ${os} ${arch_a}
@@ -27,7 +27,7 @@ goto deb_boot_type
 
 :ubuntu
 #set debmirror http://ftp.ubuntu.com/ubuntu/
-set debmirror http://${country}.releases.ubuntu.com/ubuntu/
+iseq ${mirror} ${default_mirror} && set debmirror http://${country}.releases.ubuntu.com/ubuntu/ || set debmirror ${mirror}
 
 set os Ubuntu
 menu ${os} ${arch_a}

@@ -2,7 +2,8 @@
 
 :start
 set url https://boot.salstar.sk/
-set mirror http://ftp.upjs.sk${mirror_port}/pub
+set default_mirror http://ftp.upjs.sk${mirror_port}/pub
+set mirror ${default_mirror}
 set sigs ${url}sigs/
 
 iseq ${boot_salstar_version} 1 && goto version_ok ||
@@ -272,12 +273,12 @@ item --gap Virtual servers (guests)
 item --key 2 mirror vda, vdb [2]
 item --key 1 vda vda only [1]
 item --gap Physical servers (hosts)
-item --key b mirror_s sda, sdb [b]
+item --key b mirror_sd sda, sdb [b]
 item --key a sda sda only [a]
 choose disks || goto params_menu
 iseq ${disks} mirror && set params ${params} disks=vda,vdb ||
 iseq ${disks} vda && set params ${params} disks=${disks} ||
-iseq ${disks} mirror_s && set params ${params} disks=sda,sdb ||
+iseq ${disks} mirror_sd && set params ${params} disks=sda,sdb ||
 iseq ${disks} sda && set params ${params} disks=${disks} ||
 goto params_menu
 

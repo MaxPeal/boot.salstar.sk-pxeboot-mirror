@@ -22,7 +22,7 @@ choose boot_type || exit 0
 echo ${cls}
 
 set server ftp.linux.cz
-set mirror http://${server}/
+iseq ${mirror} ${default_mirror} && set mirror http://${server}/ ||
 set dir pub/linux/mageia/distrib/${ver}/${arch5}
 set automatic method:http,network:dhcp,server:${server},directory:/${dir}
 

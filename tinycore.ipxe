@@ -3,7 +3,7 @@
 # TinyCoreLinux
 # http://distro.ibiblio.org/tinycorelinux/downloads.html
 
-set mirror http://distro.ibiblio.org/tinycorelinux/
+iseq ${mirrpr} ${default_mirror} && set mirror http://distro.ibiblio.org/tinycorelinux/ ||
 
 :tinycore_menu
 set os TinyCore

@@ -18,7 +18,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver
 
-set mirror http://ftp.linux.cz/pub/
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.linux.cz/pub/ ||
 set dir linux/slackware/slackware${sbits}-${ver}
 
 imgfree
