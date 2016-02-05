@@ -14,10 +14,10 @@ iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.o
 
 set os Debian
 menu ${os} ${arch_a}
-item --key j jessie ${os} 8 jessie (stable) [j]
-item --key s wheezy ${os} 7 wheezy (oldstable) [s]
-item --key o squeeze ${os} 6.0 squeeze (oldstable) [o]
-item --key t jessie ${os} jessie (testing) [t]
+item --key s jessie ${os} 8 jessie (stable) [s]
+item --key o wheezy ${os} 7 wheezy (oldstable) [o]
+#item --key q squeeze ${os} 6.0 squeeze (oldstable) [q]
+item --key t stretch ${os} stretch (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
 set ver_alias ${ver}
