@@ -19,13 +19,14 @@ repo --name=updates --mirrorlist=http://www.salstar.sk/download/mirrors/updates-
 
 # rpmfusion
 #repo --name=rpmfusion-free --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-$releasever&arch=$basearch
-#repo --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
 #repo --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
-#repo --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
 repo --name=rpmfusion-free --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-free-$releasever?arch=$basearch
-repo --name=rpmfusion-free-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-free-updates-released-$releasever?arch=$basearch
 repo --name=rpmfusion-nonfree --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-$releasever?arch=$basearch
-repo --name=rpmfusion-nonfree-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-updates-released-$releasever?arch=$basearch
+# rpmfusion updates
+repo --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
+repo --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+#repo --name=rpmfusion-free-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-free-updates-released-$releasever?arch=$basearch
+#repo --name=rpmfusion-nonfree-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-updates-released-$releasever?arch=$basearch
 repo --name=salstar --mirrorlist=http://www.salstar.sk/download/mirrors/salstar-fedora-$releasever?arch=$basearch
 
 # Slovak support

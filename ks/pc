@@ -399,6 +399,11 @@ def url_get(src, dst=None):
 
 if "text" in cmd_line:
   print "text"
+if "passwd" in cmd_line:
+  if cmd_line["passwd"].startswith("$"):
+    print "rootpw --iscrypted %s" % cmd_line["passwd"]
+  else:
+    print "rootpw %s" % cmd_line["passwd"]
 autopartition(
   cmd_line.get('disk') or cmd_line.get('disks'),
   cmd_line.get('part')

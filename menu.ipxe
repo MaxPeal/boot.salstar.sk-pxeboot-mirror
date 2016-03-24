@@ -179,6 +179,7 @@ item --key v vnc VNC installation [v]
 item --key m nomodeset Disable KMS (nomodeset) [m]
 item --key t text Text mode install [t]
 item --key l lang Force en_US language [l]
+item --key w passwd Change predefined root password [w]
 item --key c custom_config Custom configuration URL [c]
 item --key n network Static network configuration [n]
 item --key k ksdevice ksdevice configuration [k]
@@ -217,6 +218,12 @@ goto params_menu
 
 :params_lang
 set params ${params} lang=en_US
+goto params_menu
+
+:params_passwd
+echo If passowrd starts with "$", it's treated as crypted.
+echo -n Enter root password: ${} && read root_passwd
+set params ${params} passwd=${root_passwd}
 goto params_menu
 
 :params_custom_config
