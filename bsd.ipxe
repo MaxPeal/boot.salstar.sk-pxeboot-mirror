@@ -60,7 +60,8 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
-item 6.1.3 ${os} 6.1.3
+item 7.0 ${os} 7.0
+item 6.1.5 ${os} 6.1.5
 item 6.0.4 ${os} 6.0.4
 item 5.2.2 ${os} 5.2.2
 item 5.1.4 ${os} 5.1.4
@@ -72,7 +73,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_netbsd
 
-iseq ${mirror} ${default_mirror} && set mirror http://iso.se.netbsd.org/pub/ ||
+iseq ${mirror} ${default_mirror} && set mirror http://iso6.de.netbsd.org/pub/ ||
 set dir NetBSD/iso/${ver}
 set iso2 ${arch_a}cd-${ver}.iso
 set iso NetBSD-${ver}-${arch_a}.iso
@@ -81,6 +82,7 @@ goto boot_bsd
 :freebsd
 set os FreeBSD
 menu ${os}
+item 10.3 ${os} 10.3
 item 10.2 ${os} 10.2
 item 10.1 ${os} 10.1
 item 9.2 ${os} 9.2
@@ -101,6 +103,7 @@ goto boot_bsd
 :pcbsd
 set os PC-BSD
 menu ${os}
+item 10.3-RELEASE ${os} 10.3
 item 10.2-RELEASE ${os} 10.2
 item 10.1-RELEASE ${os} 10.1
 item 10.0-RELEASE ${os} 10.0
