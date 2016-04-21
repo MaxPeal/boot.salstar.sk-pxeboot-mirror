@@ -32,12 +32,13 @@ iseq ${mirror} ${default_mirror} && set debmirror http://${country}.releases.ubu
 set os Ubuntu
 menu ${os} ${arch_a}
 item --gap Current (supported)
+item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key w wily ${os} 15.10 Wily Werewolf [w]
-item --key v vivid ${os} 15.04 Vivid Vervet [v]
-item --key u utopic ${os} 14.10 Utopic Unicorn [u]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
 item --key p precise ${os} 12.04 LTS Precise Pangolin [p]
 item --gap End of life (unsupported)
+item vivid ${os} 15.04 Vivid Vervet
+item utopic ${os} 14.10 Utopic Unicorn
 item saucy ${os} 13.10 Saucy Salamander
 item raring ${os} 13.04 Raring Ringtail
 item quantal ${os} 12.10 Quantal Quetzal
@@ -82,7 +83,7 @@ item kde KDE
 item lxde LXDE
 item xfce XFCE
 choose --default ${desktop} desktop || goto deb_boot_type
-iseq desktop default && clear desktop_param || set desktop_param desktop=${desktop}
+iseq ${desktop} default && clear desktop_param || set desktop_param desktop=${desktop}
 goto deb_boot_type
 
 :deb_rescue
@@ -99,7 +100,7 @@ goto deb_boot
 
 :deb_gtk
 set install_params video=vesa:ywrap,mtrr vga=788
-set installer gtk/
+iseq ${ver} precise && set installer gtk/ ||
 goto deb_boot
 
 :deb_install
