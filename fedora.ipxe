@@ -12,6 +12,7 @@ set os Fedora
 set devel_ver 24
 menu Fedora
 item --gap Current (supported)
+item --key 1 24 ${os} 24 ${arch} [4]
 item --key 1 23 ${os} 23 ${arch} [3]
 item --key 1 22 ${os} 22 ${arch} [2]
 item --gap End of life (unsupported)
@@ -36,9 +37,9 @@ iseq ${ver} 18 && goto fedora_product_end ||
 iseq ${ver} 17 && goto fedora_product_end ||
 menu Choose product
 item --key s Server Server [s]
-# Fedora Workstation contains only ISO files
-#item --key w Workstation Workstation [w]
-item --key c Cloud Cloud [c]
+item --key w Workstation Workstation [w]
+item --key c Everything Everything [e]
+#item --key c Cloud Cloud [c]
 isset ${fed_product} || choose fed_product || goto main_menu
 :fedora_product_end
 isset ${fed_product} || set fed_product ${os}

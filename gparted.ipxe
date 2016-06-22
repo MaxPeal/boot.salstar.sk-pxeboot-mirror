@@ -7,6 +7,7 @@ iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i686-pae
 
 set os GParted
 menu Choose ${os}
+item 0.26.1-1 ${os} 0.26.1-1
 item 0.26.0-2 ${os} 0.26.0-2
 item 0.25.0-3 ${os} 0.25.0-3
 item 0.24.0-2 ${os} 0.24.0-2
