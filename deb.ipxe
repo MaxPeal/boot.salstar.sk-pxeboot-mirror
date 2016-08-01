@@ -14,6 +14,7 @@ iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.o
 
 set os Debian
 menu ${os} ${arch_a}
+# https://wiki.debian.org/DebianReleases
 item --key s jessie ${os} 8 jessie (stable) [s]
 item --key o wheezy ${os} 7 wheezy (oldstable) [o]
 #item --key q squeeze ${os} 6.0 squeeze (oldstable) [q]
@@ -31,12 +32,13 @@ iseq ${mirror} ${default_mirror} && set debmirror http://${country}.releases.ubu
 
 set os Ubuntu
 menu ${os} ${arch_a}
+# https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
 item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
-item --key w wily ${os} 15.10 Wily Werewolf [w]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
 item --key p precise ${os} 12.04 LTS Precise Pangolin [p]
 item --gap End of life (unsupported)
+item wily ${os} 15.10 Wily Werewolf
 item vivid ${os} 15.04 Vivid Vervet
 item utopic ${os} 14.10 Utopic Unicorn
 item saucy ${os} 13.10 Saucy Salamander

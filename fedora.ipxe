@@ -31,6 +31,7 @@ item --gap Official netboot
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${ver} || choose ver || goto main_menu
 
+iseq ${ver} 21 && goto fedora_product_end ||
 iseq ${ver} 20 && goto fedora_product_end ||
 iseq ${ver} 19 && goto fedora_product_end ||
 iseq ${ver} 18 && goto fedora_product_end ||
@@ -86,8 +87,8 @@ set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 goto fedora_setvars
 
 :fedora_live
-set dir fedora/linux/releases/${ver}/Live/${arch}
-set img ${os}-${ver}-${arch}-Live-Desktop.iso
+set dir fedora/linux/releases/${ver}/Workstation/${arch}
+set img ${os}-Workstation-Live-${arch}-${ver}-1.2.iso
 prompt
 goto main_menu
 
