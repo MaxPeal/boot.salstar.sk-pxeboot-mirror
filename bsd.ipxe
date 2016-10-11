@@ -85,6 +85,7 @@ goto boot_bsd
 :freebsd
 set os FreeBSD
 menu ${os}
+item 11.0 ${os} 11.0
 item 10.3 ${os} 10.3
 item 10.2 ${os} 10.2
 item 10.1 ${os} 10.1
@@ -98,7 +99,7 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_freebsd
 
-isqr ${mirror} ${default_mirror} && set mirror http://ftp.cz.freebsd.org/pub/ ||
+iseq ${mirror} ${default_mirror} && set mirror http://ftp.cz.freebsd.org/pub/ ||
 set dir FreeBSD/releases/ISO-IMAGES/${ver}
 set iso FreeBSD-${ver}-RELEASE-${arch_a}-bootonly.iso
 goto boot_bsd
