@@ -13,6 +13,7 @@ ipxe/ipxe.iso
 ipxe/ipxe.kpxe
 ipxe/ipxe.lkrn
 ipxe/ipxe.usb
+ipxe/ipxe.efi
 ipxe/undionly.kpxe
 ipxe/com1
 ipxe/com2
