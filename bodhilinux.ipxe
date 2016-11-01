@@ -3,7 +3,7 @@
 # This does not really works, bodhilinux can't find CDROM (sr0).
 
 set project bodhilinux
-set iso bodhi-2.0.0-${bits}.iso
+set iso bodhi-4.0.0-${bits}.iso
 set sfboot memdisk
 
 imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
