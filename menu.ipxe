@@ -45,7 +45,6 @@ item --key c centos ${space} CentOS ${arch} [c]
 isset ${extended_menu} && item --key S scientific ${space} Scientific Linux ${arch} [S] ||
 isset ${extended_menu} && item --key o opensuse ${space} openSUSE ${arch} [o] ||
 isset ${extended_menu} && item --key M mageia ${space} Mageia ${arch5} [M] ||
-isset ${extended_menu} && item --key D mandriva ${space} Mandriva ${arch5} [D] ||
 # Deb based systems
 item --key b debian ${space} Debian ${arch_a} [b]
 item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
