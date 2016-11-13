@@ -1,5 +1,7 @@
 #!ipxe
 
+# Doen't work anymore. There is no working mirror form mandriva.
+
 set os Mandriva
 
 menu ${os}
