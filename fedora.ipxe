@@ -9,13 +9,14 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_ver 24
+set devel_ver 26
 menu Fedora
 item --gap Current (supported)
-item --key 1 24 ${os} 24 ${arch} [4]
-item --key 1 23 ${os} 23 ${arch} [3]
-item --key 1 22 ${os} 22 ${arch} [2]
+item --key 5 25 ${os} 25 ${arch} [5]
+item --key 4 24 ${os} 24 ${arch} [4]
+item --key 3 23 ${os} 23 ${arch} [3]
 item --gap End of life (unsupported)
+item --key 2 22 ${os} 22 ${arch} [2]
 item --key 1 21 ${os} 21 ${arch} [1]
 item --key 0 20 ${os} 20 ${arch} [0]
 item --key 9 19 ${os} 19 ${arch} [9]

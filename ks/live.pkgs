@@ -26,13 +26,12 @@ coreutils
 -system-config-language
 #-system-config-network
 -system-config-rootpassword
--system-config-services
+#-system-config-services
 -policycoreutils-gui
 # required for selinux --disabled
 system-config-firewall-base
 
 # Large packages
--PackageKit-cached-metadata
 -ibus-kkc
 -ibus-libpinyin
 -libkkc*
@@ -111,7 +110,6 @@ liberation-serif-fonts
 @system-tools
 -BackupPC
 -jigdo
--prelink
 -sssd
 -ypbind
 -rpcbind
@@ -144,8 +142,8 @@ vlc
 #mplayer
 gstreamer1-libav
 gstreamer1-plugins-base
-gstreamer1-plugins-ugly
 gstreamer1-plugins-good
+gstreamer1-plugins-ugly
 #gstreamer1-plugins-good-extras
 gstreamer1-plugins-bad-free
 gstreamer1-plugins-bad-freeworld
@@ -164,5 +162,9 @@ pywebkitgtk
 # Fedora 21
 NetworkManager-wifi
 NetworkManager-bluetooth
+
+# Fedora 25
+# include libcrypt-nss to avoid conflits with automatically added libcrypt
+libcrypt-nss
 
 %end

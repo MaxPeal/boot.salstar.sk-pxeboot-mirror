@@ -9,7 +9,7 @@
 %include /usr/share/spin-kickstarts/fedora-live-workstation.ks
 %include /usr/share/spin-kickstarts/fedora-live-minimization.ks
 
-part / --size 6144 --fstype ext4
+part / --size 8192 --fstype ext4
 
 # Fedora
 repo --name=fedora --mirrorlist=http://www.salstar.sk/download/mirrors/$basearch/fedora-$releasever?arch=$basearch
