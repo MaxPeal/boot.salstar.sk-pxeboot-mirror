@@ -63,6 +63,7 @@ parted
 %pre --interpreter /usr/bin/python
 # SAL's fedora/centos kickstart script
 
+from __future__ import print_function
 import sys, os, re, socket, urllib2
 
 part_names = dict(
@@ -101,7 +102,7 @@ def disksize(*disks):
            int(open('/sys/class/block/%s/size' % x).read().strip())/2048
            for x in disks
          ]
-    print "# disksizes: %s = %s" % (disks, ds)
+    print("# disksizes: %s = %s" % (disks, ds))
     return min(ds)
 
 def size(s, disks=None, sum=0):
@@ -109,7 +110,7 @@ def size(s, disks=None, sum=0):
       if disks is None:
         return "1 --grow"
       else:
-        print "# sum=%d kB" % sum
+        print("# sum=%d kB" % sum)
         return disksize(*disks)-sum
     if s.endswith('m') or s.endswith('M'):
       return int(s[:-1])
@@ -128,17 +129,17 @@ class mk_raid:
           args = ""
           if self.cntr==0:
             args += " --asprimary"
-          print "part raid.%d%d --size=%s --ondisk=%s%s" \
-                % (self.cntr, i+1, s, self.disks[i], args)
+          print("part raid.%d%d --size=%s --ondisk=%s%s" \
+                % (self.cntr, i+1, s, self.disks[i], args))
           raids.append("raid.%d%d" % (self.cntr, i+1))
       return raids
   def add_raid1(self, name, s, fstype=""):
       raids = self.add(s)
-      print "raid %s --level=1 --device=md%d %s %s" \
-            % (name, self.cntr, fstype, " ".join(raids))
+      print("raid %s --level=1 --device=md%d %s %s" \
+            % (name, self.cntr, fstype, " ".join(raids)))
   def add_vg(self, vg, s):
       self.add_raid1("pv.01", s)
-      print "volgroup %s pv.01" % vg
+      print("volgroup %s pv.01" % vg)
   def add_part(self, mp, s, fstype='--fstype=ext4'):
       self.add_raid1(mp, s, fstype)
 
@@ -163,12 +164,12 @@ def detect_disks():
 
 def initdisks(disks):
     if 'zerombr' in cmd_line:
-      print "zerombr"
+      print("zerombr")
     if disks:
-      print "clearpart --all --initlabel --drives=%s" \
-            % ','.join([x for x in disks if x])
+      print("clearpart --all --initlabel --drives=%s" \
+            % ','.join([x for x in disks if x]))
     else:
-      print "clearpart --all --initlabel"
+      print("clearpart --all --initlabel")
 
 def autopartition(disks, parts):
     if distro.startswith("fc"):
@@ -176,15 +177,15 @@ def autopartition(disks, parts):
     else:
       biosboot = 0
     if disks and disks.startswith("iscsi:"):
-      #print "ignoredisk --interactive"
-      print "iscsiname iqn.2012-09.test"
-      print "iscsi --ipaddr=%s --target=%s --user=%s --password=%s" \
-            % tuple(disks[6:].split(";", 3))
+      #print("ignoredisk --interactive")
+      print("iscsiname iqn.2012-09.test")
+      print("iscsi --ipaddr=%s --target=%s --user=%s --password=%s" \
+            % tuple(disks[6:].split(";", 3)))
       return
     if not parts:
       return
     if disks:
-      print "ignoredisk --only-use=%s" % disks.strip(',')
+      print("ignoredisk --only-use=%s" % disks.strip(','))
       disks = disks.split(',')
     else:
       disks = detect_disks()
@@ -205,24 +206,24 @@ def autopartition(disks, parts):
           fstype = '--fstype=ext4'
         if key=='vg':
           vg = value
-          print "part pv.01 --ondisk=%s --size=1 --grow" % disk0
-          print "volgroup %s pv.01" % vg
+          print("part pv.01 --ondisk=%s --size=1 --grow" % disk0)
+          print("volgroup %s pv.01" % vg)
         elif key=='biosboot':
           biosboot = size(value)
         elif key=='root':
           initdisks(disks)
           if biosboot>0:
-            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                  % (disk0, biosboot)
-          print "part / --ondisk=%s %s --size=%d" \
-                % (disk0, fstype, size(value))
+            print("part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                  % (disk0, biosboot))
+          print("part / --ondisk=%s %s --size=%d" \
+                % (disk0, fstype, size(value)))
         elif key in part_names:
           if vg:
-            print "logvol %s --vgname=%s --size=%s --name=%s %s" \
-                  % (part_names[key], vg, size(value), key, fstype)
+            print("logvol %s --vgname=%s --size=%s --name=%s %s" \
+                  % (part_names[key], vg, size(value), key, fstype))
           else:
-            print "part %s --ondisk=%s %s --size=%d" \
-                  % (part_names[key], disk0, fstype, size(value))
+            print("part %s --ondisk=%s %s --size=%d" \
+                  % (part_names[key], disk0, fstype, size(value)))
     elif len(disks)==2:
       # raid 1 partition scheme
       sum = spare # 1
@@ -239,7 +240,7 @@ def autopartition(disks, parts):
           fstype = '--fstype=xfs'
         else:
           fstype = '--fstype=ext4'
-        print "# key, value, fstype:", key, value, fstype
+        print("# key, value, fstype:", key, value, fstype)
         if key=='vg':
           vg = value
           # calculate pv size
@@ -255,30 +256,30 @@ def autopartition(disks, parts):
           # add pv
           # --grow disabled in F14 for raid partitions :-(
           #raid.add_vg(vg, "%d --grow" % s)
-          print "# disk size: %d-%d" % (disksize(*disks), sum)
+          print("# disk size: %d-%d" % (disksize(*disks), sum))
           raid.add_vg(vg, "%d" % (disksize(*disks)-sum))
         elif key=='biosboot':
           biosboot = size(value)
         elif key=='root':
           initdisks(disks)
           if biosboot>0:
-            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                   % (disk0, biosboot)
-            print "part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
-                   % (disk1, biosboot)
+            print("part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                   % (disk0, biosboot))
+            print("part biosboot --fstype=biosboot --ondisk=%s --size=%d" \
+                   % (disk1, biosboot))
             sum += biosboot
           s = size(value, disks, sum)
           raid.add_part("/", s, fstype)
           sum += s
         elif key in part_names:
           if vg:
-            print "logvol %s --vgname=%s --size=%s --name=%s %s" \
-                  % (part_names[key], vg, size(value), key, fstype)
+            print("logvol %s --vgname=%s --size=%s --name=%s %s" \
+                  % (part_names[key], vg, size(value), key, fstype))
           else:
             s = size(value, disks, sum)
             raid.add_part(part_names[key], s, fstype)
             sum += s
-        print "# sum=%d kB" % sum
+        print("# sum=%d kB" % sum)
 
 class repocfg_class:
   fc = dict(
@@ -325,14 +326,14 @@ class repocfg_class:
   def repo_update(self, distro, version, arch):
       for repo in self.get(distro):
         if repo.startswith("url") and self.cmd_line_repo:
-          print "url --url=%s" % self.cmd_line_repo
+          print("url --url=%s" % self.cmd_line_repo)
         else:
-          print repo % dict(
+          print(repo % dict(
                   mirror="http://ftp.upjs.sk/pub",
                   dir="releases",
                   ver=version,
                   arch=arch
-                )
+                ))
   def geturl(self, url):
       if "://" not in url:
         url = os.path.join(os.path.dirname(cmd_line['ks']), url)
@@ -346,15 +347,15 @@ class repocfg_class:
       group_packages = dict(
         desktop = 'desktop.pkgs'
       )
-      print "%packages --ignoremissing"
-      print "\n".join(distro_packages.get(distro))
+      print("%packages --ignoremissing")
+      print("\n".join(distro_packages.get(distro)))
       if self.cmd_line_packages:
         for pkg in self.cmd_line_packages.split(','):
           if pkg in group_packages:
-            print self.geturl(group_packages[pkg])
+            print(self.geturl(group_packages[pkg]))
           else:
-            print pkg
-      print "%end"
+            print(pkg)
+      print("%end")
 
 def lang(lang):
     if not lang:
@@ -368,7 +369,7 @@ def lang(lang):
       lang = langs[lang]
     if "." not in lang:
       lang += ".UTF-8"
-    print "lang", lang
+    print("lang", lang)
 
 def url_get(src, dst=None):
     if cmd_line.get('config').startswith('https://'):
@@ -398,12 +399,12 @@ def url_get(src, dst=None):
     return script
 
 if "text" in cmd_line:
-  print "text"
+  print("text")
 if "passwd" in cmd_line:
   if cmd_line["passwd"].startswith("$"):
-    print "rootpw --iscrypted %s" % cmd_line["passwd"]
+    print("rootpw --iscrypted %s" % cmd_line["passwd"])
   else:
-    print "rootpw %s" % cmd_line["passwd"]
+    print("rootpw %s" % cmd_line["passwd"])
 autopartition(
   cmd_line.get('disk') or cmd_line.get('disks'),
   cmd_line.get('part')
@@ -421,6 +422,7 @@ if 'config' in cmd_line:
 %end
 
 %post --nochroot --interpreter /usr/bin/python
+from __future__ import print_function
 import sys, os, re
 
 chroot = '/mnt/sysimage'
