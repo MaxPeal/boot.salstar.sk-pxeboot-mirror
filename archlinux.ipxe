@@ -1,11 +1,6 @@
 #!ipxe
 
-menu ArchLinux
-item --key g ipxe ArchLinux Graphical Menu
-item --key t ipxe_text ArchLinux Text Menu
-choose ver || exit
-
 imgfree
 imgtrust --allow
-chain http://releng.archlinux.org/pxeboot/${ver}.pxe
+chain https://www.archlinux.org/static/netboot/ipxe.pxe
 exit
