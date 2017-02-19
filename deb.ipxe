@@ -34,6 +34,7 @@ set os Ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
+item --key y yakkety ${os} 16.10 Yakkety Yak  [y]
 item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
 item --key p precise ${os} 12.04 LTS Precise Pangolin [p]
