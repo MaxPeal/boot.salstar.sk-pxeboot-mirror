@@ -3,6 +3,7 @@
 menu Predefined systems
 item --key f centos Fedora 21 kickstart vnc ttyS0 [f]
 item --key c centos CentOS 7 kickstart vnc ttyS0 [c]
+item --key 6 centos6 CentOS 6 kickstart vnc ttyS0 [6]
 item --gap
 item --gap WARNING! Systems below this line can kill your current installation!
 item --gap WARNING! Use with caution!
@@ -27,6 +28,15 @@ exit
 :predef_centos
 set menu centos
 set ver 7
+set bt ks
+set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit
+
+:predef_centos6
+set menu centos
+set ver 6
 set bt ks
 set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig

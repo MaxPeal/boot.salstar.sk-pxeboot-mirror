@@ -1,9 +1,25 @@
 #!ipxe
 
+set os FreeNAS
 set project freenas
-set ver 8.3.0
-iseq ${bits} 64 && set fnarch x64 || set fnarch x86
-set iso FreeNAS-${ver}/RELEASE/${fnarch}/FreeNAS-${ver}-RELEASE-${fnarch}.iso
-set sfboot memdisk
-imgverify sourceforge.ipxe ${sigs}sourceforge.ipxe.sig
-chain sourceforge.ipxe
+
+menu FreeNAS
+item --key c Corral ${os} Corral [c]
+item --key 9 9.10 ${os} 9.10 [9]
+choose ver
+
+iseq ${ver} Corral && goto corral ||
+menu FreeNAS release
+item --key 2 2-U2 FreeNAS ${ver}.2-U2
+choose rel
+
+set iso ${ver}/STABLE/latest/x86/${os}-${ver}.${rel}.iso
+goto bootnas
+
+:corral
+set iso ${ver}/RELEASE/x64/${os}-${ver}-RELEASE.iso
+
+:bootnas
+kernel ${url}memdisk iso raw ${params}
+initrd https://download.freenas.org/${iso}
+boot
