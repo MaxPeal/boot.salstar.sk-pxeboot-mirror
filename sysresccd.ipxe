@@ -3,7 +3,7 @@
 # This doesn't really works. This ISO is not compatible with memdisk. :-(
 
 set project systemrescuecd
-set ver 4.6.0
+set ver 5.0.0
 set iso sysresccd-x86/${ver}/systemrescuecd-x86-${ver}.iso
 set isourl http://sourceforge.net/projects/${project}/files/${iso}/download
 #set sfboot sanboot

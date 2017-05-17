@@ -232,8 +232,8 @@ goto params_menu
 
 :params_network
 menu Static network configuration
-item --key f fedora Fedora 17+ style (dracut options) [f]
-item --key c centos CentOS style [c]
+item --key f fedora Fedora/CentOS 7 style (dracut options) [f]
+item --key c centos CentOS 5/6 style [c]
 choose netos || goto params_menu
 iseq ${netos} fedora && set params ${params} ip=${ip}::${gateway}:${netmask}:${ip}::none nameserver=${dns} ||
 iseq ${netos} centos && set params ${params} ip=${ip} gateway=${gateway} netmask=${netmask} dns=${dns} ||

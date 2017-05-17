@@ -42,8 +42,8 @@ item 5 ${os} ${ver_major}.5
 item 4 ${os} ${ver_major}.4
 item 3 ${os} ${ver_major}.3
 item 2 ${os} ${ver_major}.2
-item 1 ${os} ${ver_major}.1
-item --default 0 ${os} ${ver_major}.0
+item --default 1 ${os} ${ver_major}.1
+item 0 ${os} ${ver_major}.0
 item other ${os} Choose other version
 choose ver_minor || exit 0
 

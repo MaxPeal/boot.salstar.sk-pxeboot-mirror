@@ -2,15 +2,11 @@
 
 set os Clonezilla
 menu ${os} version
+item 2.5.0-25 ${os} 2.5.0-25
 item 2.4.7-8 ${os} 2.4.7-8
 item 2.3.2-22 ${os} 2.3.2-22
 item 2.2.4-12 ${os} 2.2.4-12
-item 2.2.3-25 ${os} 2.2.3-25
-item 2.2.3-10 ${os} 2.2.3-10
-item 2.2.2-32 ${os} 2.2.2-32
 item 2.1.2-43 ${os} 2.1.2-43
-item 2.1.2-20 ${os} 2.1.2-20
-item 2.1.1-25 ${os} 2.1.1-25
 item other ${os} Choose other version
 choose ver || exit 0
 
