@@ -137,12 +137,18 @@ item --key r rescue Rescue [r]
 item --key s standard Standard [s]
 choose desktop || goto deb_exit
 
-#nslookup host cdimage.debian.org
-#set url http://${host}/debian-cd/current-live/${arch_a}/webboot
-nslookup host live.debian.net
-set url http://${host}/cdimage/release/${ver_alias}/${arch_a}/web
-iseq ${ver_alias} stable && set ver_number 7.6.0 ||
-iseq ${ver_alias} oldstable && set ver_number 6.0.10 ||
+nslookup host cdimage.debian.org
+set url http://${host}/debian-cd/current-live/${arch_a}/webboot
+#iseq ${ver_alias} stable && set ver_number 7.6.0 ||
+#iseq ${ver_alias} oldstable && set ver_number 6.0.10 ||
+# only latest version available :-(
+set ver_number 8.8.0
+echo Check debian-live version on this URL:
+echo ${}  ${url}
+echo -n Enter version: ${}
+read ver_number
+#nslookup host live.debian.net
+#set url http://${host}/cdimage/release/${ver_alias}/${arch_a}/web
 set deblive ${url}/debian-live-${ver_number}-${arch_a}-${desktop}
 imgfree
 imgtrust --allow
