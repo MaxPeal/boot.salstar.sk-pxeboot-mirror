@@ -1,16 +1,16 @@
 #!ipxe
 
 menu Predefined systems
-item --key f centos Fedora 21 kickstart vnc ttyS0 [f]
+item --key f fedora Fedora 25 kickstart vnc ttyS0 [f]
 item --key c centos CentOS 7 kickstart vnc ttyS0 [c]
 item --key 6 centos6 CentOS 6 kickstart vnc ttyS0 [6]
 item --gap
 item --gap WARNING! Systems below this line can kill your current installation!
 item --gap WARNING! Use with caution!
 item --gap
-item --key D fedora_devel Fedora 21 development auto KMS [D]
-item --key M fedora_devel_nomodeset Fedora 21 development auto text nomodeset [M]
-item --key F fedora_auto Fedora 21 auto [F]
+item --key D fedora_devel Fedora development auto KMS [D]
+item --key M fedora_devel_nomodeset Fedora development auto text nomodeset [M]
+item --key F fedora_auto Fedora 25 auto [F]
 item --key C centos_auto CentOS 7 auto [C]
 item --key T test Test config [T]
 choose system || exit
@@ -18,7 +18,8 @@ goto predef_${system}
 
 :predef_fedora
 set menu fedora
-set ver 21
+set ver 25
+set fed_product Server
 set bt ks
 set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -45,7 +46,8 @@ exit
 
 :predef_fedora_auto
 set menu fedora
-set ver 21
+set ver 25
+set fed_product Server
 set bt ks
 set params ${params} part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -64,6 +66,7 @@ exit
 :predef_fedora_devel
 set menu fedora
 set ver development
+set fed_product Server
 set bt ks
 set params ${params} part=root=3,swap=1 disks=vda zerombr
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
@@ -74,6 +77,7 @@ exit
 set menu fedora
 #set ver development
 set ver alt_stage
+set fed_product Server
 set bt ks
 set params ${params} text nomodeset part=root=3,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig

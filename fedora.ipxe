@@ -180,8 +180,8 @@ isset ${bt} || choose bt || goto main_menu
 echo ${cls}
 iseq ${bt} ks && set params ${bootdev} ks=${osks} ${params} ||
 iseq ${bt} desktop && set params ${bootdev} ks=${ksurl}/pc pkgs=desktop ${params} ||
-iseq ${bt} rescue && set params rescue ${params} ||
-iseq ${bt} remote && set params ${bootdev} ks=${ksurl}rescue ${params} ||
+iseq ${bt} rescue && set params rescue ks=${ksurl}rescue ${params} ||
+iseq ${bt} remote && set params ${bootdev} ks=${ksurl}rescue-sshd ${params} ||
 goto bootos_${bt} ||
 goto bootos_images
 
