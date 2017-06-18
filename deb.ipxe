@@ -15,10 +15,11 @@ iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.o
 set os Debian
 menu ${os} ${arch_a}
 # https://wiki.debian.org/DebianReleases
-item --key s jessie ${os} 8 jessie (stable) [s]
-item --key o wheezy ${os} 7 wheezy (oldstable) [o]
-#item --key q squeeze ${os} 6.0 squeeze (oldstable) [q]
-item --key t stretch ${os} stretch (testing) [t]
+item --key s stretch ${os} 9 stretch (stable) [s]
+item --key 8 jessie ${os} 8 jessie (stable) [8]
+item --key 7 wheezy ${os} 7 wheezy (oldstable) [7]
+#item --key 6 squeeze ${os} 6.0 squeeze (oldstable) [6]
+item --key t buster ${os} buster (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
 set ver_alias ${ver}
@@ -114,8 +115,8 @@ imgfree
 imgtrust --allow
 echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
 # fallback to non-updates dir
-kernel ${debmirror}${diru}linux ${install_params} ${desktop_param} -- quiet ${params} || kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params}
-initrd ${debmirror}${diru}initrd.gz || initrd ${debmirror}${dir}initrd.gz
+kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params} || kernel ${debmirror}${diru}linux ${install_params} ${desktop_param} -- quiet ${params}
+initrd ${debmirror}${dir}initrd.gz || initrd ${debmirror}${diru}initrd.gz
 boot
 
 :deb_pxe
