@@ -4,16 +4,19 @@ set os FreeNAS
 set project freenas
 
 menu FreeNAS
-item --key c Corral ${os} Corral [c]
+item --key 1 11 ${os} 11 [1]
 item --key 9 9.10 ${os} 9.10 [9]
+item --key c Corral ${os} Corral [c]
 choose ver
 
 iseq ${ver} Corral && goto corral ||
 menu FreeNAS release
-item --key 2 2-U2 FreeNAS ${ver}.2-U2
+item --key 0 0 FreeNAS ${ver}.0 [0]
+item --key 2 2-U2 FreeNAS ${ver}.2-U2 [2]
 choose rel
 
-set iso ${ver}/STABLE/latest/x86/${os}-${ver}.${rel}.iso
+#set iso ${ver}/STABLE/latest/x86/${os}-${ver}.${rel}.iso
+set iso ${ver}/RELEASE/x64/${os}-${ver}.${rel}-RELEASE.iso
 goto bootnas
 
 :corral
@@ -21,5 +24,5 @@ set iso ${ver}/RELEASE/x64/${os}-${ver}-RELEASE.iso
 
 :bootnas
 kernel ${url}memdisk iso raw ${params}
-initrd https://download.freenas.org/${iso}
+initrd http://download.freenas.org/${iso}
 boot
