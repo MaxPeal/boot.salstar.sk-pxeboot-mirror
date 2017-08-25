@@ -3,9 +3,10 @@
 # Chainload boot scripts for various networks
 
 menu Please select
+item --key x netbootxyz boot.netboot.xyz [x]
+item --key f fedora boot.fedoraproject.org [f]
 item --key c cloudboot cloudboot.nchc.org.tw/cloudboot [c]
 item --key n netbootme netboot.me [n]
-item --key f fedora boot.fedoraproject.org [f]
 choose ver || exit 0
 goto chained_${ver}
 exit 0
@@ -27,6 +28,12 @@ exit
 echo ${cls}
 imgverify boot.fedoraproject.org.ipxe ${sigs}boot.fedoraproject.org.ipxe.sig
 chain boot.fedoraproject.org.ipxe
+exit
+
+# boot.netboot.xyz
+:chained_netbootxyz
+imgtrust --allow
+chain https://boot.netboot.xyz/
 exit
 
 # boot.kernel.org - currently not working

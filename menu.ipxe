@@ -3,6 +3,7 @@
 :start
 set url https://boot.salstar.sk/
 set default_mirror http://ftp.upjs.sk${mirror_port}/pub
+:start2
 set mirror ${default_mirror}
 set sigs ${url}sigs/
 
@@ -69,6 +70,7 @@ item --key a changebits ${space} Architecture: ${arch} (${bits}bit) [a]
 item --key 0x09 params_menu ${space} Kernel parameters: ${params}
 item --gap Tools:
 item --key t tools ${space} Hardware tools [t]
+isset ${extended_menu} && item --key D nodns ${space} Disable DNS, use IPv4 address only. [D] ||
 item --key . predefined ${space} Predefined systems menu [.]
 item --key , ipxecon ${space} Select iPXE console [,]
 item --key s shell ${space} iPXE shell [s]
@@ -93,6 +95,13 @@ exit 0
 echo Reloading menu.ipxe ...
 imgverify menu.ipxe ${sigs}menu.ipxe || goto error
 chain menu.ipxe
+
+:nodns
+echo Setting all URLs to use IPv4 only (no DNS) ...
+set url http://158.197.16.66/boot/
+set default_mirror http://158.197.16.70${mirror_port}/pub
+clear menu
+goto start2
 
 :pxelinux
 echo Loading pxelinux ...

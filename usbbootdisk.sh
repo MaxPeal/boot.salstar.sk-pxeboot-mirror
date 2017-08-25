@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=24
+FEDORA=26
 FEDORA_PREV=$((FEDORA-1))
 PRODUCT=Server
 HDT=0.5.2
@@ -58,6 +58,8 @@ addos() {
   done
   # update root=live: path
   sed -i "s|root=live:CDLABEL=[^ ]*|repo=$URL|" isolinux.cfg
+  # update syslinux files
+  cp -f $DIR/*.c32 ./
   popd
 }
 
@@ -198,16 +200,16 @@ if [ $SIZE -gt 1 ]; then
   addos fedora$FEDORA x86_64 $RELEASES/$FEDORA/$PRODUCT/x86_64/os
   cfgos fedora$FEDORA x86_64 "^Fedora $FEDORA"
 
-  addos fedora$FEDORA i386 $RELEASES/$FEDORA/$PRODUCT/i386/os
-  cfgos fedora$FEDORA i386 "Fedora $FEDORA"
+  #addos fedora$FEDORA i386 $RELEASES/$FEDORA/$PRODUCT/i386/os
+  #cfgos fedora$FEDORA i386 "Fedora $FEDORA"
 fi
 
 if [ $SIZE -gt 3 ]; then
   addos fedora$FEDORA_PREV x86_64 $RELEASES/$FEDORA_PREV/$PRODUCT/x86_64/os
   cfgos fedora$FEDORA_PREV x86_64 "Fedora $FEDORA_PREV"
 
-  addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/$PRODUCT/i386/os
-  cfgos fedora$FEDORA_PREV i386 "Fedora $FEDORA_PREV"
+  #addos fedora$FEDORA_PREV i386 $RELEASES/$FEDORA_PREV/$PRODUCT/i386/os
+  #cfgos fedora$FEDORA_PREV i386 "Fedora $FEDORA_PREV"
 fi
 
 RELEASES=$MIRROR/centos

@@ -37,7 +37,7 @@ timezone --utc Europe/Bratislava
 # Install OS instead of upgrade
 install
 # Services
-services --disabled=netfs --enabled=network
+#services --disabled=netfs --enabled=network
 # iSCSI
 #ignoredisk --interactive
 #iscsiname iqn.2012-09.test
@@ -60,11 +60,24 @@ parted
 -sendmail
 %end
 
-%pre --interpreter /usr/bin/python
+%pre --interpreter /bin/bash
 # SAL's fedora/centos kickstart script
 
+# Fedora 25 has only python3
+if [ -x /usr/bin/python ]; then
+  PYTHON=/usr/bin/python
+else
+  PYTHON=/usr/bin/python3
+fi
+
+$PYTHON << PYTHON_EOF
+
 from __future__ import print_function
-import sys, os, re, socket, urllib2
+import sys, os, re, socket
+if sys.version_info[0]>2:
+  from urllib.request import urlopen, HTTPError
+else:
+  from urllib2 import urlopen, HTTPError
 
 part_names = dict(
   swap='swap',
@@ -337,7 +350,7 @@ class repocfg_class:
   def geturl(self, url):
       if "://" not in url:
         url = os.path.join(os.path.dirname(cmd_line['ks']), url)
-      #return urllib2.urlopen(url).read()
+      #return urlopen(url).read()
       return '%include ' + url
   def package_update(self, distro, version):
       distro_packages = dict(
@@ -381,21 +394,21 @@ def url_get(src, dst=None):
       try:
         c.perform()
         c.close()
-      except pycurl.error, err:
+      except pycurl.error as err:
         sys.stderr.write('Download error: %s [%s]' % (err[1], src))
         return ''
       script = ''.join(content)
     else:
       try:
-        script = urllib2.urlopen(
+        script = urlopen(
           os.path.join(cmd_line.get('config'), src)
         ).read()
-      except urllib2.HTTPError, err:
+      except HTTPError as err:
         sys.stderr.write('Download error: %s [%s]' % (err, src))
         return ''
     if dst:
       open(dst, 'wt').write(script)
-      os.chmod(dst, 0755)
+      os.chmod(dst, 0o755)
     return script
 
 if "text" in cmd_line:
@@ -419,9 +432,20 @@ if 'config' in cmd_line:
   if url_get('pre.sh', '/tmp/salstar-custom-pre.sh'):
     os.system('/tmp/salstar-custom-pre.sh')
   url_get('post.sh', '/tmp/salstar-custom-post.sh')
+PYTHON_EOF
 %end
 
-%post --nochroot --interpreter /usr/bin/python
+%post --nochroot --interpreter /bin/bash
+
+# Fedora 25 has only python3
+if [ -x /usr/bin/python ]; then
+  PYTHON=/usr/bin/python
+else
+  PYTHON=/usr/bin/python3
+fi
+
+$PYTHON << PYTHON_EOF
+
 from __future__ import print_function
 import sys, os, re
 
@@ -502,6 +526,8 @@ if os.path.exists('/tmp/salstar-custom-post.py'):
 if os.path.exists('/tmp/salstar-custom-post.sh'):
   os.system('/tmp/salstar-custom-post.sh')
 os.system('sync')
+
+PYTHON_EOF
 %end
 
 %include /tmp/salstar.ks

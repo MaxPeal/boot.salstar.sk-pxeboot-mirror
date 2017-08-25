@@ -3,6 +3,7 @@
 set os Mageia
 
 menu ${os}
+item 6 ${os} ${arch5} 6
 item 5 ${os} ${arch5} 5
 item 4 ${os} ${arch5} 4
 item 3 ${os} ${arch5} 3
