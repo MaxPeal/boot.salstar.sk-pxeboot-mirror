@@ -3,11 +3,15 @@
 # TinyCoreLinux
 # http://distro.ibiblio.org/tinycorelinux/downloads.html
 
-iseq ${mirrpr} ${default_mirror} && set mirror http://distro.ibiblio.org/tinycorelinux/ ||
+#iseq ${mirror} ${default_mirror} &&
+set tc_mirror http://distro.ibiblio.org/tinycorelinux/ ||
 
 :tinycore_menu
 set os TinyCore
 menu ${os} version
+item 8.x ${os} 8.x
+item 7.x ${os} 7.x
+item 6.x ${os} 6.x
 item 5.x ${os} 5.x
 item 4.x ${os} 4.x
 item other ${os} Choose other version
@@ -33,5 +37,5 @@ echo ${cls}
 imgfree
 kernel ${url}memdisk iso raw ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}${dir}/${vertype}-current.iso
+initrd ${tc_mirror}${dir}/${vertype}-current.iso
 boot
