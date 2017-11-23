@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=26
+FEDORA=27
 FEDORA_PREV=$((FEDORA-1))
 PRODUCT=Server
 HDT=0.5.2
@@ -54,7 +54,7 @@ addos() {
   mkdir -p $DIR/$NAME/$ARCH
   pushd $DIR/$NAME/$ARCH/
   for i in initrd.img vmlinuz isolinux.bin isolinux.cfg boot.msg memtest splash.png vesamenu.c32; do
-    wget -c $URL/isolinux/$i || echo "File missing: $i"
+    wget -c --tries=2 $URL/isolinux/$i || echo "File missing: $i"
   done
   # update root=live: path
   sed -i "s|root=live:CDLABEL=[^ ]*|repo=$URL|" isolinux.cfg
