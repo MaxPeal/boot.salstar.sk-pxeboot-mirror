@@ -18,8 +18,6 @@ set cls:hex 1b:5b:4a  # ANSI clear screen sequence - "^[[J"
 set cls ${cls:string}
 :ignore_cls
 
-set memtest_version 4.20
-
 isset ${admin_ip} || set admin_ip 158.197.240.41
 isset ${arch} && goto skip_arch_detect ||
 cpuid --ext 29 && set arch x86_64 || set arch i386

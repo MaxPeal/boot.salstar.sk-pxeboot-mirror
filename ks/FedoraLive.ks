@@ -54,7 +54,7 @@ done
 sed -i~ -f - /etc/rc.d/init.d/livesys << EOF
   /^livedir=/aLIVEUSER=liveuser\n\
 LIVENAME="Live System User"
-  /^# add fedora user/a[\ -r\ /home/.rcinit\ ]\ &&\ .\ /home/.rcinit
+  /^# add liveuser user/a[\ -r\ /home/.rcinit\ ]\ &&\ .\ /home/.rcinit
   s/\([^~]\)liveuser/\1\$LIVEUSER/g
   s/Live System User/\$LIVENAME/
 EOF

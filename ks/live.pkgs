@@ -65,8 +65,8 @@ fuse-sshfs
 @dns-server
 
 # SAL's packages
+gnome-terminal
 firefox
-roxterm
 pygame
 lshw
 devilspie2

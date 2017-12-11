@@ -5,8 +5,9 @@ menu Tools
 item --key p lspci ${space} List PCI devices [p]
 item --key n netinfo ${space} Network card info [n]
 item --key h hdt ${space} Hardware detection tool [h]
-item --key m memtest ${space} MemTest86+ ${memtest_version} [m]
-item --key M memtest5 ${space} MemTest86+ 5.01 [M]
+item --key m memtest5 ${space} MemTest86+ 5.01 [m]
+item memtest4 ${space} MemTest86+ ${memtest_version}
+item memtest7 ${space} MemTest86 7.4
 item --key a boothda ${space} Boot local HDD0 (hda) [a]
 item --key b boothdb ${space} Boot local HDD1 (hdb) [b]
 item --key s shell ${space} iPXE shell [s]
@@ -56,10 +57,13 @@ imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
 goto tools_menu
 
-:tool_memtest
-#kernel ${url}images/memtest
-#imgverify memtest ${sigs}images/memtest.sig
-#boot
+:tool_memtest5
+kernel ${url}images/memtest5.lkrn
+imgverify memtest5.lkrn ${sigs}images/memtest5.lkrn.sig
+boot
+goto tools_menu
+
+:tool_memtest4
 imgverify ${url}images/memtest.0 ${sigs}images/memtest.0.sig
 chain memtest.0 ${params} && goto main_menu ||
 echo MEMORY ERROR DETECTED! ${errno}
@@ -67,9 +71,17 @@ echo Press any key to continue ...
 read a
 goto tools_menu
 
-:tool_memtest5
-kernel ${url}images/memtest5.lkrn
-imgverify memtest5.lkrn ${sigs}images/memtest5.lkrn.sig
+:tool_memtest7
+kernel ${url}memdisk iso raw ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${url}images/Memtest86-7.4.iso
+imgverify Memtest86-7.4.iso ${sigs}images/Memtest86-7.4.iso.sig
+boot
+goto tools_menu
+
+:tool_memtest432
+kernel ${url}images/memtest432.lkrn
+imgverify memtest432.lkrn ${sigs}images/memtest432.lkrn.sig
 boot
 goto tools_menu
 
