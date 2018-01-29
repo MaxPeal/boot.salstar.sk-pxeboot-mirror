@@ -57,19 +57,26 @@ imgverify pxelinux.0 ${sigs}pxelinux.0.sig
 boot
 goto tools_menu
 
-:tool_memtest5
-kernel ${url}images/memtest5.lkrn
-imgverify memtest5.lkrn ${sigs}images/memtest5.lkrn.sig
-boot
+:tool_memtest
+# boot memtest
+imgverify ${url}images/${memtest} ${sigs}images/${memtest}.sig
+set errno 0 # reset
+chain ${memtest} ${params} && goto main_menu ||
+iseq ${errno} 0 && goto main_menu ||
+echo MEMORY ERROR DETECTED! ${errno}
+prompt Press any key to continue ...
 goto tools_menu
 
+:tool_memtest5
+# Memtest 5.01 vmlinuz has problems to boot on real machine.
+# See http://ipxe.org/err/460381 for more information.
+# Using memtest from boot.ipxe.org.
+set memtest memtest501.0
+goto tool_memtest
+
 :tool_memtest4
-imgverify ${url}images/memtest.0 ${sigs}images/memtest.0.sig
-chain memtest.0 ${params} && goto main_menu ||
-echo MEMORY ERROR DETECTED! ${errno}
-echo Press any key to continue ...
-read a
-goto tools_menu
+set memtest memtest.0
+goto tool_memtest
 
 :tool_memtest7
 kernel ${url}memdisk iso raw ${params}
@@ -80,10 +87,8 @@ boot
 goto tools_menu
 
 :tool_memtest432
-kernel ${url}images/memtest432.lkrn
-imgverify memtest432.lkrn ${sigs}images/memtest432.lkrn.sig
-boot
-goto tools_menu
+set memtest memtest432.lkrn
+goto tool_memtest
 
 :tool_lspci
 imgverify lspci.ipxe ${sigs}lspci.ipxe.sig
@@ -92,10 +97,10 @@ goto tools_menu
 
 :tool_boothda
 sanboot --no-describe --drive 0x80 ||
-read a
+read any_key
 goto tools_menu
 
 :tool_boothdb
 sanboot --no-describe --drive 0x81 ||
-read a
+read any_key
 goto tools_menu

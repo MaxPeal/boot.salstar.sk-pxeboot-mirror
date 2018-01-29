@@ -7,6 +7,7 @@ item --key x netbootxyz boot.netboot.xyz [x]
 item --key f fedora boot.fedoraproject.org [f]
 item --key c cloudboot cloudboot.nchc.org.tw/cloudboot [c]
 item --key n netbootme netboot.me [n]
+item --key i bootipxeorg boot.ipxe.org [i]
 choose ver || exit 0
 goto chained_${ver}
 exit 0
@@ -40,4 +41,10 @@ exit
 :chained_kernel
 imgtrust --allow
 chain http://boot.kernel.org/
+exit
+
+# boot.ipxe.org
+:chained_bootipxeorg
+imgtrust --allow
+chain http://boot.ipxe.org/ipxe.lkrn
 exit
