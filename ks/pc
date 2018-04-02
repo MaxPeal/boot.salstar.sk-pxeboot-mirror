@@ -461,7 +461,7 @@ gpgcheck=1
 enabled=1
 metadata_expire=1
 
-[salstar.sk-test]
+[salstar.sk-testing]
 name=Salstar.sk $releasever - $basearch - Testing
 mirrorlist=http://www.salstar.sk/download/mirrors/salstar%(DISTRO)s-testing
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY

@@ -1,6 +1,7 @@
 #!ipxe
 
 menu openSUSE ${arch}
+item leap/42.3 openSUSE Leap 42.3
 item leap/42.2 openSUSE Leap 42.2
 item leap/42.1 openSUSE Leap 42.1
 item 13.2 openSUSE 13.2

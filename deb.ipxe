@@ -17,8 +17,10 @@ menu ${os} ${arch_a}
 # https://wiki.debian.org/DebianReleases
 item --key s stretch ${os} 9 stretch (stable) [s]
 item --key 8 jessie ${os} 8 jessie (stable) [8]
+item --gap End of life (unsupported)
 item --key 7 wheezy ${os} 7 wheezy (oldstable) [7]
 #item --key 6 squeeze ${os} 6.0 squeeze (oldstable) [6]
+item --gap Testing and development
 item --key t buster ${os} buster (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
@@ -35,18 +37,18 @@ set os Ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
-item --key a artful ${os} 17.19 Artful Aardvark [a]
-item --key y yakkety ${os} 16.10 Yakkety Yak [y]
+item --key a artful ${os} 17.10 Artful Aardvark [a]
 item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
-item --key p precise ${os} 12.04 LTS Precise Pangolin [p]
 item --gap End of life (unsupported)
+item yakkety ${os} 16.10 Yakkety Yak
 item wily ${os} 15.10 Wily Werewolf
 item vivid ${os} 15.04 Vivid Vervet
 item utopic ${os} 14.10 Utopic Unicorn
 item saucy ${os} 13.10 Saucy Salamander
 item raring ${os} 13.04 Raring Ringtail
 item quantal ${os} 12.10 Quantal Quetzal
+item precise ${os} 12.04 Precise Pangolin
 item oneiric ${os} 11.10 Oneiric Ocelot
 item natty ${os} 11.04 Natty Narwhal
 # lucid's pxelinux scripts are not compatible :-(
