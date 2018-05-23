@@ -298,14 +298,14 @@ class repocfg_class:
   fc = dict(
     base = [
       'url --url=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Fedora/%(arch)s/os/',
-      'repo --name=Updates --baseurl=%(mirror)s/fedora/linux/updates/%(ver)d/%(arch)s/'
+      'repo --name=Updates --baseurl=%(mirror)s/fedora/linux/updates/%(ver)d/Everything/%(arch)s/'
     ],
     other = [
       'repo --name=Everything --baseurl=%(mirror)s/fedora/linux/%(dir)s/%(ver)d/Everything/%(arch)s/os/',
       'repo --name=Salstar --baseurl=http://www.salstar.sk/pub/fedora/%(ver)d/%(arch)s/'
     ],
     testing = [
-      'repo --name=Updates-testing --baseurl=%(mirror)s/fedora/linux/updates/testing/%(ver)d/%(arch)s/'
+      'repo --name=Updates-testing --baseurl=%(mirror)s/fedora/linux/updates/testing/%(ver)d/Everything/%(arch)s/'
     ]
   )
   el = dict(

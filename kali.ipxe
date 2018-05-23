@@ -1,0 +1,19 @@
+#!ipxe
+
+# This does not really works. Testing only.
+
+set ver 2017.2
+
+set dir kali-${ver}/kali-linux-light-${ver}-amd64.iso
+iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
+set iso ${mirror}/${dir}
+
+echo ${iso}
+
+#sanboot ${iso} || echo Trying memdisk method.
+
+imgtrust --allow
+kernel ${url}memdisk iso raw ${params}
+imgverify memdisk ${sigs}memdisk.sig
+initrd ${iso}
+boot

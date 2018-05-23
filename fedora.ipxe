@@ -156,7 +156,6 @@ set os Scientific Linux
 menu ${os}
 item --key 7 7 ${os} 7 ${arch} [7]
 item --key 6 6 ${os} 6 ${arch} [6]
-item --key 5 5 ${os} 5 ${arch} [5]
 isset ${ver} || choose ver || goto main_menu
 set dir ${menu}/${ver}x/${arch}/os
 iseq ${ver} 5 && set dir ${menu}/${ver}x/${arch} ||
