@@ -12,8 +12,8 @@
 part / --size 8192 --fstype ext4
 
 # Fedora
-repo --name=fedora --mirrorlist=http://www.salstar.sk/download/mirrors/$basearch/fedora-$releasever?arch=$basearch
-repo --name=updates --mirrorlist=http://www.salstar.sk/download/mirrors/updates-released-$releasever?arch=$basearch
+#repo --name=fedora --mirrorlist=https://www.salstar.sk/download/mirrors/$basearch/fedora-$releasever?arch=$basearch
+#repo --name=updates --mirrorlist=https://www.salstar.sk/download/mirrors/updates-released-$releasever?arch=$basearch
 #repo --name=updates-testing --baseurl=http://ftp.upjs.sk/pub/fedora/linux/updates/testing/$releasever/$basearch/
 #repo --name=rawhide --mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=rawhide&arch=$basearch
 
@@ -23,13 +23,14 @@ repo --name=rpmfusion-free --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?
 repo --name=rpmfusion-nonfree --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-$releasever&arch=$basearch
 #repo --name=rpmfusion-nonfree --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-$releasever?arch=$basearch
 # rpmfusion updates
-#repo --name=rpmfusion-free-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=free-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-free-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-free-updates-released-$releasever?arch=$basearch
-#repo --name=rpmfusion-nonfree-updates --mirrorlist=http://mirrors.rpmfusion.org/mirrorlist?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
-repo --name=rpmfusion-nonfree-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-updates-released-$releasever?arch=$basearch
+repo --name=rpmfusion-free-updates --mirrorlist=https://mirrors.rpmfusion.org/metalink?repo=free-fedora-updates-released-$releasever&arch=$basearch
+#repo --name=rpmfusion-free-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-free-updates-released-$releasever?arch=$basearch
+repo --name=rpmfusion-nonfree-updates --mirrorlist=https://mirrors.rpmfusion.org/metalink?repo=nonfree-fedora-updates-released-$releasever&arch=$basearch
+#repo --name=rpmfusion-nonfree-updates --mirrorlist=http://www.salstar.sk/download/mirrors/rpmfusion-nonfree-updates-released-$releasever?arch=$basearch
 
 # salstar
-repo --name=salstar --mirrorlist=http://www.salstar.sk/download/mirrors/salstar-fedora-$releasever?arch=$basearch
+#repo --name=salstar --mirrorlist=http://www.salstar.sk/download/mirrors/salstar-fedora-$releasever?arch=$basearch
+repo --name=salstar --baseurl=http://www.salstar.sk/pub/fedora/$releasever/$basearch
 
 # Slovak support
 lang sk_SK.UTF-8

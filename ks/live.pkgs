@@ -157,7 +157,6 @@ ipython
 youtube-dl
 python-imaging
 python-BeautifulSoup
-pywebkitgtk
 
 # Fedora 21
 NetworkManager-wifi
@@ -165,8 +164,8 @@ NetworkManager-bluetooth
 
 # Fedora 25
 # include libcrypt-nss to avoid conflits with automatically added libcrypt
--libcrypt
-libcrypt-nss
-#libcrypt-nss.i686
+#-libcrypt
+#libcrypt-nss
+##libcrypt-nss.i686
 
 %end
