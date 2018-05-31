@@ -51,7 +51,7 @@ set menu fedora
 set ver ${fedora_latest}
 set fed_product Server
 set bt ks
-set params ${params} part=root=3,swap=1
+set params ${params} part=root=6,swap=1
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 exit
