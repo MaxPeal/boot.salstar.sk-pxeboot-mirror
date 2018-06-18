@@ -3,7 +3,7 @@
 # Works with latest gparted testing release only.
 # Requires vmalloc=256MiB for 32bit versions.
 
-iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i686-pae
+iseq ${arch} x86_64 && set gp_arch amd64 || set gp_arch i686
 
 set os GParted
 menu Choose ${os}

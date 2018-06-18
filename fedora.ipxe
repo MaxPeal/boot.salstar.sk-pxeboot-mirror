@@ -9,7 +9,7 @@ goto ${menu} ||
 # OS
 :fedora
 set os Fedora
-set devel_ver 28
+set devel_ver 29
 menu Fedora
 item --gap Current (supported)
 item --key 8 28 ${os} 28 ${arch} [8]

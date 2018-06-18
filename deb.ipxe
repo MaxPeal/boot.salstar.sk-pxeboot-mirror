@@ -15,7 +15,8 @@ iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.o
 set os Debian
 menu ${os} ${arch_a}
 # https://wiki.debian.org/DebianReleases
-item --key s stretch ${os} 9 stretch (stable) [s]
+item --key 9 stretch ${os} 9 stretch (stable) [9]
+item --gap Long Term Support (LTS)
 item --key 8 jessie ${os} 8 jessie (stable) [8]
 item --gap End of life (unsupported)
 item --key 7 wheezy ${os} 7 wheezy (oldstable) [7]
