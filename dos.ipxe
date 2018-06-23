@@ -2,10 +2,9 @@
 
 :dos_menu
 menu FreeDOS
-item --key f fdubcd UBCD FreeDOS R1.44 (Based on NwDsk V3.40) [f]
-item --key u ubcd UBCD 5.1.1 - Ultimate boot CD [u]
-item --key i install FreeDOS 1.1 src (installation iso) [i]
-#item --key l live FreeDOS 1.1 Live [l]
+item --key f fdubcd UBCD FreeDOS R1.53 (Based on NwDsk V3.40) [f]
+item --key u ubcd UBCD 5.3.8 - Ultimate boot CD [u]
+item --key i install FreeDOS 1.2 src (installation iso) [i]
 item --key c custom_iso Boot custom CDROM ISO image [c]
 item --key d custom_img Boot custom FD/HDD image [d]
 #item --key x exit Exit to main menu [x]
@@ -18,21 +17,13 @@ exit 0
 
 :boot_dos_install
 set dir mirrors/images
+set iso FD12CD.iso
 imgfree
 kernel ${url}memdisk iso ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}/${dir}/fd11src.iso
-imgverify fd11src.iso ${sigs}${dir}/fd11src.iso.sig
-#sanboot ${mirror}/${dir}/fd11src.iso
-boot
-
-:boot_dos_live
-set dir mirrors/images
-imgfree
-kernel ${url}memdisk raw keeppxe ${params}
-imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}/${dir}/fd11live.img.zip
-imgverify fd11live.img.zip ${sigs}${dir}/fd11live.img.zip.sig
+initrd ${mirror}/${dir}/${iso}
+imgverify ${iso} ${sigs}${dir}/${iso}.sig
+#sanboot ${mirror}/${dir}/${iso}
 boot
 
 :boot_dos_custom_iso
@@ -57,25 +48,27 @@ boot
 
 :boot_dos_ubcd
 set dir mirrors/images
+set iso ubcd538.iso
 imgfree
 kernel ${url}memdisk iso keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}/${dir}/ubcd511.iso
-imgverify ubcd511.iso ${sigs}${dir}/ubcd511.iso.sig
-#sanboot ${mirror}/${dir}/ubcd511.iso
+initrd ${mirror}/${dir}/${iso}
+imgverify ${iso} ${sigs}${dir}/${iso}.sig
+#sanboot ${mirror}/${dir}/${iso}
 boot
 
 :boot_dos_fdubcd
 set dir mirrors/images
+set img fdubcd.img
 imgfree
-kernel ${url}memdisk iso raw keeppxe ${params}
+kernel ${url}memdisk raw keeppxe ${params}
 imgverify memdisk ${sigs}memdisk.sig
-initrd ${mirror}/${dir}/fdubcd.iso
-imgverify fdubcd.iso ${sigs}${dir}/fdubcd.iso.sig
+initrd ${mirror}/${dir}/${img}
+imgverify ${img} ${sigs}${dir}/${img}.sig
 boot
 #set url http://boot.salstar.sk/
 #echo HOOK
-#sanhook --no-describe ${mirror}/${dir}/fdubcd.iso
+#sanhook --no-describe ${mirror}/${dir}/${img}
 #echo BOOTING
 #sanboot
 #echo END
