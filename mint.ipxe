@@ -3,7 +3,7 @@
 # This does not really works. Testing only.
 # Linux Mint requires NFS to boot over ipxe. :-(
 
-set ver 18.3
+set ver 19
 set desktop cinnamon
 #set desktop mate
 
