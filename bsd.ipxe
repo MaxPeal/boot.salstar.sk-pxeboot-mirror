@@ -64,6 +64,7 @@ goto boot_bsd
 set os NetBSD
 menu ${os} ${arch_a}
 item 8.0 ${os} 8.0
+item 7.2 ${os} 7.2
 item 7.1 ${os} 7.1
 item 7.0 ${os} 7.0
 item 6.1.5 ${os} 6.1.5
