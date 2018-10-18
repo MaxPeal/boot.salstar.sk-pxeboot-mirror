@@ -39,8 +39,8 @@ item 8 ${os} ${ver_major}.8
 item 7 ${os} ${ver_major}.7
 item 6 ${os} ${ver_major}.6
 item 5 ${os} ${ver_major}.5
-item 4 ${os} ${ver_major}.4
-item --default 3 ${os} ${ver_major}.3
+item --default 4 ${os} ${ver_major}.4
+item 3 ${os} ${ver_major}.3
 item 2 ${os} ${ver_major}.2
 item 1 ${os} ${ver_major}.1
 item 0 ${os} ${ver_major}.0
