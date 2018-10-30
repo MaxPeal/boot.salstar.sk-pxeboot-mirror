@@ -2,11 +2,23 @@
 
 # This does not really works. Testing only.
 
-set ver 2017.2
+set dir http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/debian-installer/amd64
+imgtrust --allow
+kernel ${dir}/linux
+initrd ${dir}/initrd.gz
+boot
 
-set dir kali-${ver}/kali-linux-light-${ver}-amd64.iso
-iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
-set iso ${mirror}/${dir}
+#chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/pxelinux.0
+chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/debian-installer/amd64/pxelinux.0
+
+set ver 2018.4
+
+#set dir kali-${ver}/kali-linux-light-${ver}-amd64.iso
+#iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
+#set iso ${mirror}/${dir}
+
+#set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
+set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/gtk/mini.iso
 
 echo ${iso}
 
