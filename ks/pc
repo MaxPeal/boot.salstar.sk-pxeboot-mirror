@@ -455,27 +455,19 @@ chroot = '/mnt/sysimage'
 
 repo_conf = '''\
 [salstar.sk]
-name=Salstar.sk $releasever - $basearch - Base
-#baseurl=http://ftp.upjs.sk/pub/users/sal/Fedora/$releasever/
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar%(DISTRO)s
+name=Salstar.sk \$releasever - \$basearch - Base
+#baseurl=http://ftp.upjs.sk/pub/users/sal/Fedora/\$releasever/
+mirrorlist=http://www.salstar.sk/download/mm/%(DISTRO)s/salstar/\$releasever/\$basearch
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=1
 metadata_expire=1
 
 [salstar.sk-testing]
-name=Salstar.sk $releasever - $basearch - Testing
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar%(DISTRO)s-testing
+name=Salstar.sk \$releasever - \$basearch - Testing
+mirrorlist=http://www.salstar.sk/download/mm/%(DISTRO)s/salstar-testing/\$releasever/\$basearch
 gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
-enabled=0
-metadata_expire=1
-
-[salstar.sk-builder]
-name=builder.salstar.sk
-baseurl=http://builder.salstar.sk/local/$releasever%(DISTRO)s/$basearch/
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
-gpgcheck=0
 enabled=0
 metadata_expire=1
 '''
@@ -500,17 +492,25 @@ JqwZbPlWrR9FRP8ZAJ94pSLvMM6rfXlMbeOejfvFcdwc8w==
 -----END PGP PUBLIC KEY BLOCK-----
 '''
 
+# add access from gateway, if behind NAT
+gwaccess=""
+gwip=os.popen(
+  """/sbin/ip route get to 1.1.1.1 | awk '\$2=="via" { print \$3 }'"""
+).read().strip()
+if re.search('^(10|172\.(1[6-9]|2[0-9]|3[01])|192\.168)\.', gwip):
+  gwaccess=","+gwip
+
 ssh_authorized_keys='''\
-from="work.salstar.sk,158.197.240.41,work6.salstar.sk,2001:4118:400:1::/64" \
+from="work.salstar.sk,158.197.240.41,work6.salstar.sk,2001:4118:400:1::/64%s" \
 ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1MjEAAACFBAAORxvbaG3OX99nkgSkVCPbptyfeBUUdlOtz5wPkN/EZozVQ56ZsKMHLXpHiBb973/PCrVQz1B4+n+D7Ud/UMSZIgGBThb2+Mh46qqrgPu1QhbvzcK1W4qEOsDWu4KQgCpxfFEaaF6a7V7MOrtXdSZmauMmSpSHO7BWM7Aq3PTVXH0Hvg== ondrejj@work.salstar.sk
-'''
+''' % gwaccess
 
 # detect distribution
 rh_release = open(chroot+'/etc/redhat-release').read()
 if re.compile('^(CentOS|Red Hat|Scientific)').search(rh_release):
-  os.environ['DISTRO'] = '-el'
+  os.environ['DISTRO'] = 'epel'
 else:
-  os.environ['DISTRO'] = '-fedora'
+  os.environ['DISTRO'] = 'fedora'
 os.environ['CHROOT'] = chroot
 
 # add yum repository
