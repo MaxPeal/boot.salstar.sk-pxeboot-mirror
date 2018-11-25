@@ -10,7 +10,7 @@
 #   text
 #
 # System authorization information and root password
-auth --useshadow  --enablemd5 
+auth --useshadow  --enablemd5
 rootpw --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
 # System bootloader configuration
 bootloader --append="" --location=mbr --timeout=1
@@ -43,7 +43,7 @@ install
 # iSCSI
 #ignoredisk --interactive
 #iscsiname iqn.2012-09.test
-#iscsi --ipaddr=158.197.16.70 --target=iqn.2012-09.sk.upjs.ftp:fedora 
+#iscsi --ipaddr=158.197.16.70 --target=iqn.2012-09.sk.upjs.ftp:fedora
 # Disk partitioning information
 #part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
 %packages --ignoremissing

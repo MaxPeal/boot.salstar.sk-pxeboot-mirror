@@ -1,0 +1,52 @@
+# Ubuntu kickstart
+#based on "pc" configuration
+# Accepted kernel parameters:
+#   part=root=4,vg=LVM_VG_NAME,swap=4,var=20,home=max
+#   disks=vda,vdb
+#   zerombr			!!!USE WITH CAUTION!!!
+#   lang=en_US
+#   pkgs=desktop,salpack
+#   repo=testing repo=other repo=cr repo=http://...
+#   config=http://boot.salstar.sk/ks/custom
+#   text
+#
+# System authorization information and root password
+auth --useshadow  --enablemd5
+rootpw --iscrypted $1$Nd.xn29E$ZyPRpRorSV06piZyARGxy/
+# System bootloader configuration
+bootloader --append="" --location=mbr --timeout=1
+# Firewall configuration (ssh is enabled by default)
+firewall --enabled
+# System keyboard
+keyboard us
+# System language
+lang sk_SK.UTF-8
+#lang en_US.UTF-8
+# Installation logging level
+#logging info
+# Network information
+network --bootproto=dhcp --onboot=on
+#vnc --host=158.197.240.41 --port=5500
+# Reboot after installation
+reboot
+# System timezone
+timezone --utc Europe/Bratislava
+# Install OS instead of upgrade
+install
+# Disk partitioning information
+#part / --bytes-per-inode=4096 --fstype="ext4" --grow --size=1
+
+#Use our local repo instead of going out to the internet
+preseed mirror/country string cz
+#preseed mirror/http/hostname string internal-server
+#preseed mirror/http/directory string /archive-ubuntu
+#preseed mirror/http/proxy string
+#preseed mirror/http/mirror internal-server
+
+#Ensure a minimal install
+#Options taken from ISO/preseed/ubuntu-server-minimalvm.seed
+preseed base-installer/kernel/headers boolean false
+preseed tasksel/skip-tasks string standard
+preseed pkgsel/language-pack-patterns string
+preseed pkgsel/install-language-support boolean false
+preseed base-installer/kernel/altmeta string lts-saucy

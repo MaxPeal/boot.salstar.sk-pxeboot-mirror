@@ -38,6 +38,7 @@ set os Ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
+item --key c cosmic ${os} 18.10 LTS Cosmic Cuttlefish [c]
 item --key b bionic ${os} 18.04 LTS Bionic Beaver [b]
 item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
@@ -71,8 +72,9 @@ set diru dists/${ver}-updates/main/installer-${arch_a}/current/images/netboot/
 set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
 
 menu ${os} ${ver} boot parameters
-item --key k install ${os} install [k]
+item --key i install ${os} install [i]
 item --key g gtk ${os} graphical install [g]
+item --key k kickstart ${os} kickstart install [k]
 item --key c rescue ${os} rescue mode [c]
 item --key a automated ${os} automated install [a]
 item --key e expert ${os} expert install [e]
@@ -110,6 +112,10 @@ goto deb_boot
 :deb_gtk
 set install_params video=vesa:ywrap,mtrr vga=788
 iseq ${ver} precise && set installer gtk/ ||
+goto deb_boot
+
+:deb_kickstart
+set install_params ks=http://boot.salstar.sk/ks/ubuntu
 goto deb_boot
 
 :deb_install
