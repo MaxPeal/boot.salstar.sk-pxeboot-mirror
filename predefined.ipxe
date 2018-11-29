@@ -14,6 +14,7 @@ item --key D fedora_devel Fedora development auto KMS [D]
 item --key M fedora_devel_nomodeset Fedora development auto text nomodeset [M]
 item --key F fedora_auto Fedora ${fedora_latest} auto [F]
 item --key C centos_auto CentOS 7 auto [C]
+item --key B debian_auto Debian auto [B]
 item --key T test Test config [T]
 choose system || exit
 goto predef_${system}
@@ -63,6 +64,16 @@ set bt ks
 set params ${params} part=root=4,vg=vg1,swap=2 disks=vda console=ttyS0
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
+exit
+
+:predef_debian_auto
+set menu debian
+set ver stretch
+set debmirror http://ftp.${country}.debian.org/debian/
+set params ${params} part=root=4,vg=vg1,swap=1 disks=vda
+set type automated
+imgverify deb.ipxe ${sigs}deb.ipxe.sig
+chain deb.ipxe
 exit
 
 :predef_fedora_devel

@@ -25,9 +25,9 @@ item --gap Testing and development
 item --key t buster ${os} buster (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
-set ver_alias ${ver}
-iseq ${ver} wheezy && set ver_alias stable ||
-iseq ${ver} squeeze && set ver_alias oldstable ||
+#set ver_alias ${ver}
+#iseq ${ver} wheezy && set ver_alias stable ||
+#iseq ${ver} squeeze && set ver_alias oldstable ||
 goto deb_boot_type
 
 :ubuntu
@@ -74,9 +74,9 @@ set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
 menu ${os} ${ver} boot parameters
 item --key i install ${os} install [i]
 item --key g gtk ${os} graphical install [g]
-item --key k kickstart ${os} kickstart install [k]
-item --key c rescue ${os} rescue mode [c]
 item --key a automated ${os} automated install [a]
+iseq os Debian && item --key k kickstart ${os} kickstart install [k] ||
+item --key c rescue ${os} rescue mode [c]
 item --key e expert ${os} expert install [e]
 item --key l live ${os} live boot [l]
 # desktop selection for Debian only
@@ -102,7 +102,7 @@ set install_params rescue/enable=true
 goto deb_boot
 
 :deb_automated
-set install_params auto=true priority=critical
+set install_params auto=true priority=critical url=https://www.salstar.sk/boot/ks/deb/preseed
 goto deb_boot
 
 :deb_expert
