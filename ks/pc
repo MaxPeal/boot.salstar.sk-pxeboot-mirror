@@ -5,7 +5,6 @@
 #   zerombr			!!!USE WITH CAUTION!!!
 #   lang=en_US
 #   pkgs=desktop,salpack
-#   repo=testing repo=other repo=cr repo=http://...
 #   config=http://boot.salstar.sk/ks/custom
 #   text
 #
@@ -316,6 +315,9 @@ class repocfg_class:
       'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
       'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/%(arch)s/'
     ],
+    epel = [
+      'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/%(arch)s/'
+    ],
     cr = [
       'repo --name=CR --baseurl=%(mirror)/centos/%(ver)/cr/%(arch)/',
     ],
@@ -326,16 +328,22 @@ class repocfg_class:
       'repo --name=EPEL-testing --baseurl=%(mirror)s/mirrors/epel/testing/%(ver)d/%(arch)s/'
     ]
   )
-  all_repos = ('pkgs' in cmd_line) or ('packages' in cmd_line)
+  extra_pkgs = ('pkgs' in cmd_line) or ('packages' in cmd_line)
   cmd_line_testing = 'testing' in cmd_line
   cmd_line_repo = cmd_line.get('repo')
+  cmd_line_pkgrepo = cmd_line.get('pkgrepo').split(',')
   cmd_line_packages = cmd_line.get('pkgs') or cmd_line.get('packages')
   def get(self, distro):
       grps = getattr(self, distro)
       ret = grps['base']
+      for pkgrepo in self.cmd_line_pkgrepo:
+        if pkgrepo=='none':
+          ret = []
+        else:
+          ret.extend(grps[pkgrepo])
       if self.cmd_line_testing:
         ret.extend(grps['testing'])
-      if self.all_repos:
+      if self.extra_pkgs:
         ret.extend(grps['other'])
       return ret
   def repo_update(self, distro, version, arch):
