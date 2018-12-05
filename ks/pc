@@ -331,7 +331,7 @@ class repocfg_class:
   extra_pkgs = ('pkgs' in cmd_line) or ('packages' in cmd_line)
   cmd_line_testing = 'testing' in cmd_line
   cmd_line_repo = cmd_line.get('repo')
-  cmd_line_pkgrepo = cmd_line.get('pkgrepo').split(',')
+  cmd_line_pkgrepo = cmd_line.get('pkgrepo', '').split(',')
   cmd_line_packages = cmd_line.get('pkgs') or cmd_line.get('packages')
   def get(self, distro):
       grps = getattr(self, distro)
@@ -344,6 +344,7 @@ class repocfg_class:
       if self.cmd_line_testing:
         ret.extend(grps['testing'])
       if self.extra_pkgs:
+        ret.extend(grps['epel'])
         ret.extend(grps['other'])
       return ret
   def repo_update(self, distro, version, arch):
