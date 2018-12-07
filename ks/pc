@@ -339,7 +339,7 @@ class repocfg_class:
       for pkgrepo in self.cmd_line_pkgrepo:
         if pkgrepo=='none':
           ret = []
-        else:
+        elif grps.get(pkgrepo):
           ret.extend(grps[pkgrepo])
       if self.cmd_line_testing:
         ret.extend(grps['testing'])

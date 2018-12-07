@@ -173,6 +173,7 @@ set xarch x86
 goto main_menu
 
 :params_menu
+isset ${kp_default} || set kp_default set
 menu Kernel parameters
 item --gap Current: ${params}
 item --gap
@@ -188,22 +189,25 @@ item --key t text Text mode install [t]
 item --key l lang Force en_US language [l]
 item --key w passwd Change predefined root password [w]
 item --key c custom_config Custom configuration URL [c]
-item --key n network Static network configuration [n]
+item --key n network Network configuration (bonding or static) [n]
 item --key k ksdevice ksdevice configuration [k]
-choose kp || goto main_menu
+choose --default ${kp_default} kp || goto main_menu
 echo ${cls}
 goto params_${kp}
 
 # Kernel parameters
 :params_set
+set kp_default set
 echo -n Enter parameters: ${} && read params
 goto params_menu
 
 :params_vnc
+set kp_default vnc
 set params ${params} vnc vncconnect=${admin_ip}:5500
 goto params_menu
 
 :params_serial
+set kp_default serial
 menu Serial console speed
 item --key 0 ttyS0 ttyS0 - com1, don't set speed [0]
 item --key a ttyS0,115200 ttyS0,115200 [a]
@@ -220,50 +224,62 @@ set params ${params} console=${serial_console}
 goto params_menu
 
 :params_text
+set kp_default text
 set params ${params} text nomodeset
 goto params_menu
 
 :params_lang
+set kp_default lang
 set params ${params} lang=en_US
 goto params_menu
 
 :params_passwd
+set kp_default passwd
 echo If passowrd starts with "$", it's treated as crypted.
 echo -n Enter root password: ${} && read root_passwd
 set params ${params} passwd=${root_passwd}
 goto params_menu
 
 :params_custom_config
+set kp_default custom_config
 echo -n Enter custom config URL: ${} && read custom_config_url
 set params ${params} config=${custom_config_url}
 goto params_menu
 
 :params_network
-menu Static network configuration
+set kp_default network
+menu Network configuration
+item --key b bond Set bonding device on em1/em2 [b]
 item --key f fedora Fedora/CentOS 7 style (dracut options) [f]
 item --key c centos CentOS 5/6 style [c]
 choose netos || goto params_menu
+iseq ${netos} bond && set params ${params} bond=bond_wan:em1,em2:mode=802.3ad,miimon=100,lacp_rate=1,xmit_hash_policy=1 ||
+iseq ${netos} bond && set ksdevice bond_wan
+#set params ${params} ip=${ip}:${next-server}:${gateway}:${netmask}::bond_wan BOOTIF=bond_wan
 iseq ${netos} fedora && set params ${params} ip=${ip}::${gateway}:${netmask}:${ip}::none nameserver=${dns} ||
 iseq ${netos} centos && set params ${params} ip=${ip} gateway=${gateway} netmask=${netmask} dns=${dns} ||
 goto params_menu
 
 :params_ksdevice
+set kp_default ksdevice
 menu KSDevice configuration
 item --key l link ksdevice=link [l]
 item --key 0 eth0 ksdevice=eth0 [0]
 item --key 1 eth1 ksdevice=eth1 [1]
 item --key 2 eth2 ksdevice=eth2 [2]
 item --key 3 eth3 ksdevice=eth3 [3]
+item --key w bond_wan ksdevice=bond_wan [w]
 item --key b bootif ksdevice=bootif (default) [b]
 choose ksdevice || goto params_menu
-set params ${params} ksdevice=${ksdevice}
 goto params_menu
 
 :params_nomodeset
+set kp_default nomodeset
 set params ${params} nomodeset
 goto params_menu
 
 :params_autopart
+set kp_default autopart
 menu Autopartition
 item --key t root4max part=root=4,vg=vg1,swap=1 [t]
 item --key 4 root4 part=root=4,swap=1 [4]
@@ -282,6 +298,7 @@ iseq ${autopart} gpt && set params ${params} gpt part=biosboot=2m,root=4,swap=1 
 goto params_menu
 
 :params_disks
+set kp_default disks
 menu Disk selection
 item --gap Virtual servers (guests)
 item --key 2 mirror vda, vdb [2]
@@ -297,6 +314,7 @@ iseq ${disks} sda && set params ${params} disks=${disks} ||
 goto params_menu
 
 :params_pkgs
+set kp_default pkgs
 menu Package selection
 item --key b core Core salpack only [c]
 item --key g guestnrpe Guest with NRPE [g]

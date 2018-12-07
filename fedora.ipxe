@@ -3,6 +3,7 @@
 # Fedora & CentOS
 
 set ksurl https://www.salstar.sk/boot/ks/
+isset ksdevice || set ksdevice bootif
 
 goto ${menu} ||
 
@@ -133,7 +134,7 @@ imgtrust --allow
 set dir ${menu}/${ver}/os/${arch}
 set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
-set bootdev ksdevice=bootif BOOTIF=${mac}
+set bootdev ksdevice=${ksdevice} BOOTIF=${mac}
 # fix i386 mirror for CentOS 7
 iseq ${os} CentOS || goto boottype
 iseq ${ver} 7 || goto boottype
@@ -161,7 +162,7 @@ isset ${ver} || choose ver || goto main_menu
 set dir ${menu}/${ver}x/${arch}/os
 iseq ${ver} 5 && set dir ${menu}/${ver}x/${arch} ||
 set osks ${ksurl}centos${ver}
-set bootdev ksdevice=bootif BOOTIF=${mac}
+set bootdev ksdevice=${ksdevice} BOOTIF=${mac}
 iseq ${mirror} ${default_mirror} && set mirror http://ftp.scientificlinux.org/linux ||
 goto boottype
 
