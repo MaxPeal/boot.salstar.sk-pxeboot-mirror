@@ -467,7 +467,7 @@ repo_conf = '''\
 name=Salstar.sk \$releasever - \$basearch - Base
 #baseurl=http://ftp.upjs.sk/pub/users/sal/Fedora/\$releasever/
 mirrorlist=http://www.salstar.sk/download/mm/%(DISTRO)s/salstar/\$releasever/\$basearch
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=1
 metadata_expire=1
@@ -475,7 +475,7 @@ metadata_expire=1
 [salstar.sk-testing]
 name=Salstar.sk \$releasever - \$basearch - Testing
 mirrorlist=http://www.salstar.sk/download/mm/%(DISTRO)s/salstar-testing/\$releasever/\$basearch
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=0
 metadata_expire=1

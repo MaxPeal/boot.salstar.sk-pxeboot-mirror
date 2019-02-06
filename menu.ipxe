@@ -51,11 +51,11 @@ item --key u ubuntu ${space} Ubuntu ${arch_a} [u]
 isset ${extended_menu} && item --key A archlinux ${space} ArchLinux [A] ||
 isset ${extended_menu} && item --key L slackware ${space} Slackware ${bits} bit [L] ||
 isset ${extended_menu} && item --key g gparted ${space} GParted ${bits} bit [g] ||
+isset ${extended_menu} && item --key R sysresccd ${space} SystemRescueCd [R] ||
 isset ${extended_menu} && item --key p pmagic ${space} Parted Magic [p] ||
 isset ${extended_menu} && item --key z clonezilla ${space} Clonezilla [z] ||
 isset ${extended_menu} && item --key T tinycore ${space} Tiny Core Linux [T] ||
 isset ${extended_menu} && item --key C coreos ${space} CoreOS [C] ||
-#isset ${extended_menu} && item --key R rescatux ${space} RescaTux [R] ||
 # BSD systems
 isset ${extended_menu} && item --key y bsd ${space} BSD systems [y] ||
 # DOS
