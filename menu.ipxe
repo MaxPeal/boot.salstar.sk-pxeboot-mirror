@@ -324,11 +324,11 @@ item --key m mail Guest mail server with mariadb and NRPE [m]
 item --key n nrpe Core and NRPE salpack [n]
 choose pkgs || goto params_menu
 iseq ${pkgs} core && set params ${params} pkgs=salpack ||
-iseq ${pkgs} guestnrpe && set params ${params} pkgs=salpack-nrpe,salpack-guest ||
+iseq ${pkgs} guestnrpe && set params ${params} pkgs=salpack-nrpe,salpack-guest,-*-firmware ||
 iseq ${pkgs} kvmnrpe && set params ${params} pkgs=salpack-nrpe,salpack-kvm ||
-iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mariadb ||
-iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mariadb ||
-iseq ${pkgs} nrpe && set params ${params} pkgs=salpack-nrpe ||
+iseq ${pkgs} web && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-web,salpack-mariadb,-*-firmware ||
+iseq ${pkgs} mail && set params ${params} pkgs=salpack-nrpe,salpack-guest,salpack-mail,salpack-mariadb,-*-firmware ||
+iseq ${pkgs} nrpe && set params ${params} pkgs=salpack-nrpe,-*-firmware ||
 goto params_menu
 
 :extended_menu

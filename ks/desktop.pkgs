@@ -29,7 +29,7 @@ mutt
 -jigdo
 -@admin-tools
 remmina-plugins-*
-wireshark-gnome
+wireshark
 ngrep
 -@fonts
 dejavu-sans-fonts
