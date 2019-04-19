@@ -38,7 +38,8 @@ set os Ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
-item --key c cosmic ${os} 18.10 LTS Cosmic Cuttlefish [c]
+item --key d disco ${os} 19.04 LTS Disco Dingo [d]
+item --key c cosmic ${os} 18.10 Cosmic Cuttlefish [c]
 item --key b bionic ${os} 18.04 LTS Bionic Beaver [b]
 item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
