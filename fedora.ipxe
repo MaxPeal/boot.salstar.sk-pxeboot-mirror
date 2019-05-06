@@ -31,9 +31,12 @@ item --key d development ${os} development ${arch} [d]
 item --key b Beta ${os} ${devel_ver}_Beta ${arch} [b]
 item --key a Alpha ${os} ${devel_ver}_Aplha ${arch} [a]
 item --key A alt_stage ${os} dl.fedoraproject.org/pub/alt/stage ${arch} [A]
+item --gap Change ${os} mirror
+item mirror_linux_cz Use ftp.linux.cz as mirror server
 item --gap Official netboot
 item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${ver} || choose ver || goto main_menu
+iseq ${ver} mirror_linux_cz && goto mirror_linux_cz ||
 
 iseq ${ver} 21 && goto fedora_product_end ||
 iseq ${ver} 20 && goto fedora_product_end ||
@@ -109,6 +112,12 @@ set params root=live:${mirror}/${dir}/LiveOS/squashfs.img ${params}
 # signature checking is disabled for development ver
 set ver development
 goto fedora_setvars
+
+# change mirror
+:mirror_linux_cz
+set mirror http://ftp.linux.cz/pub/linux
+clear ver
+goto fedora
 
 # boot.fedoraproject.org online boot
 :fedora_fedoraproject
