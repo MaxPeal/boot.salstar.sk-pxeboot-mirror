@@ -1,6 +1,6 @@
 #!ipxe
 
-set fedora_latest 29
+set fedora_latest 30
 
 menu Predefined systems
 item --key f fedora Fedora ${fedora_latest} kickstart vnc ttyS0 [f]

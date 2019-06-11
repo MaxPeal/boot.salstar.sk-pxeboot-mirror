@@ -63,6 +63,7 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
+item 8.1 ${os} 8.1
 item 8.0 ${os} 8.0
 item 7.2 ${os} 7.2
 item 7.1 ${os} 7.1
@@ -80,6 +81,7 @@ echo -n Enter version: ${} && read ver
 :skip_read_ver_netbsd
 
 iseq ${mirror} ${default_mirror} && set mirror http://iso.fi.netbsd.org/pub/ ||
+#iseq ${mirror} ${default_mirror} && set mirror ftp://iso.fr.netbsd.org/pub/ ||
 set dir NetBSD/iso/${ver}
 set iso2 ${arch_a}cd-${ver}.iso
 set iso NetBSD-${ver}-${arch_a}.iso

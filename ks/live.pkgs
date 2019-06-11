@@ -110,7 +110,7 @@ liberation-serif-fonts
 -@admin-tools
 
 @system-tools
--BackupPC
+#-BackupPC
 -jigdo
 -sssd
 -ypbind
@@ -126,7 +126,7 @@ gnome-shell-extension-native-window-placement
 gnome-shell-extension-openweather
 #gnome-shell-extension-alternative-status-menu
 #gnome-shell-extension-cpu-temperature
-gnome-shell-extension-alternate-tab
+#gnome-shell-extension-alternate-tab
 gnome-shell-extension-system-monitor-applet
 
 # Office
@@ -137,6 +137,8 @@ remmina-plugins-*
 gimp
 gimp-data-extras
 
+fedora-repos
+
 # rpmfusion packages
 rpmfusion-free-release
 rpmfusion-nonfree-release
@@ -145,7 +147,7 @@ vlc
 gstreamer1-libav
 gstreamer1-plugins-base
 gstreamer1-plugins-good
-gstreamer1-plugins-ugly
+#gstreamer1-plugins-ugly
 #gstreamer1-plugins-good-extras
 gstreamer1-plugins-bad-free
 gstreamer1-plugins-bad-freeworld
@@ -154,7 +156,7 @@ python-gstreamer1
 
 # svplayer and python dependencies
 git
-ipython
+ipython3
 #python-gdata
 youtube-dl
 python-imaging
@@ -174,5 +176,9 @@ NetworkManager-bluetooth
 -simple-scan
 -libsane-hpaio
 -sane-backends-driver*
+
+# Fedora 30
+# initscripts needed to find LiveOS home.img
+initscripts
 
 %end
