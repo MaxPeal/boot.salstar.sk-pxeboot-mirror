@@ -15,14 +15,15 @@ iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.o
 set os Debian
 menu ${os} ${arch_a}
 # https://wiki.debian.org/DebianReleases
-item --key 9 stretch ${os} 9 stretch (stable) [9]
+item --key 0 buster ${os} 10 buster (stable) [0]
+item --key 9 stretch ${os} 9 stretch (oldstable) [9]
 item --gap Long Term Support (LTS)
 item --key 8 jessie ${os} 8 jessie (stable) [8]
 item --gap End of life (unsupported)
-item --key 7 wheezy ${os} 7 wheezy (oldstable) [7]
-#item --key 6 squeeze ${os} 6.0 squeeze (oldstable) [6]
+item --key 7 wheezy ${os} 7 wheezy [7]
+#item --key 6 squeeze ${os} 6.0 squeeze [6]
 item --gap Testing and development
-item --key t buster ${os} buster (testing) [t]
+item --key t bullseye ${os} bullseye (testing) [t]
 item --key u sid ${os} sid (unstable) [u]
 choose ver || goto deb_exit
 #set ver_alias ${ver}
