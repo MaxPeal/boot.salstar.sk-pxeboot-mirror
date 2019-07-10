@@ -15,6 +15,7 @@ ipxe/ipxe.lkrn
 ipxe/ipxe.usb
 ipxe/ipxe.efi
 ipxe/undionly.kpxe
+ipxe/snponly.efi
 ipxe/*.rom
 ipxe/com1
 ipxe/com2
