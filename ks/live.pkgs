@@ -69,6 +69,7 @@ fuse-sshfs
 # SAL's packages
 gnome-terminal
 firefox
+firefox-wayland
 pygame
 lshw
 devilspie2
