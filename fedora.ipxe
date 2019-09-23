@@ -23,8 +23,6 @@ item 25 ${os} 25 ${arch}
 item 24 ${os} 24 ${arch}
 item 23 ${os} 23 ${arch}
 item 22 ${os} 22 ${arch}
-item 21 ${os} 21 ${arch}
-item 20 ${os} 20 ${arch}
 item --gap Testing and development
 item --key r rawhide ${os} rawhide ${arch} [r]
 item --key d development ${os} development ${arch} [d]
@@ -38,11 +36,7 @@ item --key f fedoraproject ${os} boot.fedoraproject.org [f]
 isset ${ver} || choose ver || goto main_menu
 iseq ${ver} mirror_linux_cz && goto mirror_linux_cz ||
 
-iseq ${ver} 21 && goto fedora_product_end ||
-iseq ${ver} 20 && goto fedora_product_end ||
-iseq ${ver} 19 && goto fedora_product_end ||
-iseq ${ver} 18 && goto fedora_product_end ||
-iseq ${ver} 17 && goto fedora_product_end ||
+#iseq ${ver} 21 && goto fedora_product_end ||
 menu Choose product
 item --key s Server Server [s]
 item --key w Workstation Workstation [w]
@@ -53,7 +47,7 @@ isset ${fed_product} || choose fed_product || goto main_menu
 isset ${fed_product} || set fed_product ${os}
 
 # workaround for fedora 17
-iseq ${ver} 17 && set params rd.debug ${params} ||
+#iseq ${ver} 17 && set params rd.debug ${params} ||
 
 set bootdev ks.device=${mac}
 
@@ -129,6 +123,7 @@ exit
 :centos
 set os CentOS
 menu ${os}
+item --key 8 8 ${os} 8 ${arch} [8]
 item --key 7 7 ${os} 7 ${arch} [7]
 item --key 6 6 ${os} 6 ${arch} [6]
 item --key 5 5 ${os} 5 ${arch} [5]
@@ -142,12 +137,16 @@ echo -n Enter version: ${} && read ver
 imgtrust --allow
 :centos_skip_read_ver
 set dir ${menu}/${ver}/os/${arch}
+iseq ${ver} 8 || goto not_centos8
+set dir ${menu}/${ver}/BaseOS/${arch}/os
+:not_centos8
 set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
 set bootdev ksdevice=${ksdevice} BOOTIF=${mac}
 # fix i386 mirror for CentOS 7
 iseq ${os} CentOS || goto boottype
 iseq ${ver} 7 || goto boottype
+iseq ${ver} 8 || goto boottype
 iseq ${arch} i386 || goto boottype
 iseq ${mirror} ${default_mirror} && set mirror http://mirror.centos.org/altarch ||
 set dir ${ver}/os/${arch}

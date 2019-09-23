@@ -11,7 +11,7 @@
 #chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/pxelinux.0
 #chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/debian-installer/amd64/pxelinux.0
 
-set ver 2019.2
+set ver 2019.3
 
 set dir kali-${ver}/kali-linux-light-${ver}-amd64.iso
 iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
