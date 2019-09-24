@@ -347,7 +347,7 @@ class repocfg_class:
       'repo --name=SALstar.sk --baseurl=https://www.salstar.sk/pub/epel/%(ver)d/%(arch)s/'
     ],
     testing = [
-      'repo --name=EPEL-testing --baseurl=%(mirror)s/mirrors/epel/testing/%(ver)d/%(arch)s/'
+      'repo --name=EPEL-testing --baseurl=%(mirror)s/mirrors/epel/testing/%(ver)d/Everything/%(arch)s/'
     ]
   )
   extra_pkgs = ('pkgs' in cmd_line) or ('packages' in cmd_line)
