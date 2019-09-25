@@ -4,7 +4,8 @@ set fedora_latest 30
 
 menu Predefined systems
 item --key f fedora Fedora ${fedora_latest} kickstart vnc ttyS0 [f]
-item --key c centos CentOS 7 kickstart vnc ttyS0 [c]
+item --key c centos8 CentOS 8 kickstart vnc ttyS0 [c]
+item --key 7 centos7 CentOS 7 kickstart vnc ttyS0 [c]
 item --key 6 centos6 CentOS 6 kickstart vnc ttyS0 [6]
 item --gap
 item --gap WARNING! Systems below this line can kill your current installation!
@@ -13,7 +14,7 @@ item --gap
 item --key D fedora_devel Fedora development auto KMS [D]
 item --key M fedora_devel_nomodeset Fedora development auto text nomodeset [M]
 item --key F fedora_auto Fedora ${fedora_latest} auto [F]
-item --key C centos_auto CentOS 7 auto [C]
+item --key C centos_auto CentOS 8 auto [C]
 item --key B debian_auto Debian auto [B]
 item --key T test Test config [T]
 choose system || exit
@@ -29,7 +30,16 @@ imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
 chain fedora.ipxe
 exit
 
-:predef_centos
+:predef_centos8
+set menu centos
+set ver 8
+set bt ks
+set params ${params} vnc vncconnect=${admin_ip}:5500 console=ttyS0
+imgverify fedora.ipxe ${sigs}fedora.ipxe.sig
+chain fedora.ipxe
+exit
+
+:predef_centos7
 set menu centos
 set ver 7
 set bt ks
@@ -59,7 +69,7 @@ exit
 
 :predef_centos_auto
 set menu centos
-set ver 7
+set ver 8
 set bt ks
 set params ${params} part=root=4,vg=vg1,swap=2 disks=vda console=ttyS0 pkgs=-*-firmware
 imgverify fedora.ipxe ${sigs}fedora.ipxe.sig

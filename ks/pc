@@ -334,8 +334,9 @@ class repocfg_class:
   el8 = dict(
     base = [
       'url --url=%(mirror)s/centos/%(ver)d/BaseOS/%(arch)s/os/',
-      'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
-      'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/Everything/%(arch)s/'
+      # updates for centos 8 has not been released yet
+      #'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
+      #'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/Everything/%(arch)s/'
     ],
     epel = [
       'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/Everything/%(arch)s/'
@@ -370,7 +371,10 @@ class repocfg_class:
         ret.extend(grps['other'])
       return ret
   def repo_update(self, distro, version, arch):
-      ver_short = version.split(".")[0]
+      if type(version)==int:
+        ver_short = str(version)
+      else:
+        ver_short = version.split(".")[0]
       if hasattr(self, distro+ver_short):
         repolist = self.get(distro+ver_short)
       else:
