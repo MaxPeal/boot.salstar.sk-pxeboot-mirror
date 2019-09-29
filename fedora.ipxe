@@ -126,9 +126,9 @@ menu ${os}
 item --key 8 8 ${os} 8 ${arch} [8]
 item --key 7 7 ${os} 7 ${arch} [7]
 item --key 6 6 ${os} 6 ${arch} [6]
-item --key 5 5 ${os} 5 ${arch} [5]
 item --key o other Choose other version [o]
 item --key c bco boot.centos.org [c]
+item --key s 8-stream ${os} 8-stream ${arch} [s]
 isset ${ver} || choose ver || goto main_menu
 iseq ${ver} bco && goto boot_centos_org ||
 iseq ${ver} other || goto centos_skip_read_ver
@@ -136,17 +136,16 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 imgtrust --allow
 :centos_skip_read_ver
-set dir ${menu}/${ver}/os/${arch}
-iseq ${ver} 8 || goto not_centos8
+# use BaseOS directory for centos8, old style directory for centos7-
 set dir ${menu}/${ver}/BaseOS/${arch}/os
-:not_centos8
+iseq ${ver} 7 && set dir ${menu}/${ver}/os/${arch} ||
+iseq ${ver} 6 && set dir ${menu}/${ver}/os/${arch} ||
 set repo repo=${mirror}/${dir}
 set osks ${ksurl}centos${ver}
 set bootdev ksdevice=${ksdevice} BOOTIF=${mac}
 # fix i386 mirror for CentOS 7
 iseq ${os} CentOS || goto boottype
 iseq ${ver} 7 || goto boottype
-iseq ${ver} 8 || goto boottype
 iseq ${arch} i386 || goto boottype
 iseq ${mirror} ${default_mirror} && set mirror http://mirror.centos.org/altarch ||
 set dir ${ver}/os/${arch}
