@@ -20,7 +20,7 @@ firstboot --enable
 # System keyboard
 keyboard us
 # System language
-lang sk_SK.UTF-8
+#lang sk_SK.UTF-8
 #lang en_US.UTF-8
 # Installation logging level
 #logging info
@@ -116,7 +116,7 @@ for cmd in open('/proc/cmdline').read().strip().split(' '):
 
 def disksize(*disks):
     ds = [
-           int(open('/sys/class/block/%s/size' % x).read().strip())/2048
+           int(open('/sys/class/block/%s/size' % x).read().strip())//2048
            for x in disks
          ]
     print("# disksizes: %s = %s" % (disks, ds))
@@ -217,7 +217,7 @@ def autopartition(disks, parts):
           value = value.split(':', 1)[0]
         elif key=='swap':
           fstype = ''
-        elif distro=='el7':
+        elif distro.startswith('el7') or distro.startswith('el8'):
           fstype = '--fstype=xfs'
         else:
           fstype = '--fstype=ext4'
@@ -253,7 +253,7 @@ def autopartition(disks, parts):
           value = value.split(':', 1)[0]
         elif key=='swap':
           fstype = ''
-        elif distro=='el7':
+        elif distro.startswith('el7') or distro.startswith('el8'):
           fstype = '--fstype=xfs'
         else:
           fstype = '--fstype=ext4'
@@ -414,7 +414,7 @@ class repocfg_class:
 
 def lang(lang):
     if not lang:
-      return
+      lang = "sk_SK"
     langs = dict(
       en = "en_US",
       sk = "sk_SK",
