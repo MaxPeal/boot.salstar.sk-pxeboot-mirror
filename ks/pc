@@ -334,8 +334,6 @@ class repocfg_class:
   el8 = dict(
     base = [
       'url --url=%(mirror)s/centos/%(ver)d/BaseOS/%(arch)s/os/',
-      # updates for centos 8 has not been released yet
-      #'repo --name=Updates --baseurl=%(mirror)s/centos/%(ver)d/updates/%(arch)s/',
       #'repo --name=EPEL --baseurl=%(mirror)s/mirrors/epel/%(ver)d/Everything/%(arch)s/'
     ],
     epel = [
@@ -367,7 +365,8 @@ class repocfg_class:
       if self.cmd_line_testing:
         ret.extend(grps['testing'])
       if self.extra_pkgs:
-        ret.extend(grps['epel'])
+        if 'epel' in grps:
+          ret.extend(grps['epel'])
         ret.extend(grps['other'])
       return ret
   def repo_update(self, distro, version, arch):
