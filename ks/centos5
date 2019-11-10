@@ -202,16 +202,16 @@ cat > /etc/yum.repos.d/salstar.repo << KSEOF
 [salstar.sk]
 name=Salstar.sk \$releasever - \$basearch - Base
 #baseurl=http://ftp.upjs.sk/pub/users/sal/Fedora/\$releasever/
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar-centos5
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+mirrorlist=https://www.salstar.sk/download/mirrors/salstar-centos5
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=1
 metadata_expire=1
 
 [salstar.sk-test]
 name=Salstar.sk \$releasever - \$basearch - Testing
-mirrorlist=http://www.salstar.sk/download/mirrors/salstar-centos-testing
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+mirrorlist=https://www.salstar.sk/download/mirrors/salstar-centos-testing
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=1
 enabled=0
 metadata_expire=1
@@ -219,7 +219,7 @@ metadata_expire=1
 [salstar.sk-builder]
 name=builder.salstar.sk
 baseurl=http://builder.salstar.sk/local/\$releasever/\$basearch/
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=0
 enabled=0
 metadata_expire=1

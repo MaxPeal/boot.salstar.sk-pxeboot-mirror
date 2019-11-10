@@ -516,7 +516,7 @@ metadata_expire=1
 [salstar.sk-builder]
 name=builder.salstar.sk
 baseurl=http://builder.salstar.sk/local/$releasever/$basearch/
-gpgkey=http://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
+gpgkey=https://www.salstar.sk/pub/sagator/SAGATOR-GPG-KEY
 gpgcheck=0
 enabled=0
 metadata_expire=1
