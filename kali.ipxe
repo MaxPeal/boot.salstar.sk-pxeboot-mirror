@@ -2,23 +2,27 @@
 
 # This does not really works. Testing only.
 
-#set dir http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/debian-installer/amd64
-#imgtrust --allow
-#kernel ${dir}/linux
-#initrd ${dir}/initrd.gz
-#boot
+# Installer boot
+#set gtk_inst gtk/
+clear gtk_inst
+set dir http://http.kali.org/kali/dists/kali-rolling/main/installer-${arch_a}/current/images/netboot/${gtk_inst}debian-installer/${arch_a}
+imgtrust --allow
+kernel ${dir}/linux
+initrd ${dir}/initrd.gz
+boot
 
-#chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/pxelinux.0
-#chain http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/debian-installer/amd64/pxelinux.0
+#chain http://http.kali.org/kali/dists/kali-rolling/main/installer-${arch_a}/current/images/netboot/pxelinux.0
+#chain http://http.kali.org/kali/dists/kali-rolling/main/installer-${arch_a}/current/images/netboot/debian-installer/${arch_a}/pxelinux.0
 
-set ver 2019.3
+# Live boot
+set ver 2019.4
 
-set dir kali-${ver}/kali-linux-light-${ver}-amd64.iso
+set dir kali-${ver}/kali-linux-${ver}-light-${arch_a}.iso
 iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
 set iso ${mirror}/${dir}
 
-#set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/mini.iso
-#set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-amd64/current/images/netboot/gtk/mini.iso
+#set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-${arch_a}/current/images/netboot/mini.iso
+#set iso http://http.kali.org/kali/dists/kali-rolling/main/installer-${arch_a}/current/images/netboot/gtk/mini.iso
 
 echo ${iso}
 
