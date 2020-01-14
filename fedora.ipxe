@@ -40,8 +40,8 @@ iseq ${ver} mirror_linux_cz && goto mirror_linux_cz ||
 #iseq ${ver} 21 && goto fedora_product_end ||
 menu Choose product
 item --key s Server Server [s]
-item --key w Workstation Workstation [w]
 item --key c Everything Everything [e]
+#item --key w Workstation Workstation [w]
 #item --key c Cloud Cloud [c]
 isset ${fed_product} || choose fed_product || goto main_menu
 :fedora_product_end

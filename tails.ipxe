@@ -2,7 +2,7 @@
 
 # Tails linux. This is for testing only.
 
-set ver 3.15
+set ver 4.1
 set isofile stable/tails-amd64-${ver}/tails-amd64-${ver}.img 
 iseq ${mirror} ${default_mirror} && set mirror http://dl.amnesia.boum.org/tails ||
 set iso ${mirror}/${isofile}
