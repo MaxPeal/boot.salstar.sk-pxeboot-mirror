@@ -30,7 +30,7 @@ coreutils
 #-system-config-services
 -policycoreutils-gui
 # required for selinux --disabled
-system-config-firewall-base
+#system-config-firewall-base
 
 # Large packages
 -ibus-kkc
@@ -70,7 +70,7 @@ fuse-sshfs
 gnome-terminal
 firefox
 firefox-wayland
-pygame
+python3-pygame
 lshw
 devilspie2
 gthumb
@@ -144,6 +144,7 @@ fedora-repos
 rpmfusion-free-release
 rpmfusion-nonfree-release
 vlc
+vlc-core
 #mplayer
 gstreamer1-libav
 gstreamer1-plugins-base
@@ -153,15 +154,13 @@ gstreamer1-plugins-good
 gstreamer1-plugins-bad-free
 gstreamer1-plugins-bad-freeworld
 #gstreamer1-plugins-entrans
-python-gstreamer1
+python3-gstreamer1
 
 # svplayer and python dependencies
 git
 ipython3
-#python-gdata
 youtube-dl
-python-imaging
-python-BeautifulSoup
+python3-pillow
 
 # Fedora 21
 NetworkManager-wifi

@@ -9,7 +9,7 @@
 -ypbind
 @gnome-desktop
 @graphical-internet
--evolution*
+#-evolution*
 -empathy
 @java
 @sound-and-video
