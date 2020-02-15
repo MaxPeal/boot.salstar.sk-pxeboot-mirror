@@ -63,6 +63,7 @@ goto boot_bsd
 :netbsd
 set os NetBSD
 menu ${os} ${arch_a}
+item 9.0 ${os} 9.0
 item 8.1 ${os} 8.1
 item 8.0 ${os} 8.0
 item 7.2 ${os} 7.2
@@ -80,9 +81,22 @@ echo ${cls}
 echo -n Enter version: ${} && read ver
 :skip_read_ver_netbsd
 
-iseq ${mirror} ${default_mirror} && set mirror http://iso.fi.netbsd.org/pub/ ||
-#iseq ${mirror} ${default_mirror} && set mirror ftp://iso.fr.netbsd.org/pub/ ||
-set dir NetBSD/iso/${ver}
+# select mirror
+menu Select ${os} mirror
+item ftp://ftp.fi.netbsd.org/pub/NetBSD/ Finland
+item ftp://ftp.de.netbsd.org/pub/NetBSD/ Germany
+item ftp://ftp.hu.netbsd.org/pub/NetBSD/ Hungary
+item ftp://ftp.dk.netbsd.org/pub/NetBSD/ Denmark
+item ftp://ftp.ee.netbsd.org/pub/NetBSD/ Estonia
+item ftp://ftp2.jp.netbsd.org/pub/NetBSD/ Japan
+item ftp://ftp.kaist.ac.kr/NetBSD/ Korea
+item ftp://ftp.nl.netbsd.org/pub/NetBSD/ Netherlands
+item http://mirror.planetunix.net/pub/NetBSD/ USA
+item ftp://ftp.netbsd.org/pub/NetBSD/ Main site
+choose netbsd_mirror
+
+iseq ${mirror} ${default_mirror} && set mirror ${netbsd_mirror} ||
+set dir iso/${ver}
 set iso2 ${arch_a}cd-${ver}.iso
 set iso NetBSD-${ver}-${arch_a}.iso
 goto boot_bsd
