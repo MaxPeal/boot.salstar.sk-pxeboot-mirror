@@ -189,10 +189,10 @@ def initdisks(disks):
       print("clearpart --all --initlabel")
 
 def autopartition(disks, parts):
-    if distro.startswith("fc"):
-      biosboot = 2
-    else:
+    if distro.startswith('el7') or distro.startswith('el6'):
       biosboot = 0
+    else:
+      biosboot = 2
     if disks and disks.startswith("iscsi:"):
       #print("ignoredisk --interactive")
       print("iscsiname iqn.2012-09.test")

@@ -20,7 +20,7 @@ LIVE=$2
 DEV=${PART:0:-1}
 MOUNT=/mnt/t
 SIZE=${SIZE:-4}
-FEDORA=30
+FEDORA=31
 FEDORA_PREV=$((FEDORA-1))
 PRODUCT=Server
 HDT=0.5.2
@@ -54,7 +54,7 @@ addos() {
   mkdir -p $DIR/$NAME/$ARCH
   pushd $DIR/$NAME/$ARCH/
   for i in initrd.img vmlinuz isolinux.bin isolinux.cfg boot.msg memtest splash.png vesamenu.c32; do
-    wget -c --tries=2 $URL/isolinux/$i || echo "File missing: $i"
+    wget -c -4 --tries=2 $URL/isolinux/$i || echo "File missing: $i"
   done
   # update root=live: path
   sed -i "s|root=live:CDLABEL=[^ ]*|repo=$URL|" isolinux.cfg
@@ -155,7 +155,7 @@ mount $PART $MOUNT
 copy /usr/share/syslinux/menu.c32 $MOUNT/syslinux
 copy /usr/share/syslinux/memdisk $MOUNT/syslinux
 unlink $MOUNT/syslinux/hdt.iso
-wget -c --timeout=5 --tries=2 -O $MOUNT/syslinux/hdt.iso \
+wget -c -4 --timeout=5 --tries=2 -O $MOUNT/syslinux/hdt.iso \
   http://hdt-project.org/raw-attachment/wiki/hdt-${HDT:0:4}0/hdt-$HDT.iso \
   || echo "HDT download error"
 copy /boot/memtest86+-${MEMTEST} $MOUNT/syslinux/memtest
@@ -191,7 +191,7 @@ LABEL memtest
 
 EOF
 unlink $MOUNT/syslinux/ipxe.lkrn
-wget --no-check-certificate -O $MOUNT/syslinux/ipxe.lkrn \
+wget --no-check-certificate -4 -O $MOUNT/syslinux/ipxe.lkrn \
   https://boot.salstar.sk/ipxe/ipxe.lkrn
 #cp -a ~ondrejj/svn/pxeboot/ipxe/ipxe.lkrn $MOUNT/syslinux/
 
@@ -214,6 +214,9 @@ fi
 
 RELEASES=$MIRROR/centos
 if [ $SIZE -gt 1 ]; then
+  addos centos8 x86_64 $RELEASES/8/BaseOS/x86_64/os
+  cfgos centos8 x86_64 "^CentOS 8"
+
   addos centos7 x86_64 $RELEASES/7/os/x86_64
   cfgos centos7 x86_64 "^CentOS 7"
 
@@ -239,7 +242,7 @@ if [ "$PMAGIC" ]; then
   #    echo "Pmagic bzImage present, use FORCE_UPDATE=1 to overwrite."
   #  else
   #    for pmfn in bzImage initrd.img; do
-  #      wget -O $DIR/pmagic/$arch/$pmfn \
+  #      wget -4 -O $DIR/pmagic/$arch/$pmfn \
   #        $RELEASES/$arch/pmagic_pxe_$PMAGIC/pmagic/$pmfn
   #    done
   #  fi
@@ -250,7 +253,7 @@ if [ "$PMAGIC" ]; then
   mkdir -p $DIR/pmagic
   unlink $DIR/pmagic/bzImage $DIR/pmagic/bzImage64 $DIR/pmagic/initrd.img
   for pmfn in bzImage bzImage64 initrd.img; do
-    wget -O $DIR/pmagic/$pmfn $RELEASES/pmagic_pxe_$PMAGIC/pmagic/$pmfn
+    wget -4 -O $DIR/pmagic/$pmfn $RELEASES/pmagic_pxe_$PMAGIC/pmagic/$pmfn
   done
   cfgpmagic x86_64 "" 64 ^
   cfgpmagic i686
