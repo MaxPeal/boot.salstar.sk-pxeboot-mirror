@@ -68,11 +68,13 @@ fuse-sshfs
 
 # SAL's packages
 gnome-terminal
+kitty
 firefox
 firefox-wayland
 python3-pygame
 lshw
 devilspie2
+kpie
 gthumb
 qemu-kvm
 httptunnel
