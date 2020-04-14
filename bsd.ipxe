@@ -4,7 +4,6 @@ menu BSD systems
 item --key o openbsd OpenBSD [o]
 item --key n netbsd NetBSD [n]
 item --key f freebsd FreeBSD [f]
-item --key p pcbsd PC-BSD [p]
 choose bsd || goto bsd_exit
 
 goto ${bsd}
@@ -106,11 +105,9 @@ goto boot_bsd
 set os FreeBSD
 menu ${os}
 item 12.1 ${os} 12.1
-item 12.0 ${os} 12.0
 item 11.3 ${os} 11.3
 item 11.2 ${os} 11.2
 item 11.1 ${os} 11.1
-item 11.0 ${os} 11.0
 item 10.3 ${os} 10.3
 item 10.2 ${os} 10.2
 item 10.1 ${os} 10.1
@@ -127,29 +124,4 @@ echo -n Enter version: ${} && read ver
 iseq ${mirror} ${default_mirror} && set mirror http://ftp.cz.freebsd.org/pub/ ||
 set dir FreeBSD/releases/ISO-IMAGES/${ver}
 set iso FreeBSD-${ver}-RELEASE-${arch_a}-bootonly.iso
-goto boot_bsd
-
-:pcbsd
-set os PC-BSD
-menu ${os}
-item 10.3-RELEASE ${os} 10.3
-item 10.2-RELEASE ${os} 10.2
-item 10.1-RELEASE ${os} 10.1
-item 10.0-RELEASE ${os} 10.0
-item 9.2-RELEASE ${os} 9.2
-item 9.1-RELEASE ${os} 9.1
-item 9.0 ${os} 9.0
-item other ${os} Choose other version
-choose ver || exit 0
-
-iseq ${ver} other || goto skip_read_ver_pcbsd
-echo ${cls}
-echo -n Enter version: ${} && read ver
-:skip_read_ver_pcbsd
-
-iseq ${mirror} ${default_mirror} && set mirror http://iso.cdn.pcbsd.org/ ||
-iseq ${arch} i386 && set xarch x86 || set xarch x64
-set dir ${ver}/${arch_a}
-#set iso PCBSD${ver}-${xarch}-bootonly.iso
-set iso latest.iso
 goto boot_bsd
