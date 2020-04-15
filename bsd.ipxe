@@ -4,6 +4,7 @@ menu BSD systems
 item --key o openbsd OpenBSD [o]
 item --key n netbsd NetBSD [n]
 item --key f freebsd FreeBSD [f]
+item --key g ghostbsd GhostBSD [g]
 choose bsd || goto bsd_exit
 
 goto ${bsd}
@@ -124,4 +125,21 @@ echo -n Enter version: ${} && read ver
 iseq ${mirror} ${default_mirror} && set mirror http://ftp.cz.freebsd.org/pub/ ||
 set dir FreeBSD/releases/ISO-IMAGES/${ver}
 set iso FreeBSD-${ver}-RELEASE-${arch_a}-bootonly.iso
+goto boot_bsd
+
+:ghostbsd
+set os GhostBSD
+menu ${os}
+item 20.03 ${os} 20.03
+item other ${os} Choose other version
+choose ver || exit 0
+
+iseq ${ver} other || goto skip_read_ver_ghostbsd
+echo ${cls}
+echo -n Enter version: ${} && read ver
+:skip_read_ver_ghostbsd
+
+iseq ${mirror} ${default_mirror} && set mirror http://download.fr.ghostbsd.org/ ||
+set dir releases/${arch_a}/${ver}
+set iso GhostBSD-${ver}.iso
 goto boot_bsd

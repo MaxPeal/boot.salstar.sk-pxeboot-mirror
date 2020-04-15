@@ -13,6 +13,7 @@ goto ${menu}
 iseq ${mirror} ${default_mirror} && set debmirror http://ftp.${country}.debian.org/debian/ || set debmirror ${mirror}
 
 set os Debian
+set os_lower debian
 menu ${os} ${arch_a}
 # https://wiki.debian.org/DebianReleases
 item --key 0 buster ${os} 10 buster (stable) [0]
@@ -36,12 +37,13 @@ goto deb_boot_type
 iseq ${mirror} ${default_mirror} && set debmirror http://${country}.archive.ubuntu.com/ubuntu/ || set debmirror ${mirror}
 
 set os Ubuntu
+set os_lower ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
 item --key e eoan ${os} 19.10 Eoan Ermine [e]
 item --key b bionic ${os} 18.04 LTS Bionic Beaver [b]
-item --key w xenial ${os} 16.04 LTS Xenial Xerus [x]
+item --key x xenial ${os} 16.04 LTS Xenial Xerus [x]
 item --key t trusty ${os} 14.04 LTS Trusty Tahr [t]
 item --gap End of life (unsupported)
 item disco ${os} 19.04 Disco Dingo
@@ -105,7 +107,7 @@ set install_params rescue/enable=true
 goto deb_boot
 
 :deb_automated
-set install_params auto=true priority=critical url=https://www.salstar.sk/boot/ks/deb/preseed
+set install_params auto=true priority=critical url=http://www.salstar.sk/boot/ks/deb/${os_lower}_preseed
 goto deb_boot
 
 :deb_expert
