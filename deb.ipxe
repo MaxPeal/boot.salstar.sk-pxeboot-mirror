@@ -131,8 +131,8 @@ imgfree
 imgtrust --allow
 echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
 # fallback to non-updates dir
-kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params} || kernel ${debmirror}${diru}linux ${install_params} ${desktop_param} -- quiet ${params}
-initrd ${debmirror}${dir}initrd.gz || initrd ${debmirror}${diru}initrd.gz
+kernel ${debmirror}${diru}linux ${install_params} ${desktop_param} -- quiet ${params} || kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params}
+initrd ${debmirror}${diru}initrd.gz || initrd ${debmirror}${dir}initrd.gz
 boot
 
 :deb_pxe
