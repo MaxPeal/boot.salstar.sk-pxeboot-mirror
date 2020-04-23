@@ -41,6 +41,7 @@ set os_lower ubuntu
 menu ${os} ${arch_a}
 # https://wiki.ubuntu.com/Releases
 item --gap Current (supported)
+item --key f focal ${os} 20.04 LTS Focal Fossa [f]
 item --key e eoan ${os} 19.10 Eoan Ermine [e]
 item --key b bionic ${os} 18.04 LTS Bionic Beaver [b]
 item --key x xenial ${os} 16.04 LTS Xenial Xerus [x]
@@ -74,6 +75,7 @@ echo -n Enter version: ${} && read ver
 
 :deb_boot_type
 set diru dists/${ver}-updates/main/installer-${arch_a}/current/images/netboot/
+set dirl dists/${ver}/main/installer-${arch_a}/current/legacy-images/netboot/
 set dir dists/${ver}/main/installer-${arch_a}/current/images/netboot/
 
 menu ${os} ${ver} boot parameters
@@ -126,13 +128,15 @@ goto deb_boot
 :deb_install
 :deb_boot
 set diru ${diru}${installer}${menu}-installer/${arch_a}/
+set dirl ${dirl}${installer}${menu}-installer/${arch_a}/
 set dir ${dir}${installer}${menu}-installer/${arch_a}/
 imgfree
 imgtrust --allow
 echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
 # fallback to non-updates dir
-kernel ${debmirror}${diru}linux ${install_params} ${desktop_param} -- quiet ${params} || kernel ${debmirror}${dir}linux ${install_params} ${desktop_param} -- quiet ${params}
-initrd ${debmirror}${diru}initrd.gz || initrd ${debmirror}${dir}initrd.gz
+set all_params ${install_params} ${desktop_param} -- quiet ${params}
+kernel ${debmirror}${dirl}linux ${all_params} || kernel ${debmirror}${diru}linux ${all_params} || kernel ${debmirror}${dir}linux ${all_params}
+initrd ${debmirror}${dirl}initrd.gz || initrd ${debmirror}${diru}initrd.gz || initrd ${debmirror}${dir}initrd.gz
 boot
 
 :deb_pxe
