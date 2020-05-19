@@ -10,6 +10,7 @@ item --key i installer ${os} Installer [i]
 choose kali_type || goto main_menu
 
 menu ${os} version
+item 2020.2 ${os} 2020.2
 item 2019.4 ${os} 2019.4
 choose ver || goto main_menu
 
@@ -17,7 +18,9 @@ goto kali_boot_${kali_type}
 
 # Live from ftp.upjs.sk
 :kali_boot_live
-set dir http://ftp.upjs.sk/pub/mirrors/kali/kali-linux-${ver}-light-${arch_a}/live
+#set variant light
+set variant live
+set dir http://ftp.upjs.sk/pub/mirrors/kali/kali-linux-${ver}-${variant}-${arch_a}/live
 echo ${dir}
 read a
 kernel ${dir}/vmlinuz vga=788 initrd=initrd.img append boot=live components fetch=${dir}/filesystem.squashfs ${params}
@@ -47,7 +50,7 @@ exit 0
 
 # This doesn't really work, just for testing
 # Live boot
-set dir kali-${ver}/kali-linux-${ver}-light-${arch_a}.iso
+set dir kali-${ver}/kali-linux-${ver}-${variant}-${arch_a}.iso
 iseq ${mirror} ${default_mirror} && set mirror http://cdimage.kali.org ||
 set iso ${mirror}/${dir}
 

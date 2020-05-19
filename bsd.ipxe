@@ -36,8 +36,8 @@ echo -n Enter major version: ${} && read ver_major
 menu Choose minor version for ${os} ${ver_major} ${arch_a}
 item 9 ${os} ${ver_major}.9
 item 8 ${os} ${ver_major}.8
-item 7 ${os} ${ver_major}.7
-item --default 6 ${os} ${ver_major}.6
+item --default 7 ${os} ${ver_major}.7
+item 6 ${os} ${ver_major}.6
 item 5 ${os} ${ver_major}.5
 item 4 ${os} ${ver_major}.4
 item 3 ${os} ${ver_major}.3
