@@ -36,7 +36,7 @@ isset ${cleanpmagic} || initrd images/modules.cgz
 isset ${cleanpmagic} || imgverify modules.cgz ${sigs}images/modules.cgz.sig
 initrd ${mirror}/${dir}/pmagic_pxe_${ver}/pmagic/initrd.img
 imgverify initrd.img ${sigs}${dir}/pmagic_pxe_${ver}/pmagic/initrd.img.sig
-imgargs ${bzimage} edd=off load_ramdisk=1 prompt_ramdisk=0 rw vga=normal loglevel=9 max_loop=256 ${params}
+imgargs ${bzimage} initrd=initrd.img edd=off load_ramdisk=1 prompt_ramdisk=0 rw vga=normal loglevel=9 max_loop=256 ${params}
 boot
 exit
 

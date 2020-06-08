@@ -35,5 +35,5 @@ kernel ${mirror}/${dir}/live/vmlinuz
 imgverify vmlinuz ${sigs}${dir}/live/vmlinuz.sig
 initrd ${mirror}/${dir}/live/initrd.img
 imgverify initrd.img ${sigs}${dir}/live/initrd.img.sig
-imgargs vmlinuz boot=live config noswap nolocales edd=on nomodeset ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_keymap="" ocs_live_batch="no" ocs_lang="" vga=788 nosplash noprompt fetch=${fetch} ${params}
+imgargs vmlinuz initrd=initrd.img boot=live config noswap nolocales edd=on nomodeset ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_keymap="" ocs_live_batch="no" ocs_lang="" vga=788 nosplash noprompt fetch=${fetch} ${params}
 boot

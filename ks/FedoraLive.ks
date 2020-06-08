@@ -45,6 +45,7 @@ selinux --disabled
 %post
 systemctl --no-reload enable chronyd.service 2> /dev/null || :
 systemctl --no-reload enable systemd-ask-password-wall.service 2> /dev/null || :
+systemctl --no-reload enable sshd.service 2> /dev/null || :
 for service in tcsd cups \
                abrtd abrt-ccpp abrt-oops abrt-vmcore abrt-xorg \
                ksm ksmtuned spice-vdagentd
@@ -63,5 +64,10 @@ EOF
 if [ -f /etc/freshclam.conf ]; then
   sed -i 's/^#Example/Example/' /etc/freshclam.conf
 fi
+
+mkdir /root/.ssh
+cat << EOF > /root/.ssh/authorized_keys
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJskfyU63Nm3lx7ZjEf0unaPDhqiNiOnLdBRHsRG7fBv ondrejj@work.salstar.sk
+EOF
 
 %end

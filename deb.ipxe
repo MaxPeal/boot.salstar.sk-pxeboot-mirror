@@ -135,8 +135,9 @@ imgtrust --allow
 echo Boot parameters: ${install_params} ${desktop_param} -- quiet ${params}
 # fallback to non-updates dir
 set all_params ${install_params} ${desktop_param} -- quiet ${params}
-kernel ${debmirror}${dirl}linux ${all_params} || kernel ${debmirror}${diru}linux ${all_params} || kernel ${debmirror}${dir}linux ${all_params}
+kernel ${debmirror}${dirl}linux || kernel ${debmirror}${diru}linux ${all_params} || kernel ${debmirror}${dir}linux
 initrd ${debmirror}${dirl}initrd.gz || initrd ${debmirror}${diru}initrd.gz || initrd ${debmirror}${dir}initrd.gz
+imgargs linux initrd=initrd.gz ${all_params}
 boot
 
 :deb_pxe
@@ -173,8 +174,10 @@ read ver_number
 set deblive ${url}/debian-live-${ver_number}-${arch_a}-${desktop}
 imgfree
 imgtrust --allow
-kernel ${deblive}.vmlinuz boot=live components fetch=${deblive}.squashfs live-config ${params}
+kernel ${deblive}.vmlinuz
 initrd ${deblive}.initrd.img
+imgargs ${deblive}.vmlinuz initrd=${deblive}.initrd.img boot=live components fetch=${deblive}.squashfs live-config ${params}
+
 boot
 
 :deb_exit

@@ -44,7 +44,7 @@ imgfree
 imgtrust --allow
 kernel ${mirror}${dir}/isolinux/${arch}/vmlinuz
 initrd ${mirror}${dir}/isolinux/${arch}/all.rdz
-imgargs vmlinuz automatic=${automatic} vga=788 splash=silent ${params}
+imgargs vmlinuz initrd=all.rdz automatic=${automatic} vga=788 splash=silent ${params}
 boot  
 exit 0
 
@@ -53,7 +53,7 @@ imgfree
 imgtrust --allow
 kernel ${mirror}${dir}/isolinux/alt0/vmlinuz
 initrd ${mirror}${dir}/isolinux/alt0/all.rdz
-imgargs vmlinuz automatic=${automatic} vga=788 splash=silent ${params}
+imgargs vmlinuz initrd=all.rdz automatic=${automatic} vga=788 splash=silent ${params}
 boot
 exit 0
 

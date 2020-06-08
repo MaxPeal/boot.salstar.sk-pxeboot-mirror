@@ -1,14 +1,14 @@
 #!ipxe
 
 menu openSUSE ${arch}
-item leap/42.3 openSUSE Leap 42.3
-item leap/42.2 openSUSE Leap 42.2
-item leap/42.1 openSUSE Leap 42.1
-item 13.2 openSUSE 13.2
-item 12.2 openSUSE 12.2
-item 11.4 openSUSE 11.4
-item 11.3 openSUSE 11.3
-item factory openSUSE factory
+item leap/15.2 openSUSE Leap 15.2
+item leap/15.1 openSUSE Leap 15.1
+item leap/15.0 openSUSE Leap 15.0
+#item 13.2 openSUSE 13.2
+#item 12.2 openSUSE 12.2
+#item 11.4 openSUSE 11.4
+#item 11.3 openSUSE 11.3
+#item factory openSUSE factory
 choose ver || goto opensuse_exit
 
 iseq ${mirror} ${default_mirror} && set mirror http://ftp.linux.cz/pub/linux/opensuse/ ||
@@ -19,7 +19,7 @@ imgfree
 imgtrust --allow
 kernel ${mirror}${dir}boot/${arch}/loader/linux
 initrd ${mirror}${dir}boot/${arch}/loader/initrd
-imgargs linux netsetup=dhcp install=${mirror}${dir} ${params}
+imgargs linux initrd=initrd netsetup=dhcp install=${mirror}${dir} ${params}
 boot
 
 :opensuse_exit
