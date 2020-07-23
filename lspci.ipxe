@@ -2,7 +2,13 @@
 
 clear addr
 pciscan addr && goto pciscan_found ||
+iseq ${errno} 0x2c044087 && goto pciscan_err_efi ||
 echo Missing "pciscan" command. Recompile ipxe with CMD_PCI.
+prompt Press any key to continue ...
+exit
+:pciscan_err_efi
+echo No such device. "pciscan" command is not implemented for EFI builds.
+prompt Press any key to continue ...
 exit
 :pciscan_found
 

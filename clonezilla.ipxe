@@ -1,8 +1,12 @@
 #!ipxe
 
+# Clonezilla
+# https://clonezilla.org/downloads.php
+
 set os Clonezilla
 menu ${os} version
-item 2.6.6-15 ${os} 2.6.6.15
+item 2.6.7-28 ${os} 2.6.7-28
+item 2.6.6-15 ${os} 2.6.6-15
 item 2.6.1-25 ${os} 2.6.1-25
 item other ${os} Choose other version
 choose ver || exit 0

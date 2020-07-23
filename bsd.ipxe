@@ -106,6 +106,7 @@ goto boot_bsd
 set os FreeBSD
 menu ${os}
 item 12.1 ${os} 12.1
+item 11.4 ${os} 11.4
 item 11.3 ${os} 11.3
 item 11.2 ${os} 11.2
 item 11.1 ${os} 11.1

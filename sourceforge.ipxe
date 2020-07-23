@@ -10,9 +10,12 @@
 
 #isset ${iso} && set sfurl http://sourceforge.net/projects/${project}/files/${iso}/download ||
 #isset ${img} && set sfurl http://sourceforge.net/projects/${project}/files/${img}/download ||
-isset ${iso} && set sfurl http://downloads.sourceforge.net/${project}/${iso} ||
-isset ${img} && set sfurl http://downloads.sourceforge.net/${project}/${img} ||
+isset ${iso} && set sfurl https://downloads.sourceforge.net/${project}/${iso} ||
+isset ${img} && set sfurl https://downloads.sourceforge.net/${project}/${img} ||
 set lmurl http://ftp.upjs.sk/pub/mirrors/${project}/${iso}
+
+# force sanboot type for efi systems, memdisk doesn't work
+iseq ${platform} efi && set sfboot sanboot ||
 
 goto sourceforge_${sfboot} ||
 
